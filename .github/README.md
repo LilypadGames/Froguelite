@@ -28,6 +28,14 @@
 - Randomly Generated Dungeons
 - A ton of items to make every playthrough unique
 
+## **Storyboard**
+
+- Start with a frog on a lilypad.
+- A little fairy or something flies overhead and the frog eats it with its long ass tongue, mistaking it for a fly.
+- A magical puff of smoke or something appears around the frog shortly after, and the frog has become anthropomorphic (stands on two legs) and has a wand and wizard hat.
+- The frog jumps off screen.
+- A new scene begins with the frog at the edge of the river, in front of where the fairy must have come from- a small mystical cave opening.
+
 ## **Languages & Tools**
 
 - Typescript
