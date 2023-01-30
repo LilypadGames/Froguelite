@@ -1,0 +1,53 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Install (Client)",
+            "command": "cd client && npm install",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Dev (Client)",
+            "command": "cd client && npm run dev",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Build (Client)",
+            "command": "cd client && npm run build",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Run Web Server (Client)",
+            "command": "cd client && npm run serve",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Install (Electron)",
+            "command": "cd electron && yarn",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Dev (Electron)",
+            "command": "cd electron && yarn dev",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Preview (Electron)",
+            "command": "cd electron && yarn preview",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Build (Electron)",
+            "command": "cd electron && yarn build",
+            "request": "launch",
+            "type": "node-terminal"
+        }
+    ]
+}
