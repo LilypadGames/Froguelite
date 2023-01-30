@@ -1,9 +1,9 @@
 {
-  "name": "phaser-3-typescript-electron-template",
-  "version": "1.0.0",
+  "name": "froguelike",
+  "version": "0.0.1",
   "main": "./main.js",
-  "author": "Marco Chierchia",
-  "license": "MIT",
+  "author": "DanMizu",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "copy": "yarn --cwd ../client build && node ./scripts/copy-from-client.js",
     "electron": "electron .",
@@ -23,9 +23,9 @@
     "fs-extra": "^10.1.0"
   },
   "build": {
-    "appId": "your.id",
+    "appId": "dev.danmizu.froguelike",
     "mac": {
-      "category": "your.app.category.type"
+      "category": "public.app-category.action-games"
     }
   },
   "nodeversion": "14.18.1",

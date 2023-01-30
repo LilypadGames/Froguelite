@@ -1,5 +1,5 @@
 {
-  "name": "phaser-3-typescript-electron-template",
+  "name": "froguelike",
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Dan-Mizu/Froguelike"
   },
-  "author": "Marco Chierchia",
-  "license": "MIT",
+  "author": "DanMizu",
+  "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^22.0.0",
