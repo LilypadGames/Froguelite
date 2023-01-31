@@ -13,6 +13,10 @@ export class Core extends Phaser.Scene {
 		init: () => {},
 		preload: () => {},
 		create: () => {
+			// disable right-click context menu
+			this.input.mouse.disableContextMenu();
+
+			// init cursor
 			this.core.cursor.init();
 		},
 		// cursor
