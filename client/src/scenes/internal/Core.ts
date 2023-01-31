@@ -10,27 +10,27 @@ export class Core extends Phaser.Scene {
 	}
 
 	core: any = {
+		init: () => {},
 		preload: () => {},
 		create: () => {
-			// init cursor
 			this.core.cursor.init();
 		},
 		// cursor
 		cursor: {
 			init: () => {
-				// default
+				// default cursor
 				this.input.setDefaultCursor(
 					"url(assets/input/cursors/cursor_large.cur), pointer"
 				);
 
-				// click
+				// change cursor on click
 				this.input.on("pointerdown", () => {
 					this.input.setDefaultCursor(
 						"url(assets/input/cursors/cursor_small.cur), pointer"
 					);
 				});
 
-				// un-click
+				// change cursor back when click released
 				this.input.on("pointerup", () => {
 					this.input.setDefaultCursor(
 						"url(assets/input/cursors/cursor_large.cur), pointer"
@@ -39,4 +39,15 @@ export class Core extends Phaser.Scene {
 			},
 		},
 	};
+
+	changeScene(scene: string) {
+		// remove listeners
+		// this.input.removeAllListeners();
+
+		// stop current scene
+		this.scene.stop();
+
+		// start next scene
+		this.scene.start(scene);
+	}
 }

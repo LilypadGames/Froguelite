@@ -63,7 +63,7 @@ export class Menu extends Core {
 
 		// on click, go to game
 		this.input.on("pointerdown", () => {
-			this.scene.start("Game");
+			this.changeScene("Game")
 		});
 	}
 }
