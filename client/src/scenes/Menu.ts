@@ -22,7 +22,7 @@ export class Menu extends Core {
 		const logo = this.make.text({
 			x: window.innerWidth / 2,
 			y: window.innerHeight / 3,
-			text: "Frougelike",
+			text: "Froguelike",
 			style: {
 				fontSize: "128px",
 				fontFamily: "Pix",

@@ -1,13 +1,15 @@
 {
     "cSpell.words": [
+        "anims",
         "Froguelike",
-        "Frougelike",
         "gameplay",
         "lilypad",
         "nodeversion",
         "npmversion",
         "playthrough",
         "Roguelike",
-        "Tilemap"
+        "spritesheet",
+        "Tilemap",
+        "WASD"
     ]
 }
