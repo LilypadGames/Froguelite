@@ -1,25 +1,21 @@
 import { Core } from "./internal/Core";
 
+//
+// This is the Main Menu, what you first see when you open the game.
+//
+
 export class Menu extends Core {
 	constructor() {
 		super({ key: "Menu" });
 	}
 
 	preload() {
-		this.load.image("logo", "assets/phaser3-logo.png");
+		//preload core mechanics
+		this.core.preload();
 	}
 
 	create() {
-		this.core.cursor.init();
-
-		const logo = this.add.image(400, 70, "logo");
-		this.tweens.add({
-			targets: logo,
-			y: 350,
-			duration: 1500,
-			ease: "Sine.inOut",
-			yoyo: true,
-			repeat: -1,
-		});
+		//create core mechanics
+		this.core.create();
 	}
 }
