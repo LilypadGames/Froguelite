@@ -150,14 +150,13 @@ export class Game extends Core {
 				this.player.anims.play("front", true);
 		}
 
-		// not moving
-		if (
-			!key.left.isDown &&
-			!key.right.isDown &&
-			!key.up.isDown &&
-			!key.down.isDown
-		) {
+		// not moving left or right
+		if (!key.left.isDown && !key.right.isDown) {
 			this.player.setVelocityX(0);
+		}
+
+		// not moving up or down
+		if (!key.up.isDown && !key.down.isDown) {
 			this.player.setVelocityY(0);
 		}
 	}
