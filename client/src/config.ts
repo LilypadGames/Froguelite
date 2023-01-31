@@ -1,5 +1,9 @@
 import Phaser from "phaser";
 
+//
+// These are the settings for the game canvas and game itself.
+//
+
 export default {
 	type: Phaser.AUTO,
 	parent: "game",
