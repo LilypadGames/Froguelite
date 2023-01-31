@@ -6,7 +6,8 @@ require("@electron/remote/main").initialize();
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+// const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment = false;
 
 
 const createWindow = () => {
