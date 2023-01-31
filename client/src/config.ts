@@ -14,4 +14,13 @@ export default {
 		width: window.innerWidth,
 		height: window.innerHeight,
 	},
+	render: {
+        pixelArt: true,
+    },
+	physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false
+        }
+    },
 };
