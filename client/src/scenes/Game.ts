@@ -164,7 +164,7 @@ export class Game extends Core {
 	addPlayer(x: number, y: number) {
 		// create player
 		let player = this.physics.add
-			.sprite(x, y, "pp", 2)
+			.sprite(x, y, "pp")
 			.setScale(10)
 			.setOrigin(0.5, 0.5);
 
