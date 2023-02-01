@@ -307,7 +307,10 @@ export class Game extends Core {
 
 	// spawn enemy
 	spawnEnemy(id: string, x: number, y: number) {
+		// get enemy data
+		let enemyData = this.cache.json.get("enemyData");
+
 		// add enemy
-		this.physics.add.sprite(x, y, id);
+		this.physics.add.sprite(x, y, id).setScale(enemyData[id]["scale"]);
 	}
 }

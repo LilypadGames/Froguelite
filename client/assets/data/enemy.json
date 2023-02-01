@@ -1,6 +1,7 @@
 {
     "LSF": {
         "name": "LSF",
-        "sprite": "lsf"
+        "sprite": "lsf",
+        "scale": 0.5
     }
 }
