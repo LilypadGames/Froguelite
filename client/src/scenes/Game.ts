@@ -18,7 +18,11 @@ export class Game extends Core {
 	// config
 	velocity: number = 30;
 	velocityDampening: number = 1.8;
-	turnThreshold: number = 150;
+	turnThreshold: number = 20;
+
+	// world
+	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
+	spawnpoint: any;
 
 	constructor() {
 		super({ key: "Game" });
@@ -57,10 +61,7 @@ export class Game extends Core {
 		this.createWorld();
 
 		// add player to world
-		this.player = this.addPlayer(
-			window.innerWidth / 2,
-			window.innerHeight / 2
-		);
+		this.player = this.addPlayer(this.spawnpoint.x, this.spawnpoint.y);
 
 		// set up camera to follow player and resize view
 		this.cameras.main.startFollow(this.player, false, 1, 1, 0, 0);
@@ -85,11 +86,19 @@ export class Game extends Core {
 
 		// if pointer down, make player face the pointer
 		if (this.input.activePointer.isDown) {
+			// get mouse position relative to the camera view
 			let mouse = {
-				x: this.input.activePointer.x,
-				y: this.input.activePointer.y,
+				x: this.input.activePointer.x / this.cameras.main.zoomX,
+				y: this.input.activePointer.y / this.cameras.main.zoomY,
 			};
-			let player = { x: this.player.x, y: this.player.y };
+
+			// get player position relative to the camera view
+			let player = {
+				x: this.cameras.main.worldView.width / 2,
+				y: this.cameras.main.worldView.height / 2,
+			};
+
+			// get difference between player position and mouse position to determine where the pointer is relative to the player
 			let difference = {
 				x: player.x - mouse.x,
 				y: player.y - mouse.y,
@@ -222,26 +231,29 @@ export class Game extends Core {
 
 	// create tilemap world
 	createWorld() {
+		// make map
 		const map = this.make.tilemap({ key: "riverside" });
 		const tileset = map.addTilesetImage("tiles", "world_tiles");
-		map.createLayer(
-			"Grass",
-			tileset,
-			window.innerWidth / 2,
-			window.innerHeight / 2
-		);
-		map.createLayer(
-			"Water",
-			tileset,
-			window.innerWidth / 2,
-			window.innerHeight / 2
+
+		// add layers
+		map.createLayer("Grass", tileset, 0, 0);
+		map.createLayer("Sand", tileset, 0, 0);
+		this.collisionLayers.push(map.createLayer("Water", tileset, 0, 0));
+		this.collisionLayers.push(map.createLayer("Bounds", tileset, 0, 0));
+
+		// get spawnpoint
+		this.spawnpoint = map.findObject(
+			"Spawn",
+			(obj) => obj.name === "Spawn Point"
 		);
 	}
 
 	// add player to world
 	addPlayer(x: number, y: number) {
 		// create player
-		let player = this.physics.add.sprite(x, y, "pp").setOrigin(0.5, 0.5);
+		let player = this.physics.add
+			.sprite(x, y, "pp", "2")
+			.setOrigin(0.5, 0.5);
 
 		// make player collide with world bounds
 		player.setCollideWorldBounds(true);
@@ -253,26 +265,29 @@ export class Game extends Core {
 			frameRate: 1,
 			repeat: -1,
 		});
-
 		this.anims.create({
 			key: "right",
 			frames: this.anims.generateFrameNumbers("pp", { start: 1, end: 1 }),
 			frameRate: 1,
 			repeat: -1,
 		});
-
 		this.anims.create({
 			key: "front",
 			frames: this.anims.generateFrameNumbers("pp", { start: 2, end: 2 }),
 			frameRate: 1,
 			repeat: -1,
 		});
-
 		this.anims.create({
 			key: "back",
 			frames: this.anims.generateFrameNumbers("pp", { start: 3, end: 3 }),
 			frameRate: 1,
 			repeat: -1,
+		});
+
+		// add collisions
+		this.collisionLayers.forEach((layer) => {
+			layer.setCollisionByExclusion([-1]);
+			this.physics.add.collider(player, layer);
 		});
 
 		return player;
