@@ -54,6 +54,11 @@
   "resolved" "https://registry.npmjs.org/@types/node/-/node-17.0.31.tgz"
   "version" "17.0.31"
 
+"@types/webfontloader@^1.6.35":
+  "integrity" "sha512-IJlrsiDWq6KghQ7tPlL5tcwSUyOxLDceT+AFUY7Ylj0Fcv3/h3QkANqQxZ0B5mEpEKxhTw76vDmvrruSMV9n9Q=="
+  "resolved" "https://registry.npmjs.org/@types/webfontloader/-/webfontloader-1.6.35.tgz"
+  "version" "1.6.35"
+
 "balanced-match@^1.0.0":
   "integrity" "sha1-ibTRmasr7kneFk6gK4nORi1xt2c="
   "resolved" "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.0.tgz"
@@ -322,6 +327,11 @@
     "rollup" "^2.59.0"
   optionalDependencies:
     "fsevents" "~2.3.2"
+
+"webfontloader@^1.6.28":
+  "integrity" "sha512-Egb0oFEga6f+nSgasH3E0M405Pzn6y3/9tOVanv/DLfa1YBIgcv90L18YyWnvXkRbIM17v5Kv6IT2N6g1x5tvQ=="
+  "resolved" "https://registry.npmjs.org/webfontloader/-/webfontloader-1.6.28.tgz"
+  "version" "1.6.28"
 
 "wrappy@1":
   "integrity" "sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8="
