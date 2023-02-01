@@ -16,7 +16,7 @@ export class Game extends Core {
 	};
 
 	// config
-	velocity: number = 30;
+	velocity: number = 50;
 	velocityDampening: number = 1.8;
 	turnThreshold: number = 20;
 
@@ -79,7 +79,8 @@ export class Game extends Core {
 	// handle player movement and direction
 	handlePlayerMovement() {
 		// init direction
-		let direction: string = "";
+		let directionX: string = "";
+		let directionY: string = "";
 
 		// init velocity
 		let velocity: number = this.velocity;
@@ -107,22 +108,22 @@ export class Game extends Core {
 			// player looking left
 			if (difference.x > this.turnThreshold) {
 				this.player.anims.play("left", true);
-				direction = "left";
+				directionX = "left";
 			}
 			// player looking right
 			else if (difference.x < -this.turnThreshold) {
 				this.player.anims.play("right", true);
-				direction = "right";
+				directionX = "right";
 			}
 			// player looking away from the player
 			else if (difference.y > 0) {
 				this.player.anims.play("back", true);
-				direction = "up";
+				directionY = "up";
 			}
 			// player looking towards the player
 			else if (difference.y <= 0) {
 				this.player.anims.play("front", true);
-				direction = "down";
+				directionY = "down";
 			}
 		}
 
@@ -153,10 +154,10 @@ export class Game extends Core {
 		// moving up
 		if (key.up.isDown) {
 			// determine direction
-			if (direction === "") direction = "up";
+			if (directionY === "") directionY = "up";
 
 			// determine velocity
-			if (direction !== "up")
+			if (directionY !== "up")
 				velocity = this.velocity / this.velocityDampening;
 
 			// move up
@@ -170,10 +171,10 @@ export class Game extends Core {
 		// moving down
 		if (key.down.isDown) {
 			// determine direction
-			if (direction === "") direction = "down";
+			if (directionY === "") directionY = "down";
 
 			// determine velocity
-			if (direction !== "down")
+			if (directionY !== "down")
 				velocity = this.velocity / this.velocityDampening;
 
 			// move down
@@ -187,10 +188,10 @@ export class Game extends Core {
 		// moving left
 		if (key.left.isDown) {
 			// determine direction
-			if (direction == "") direction = "left";
+			if (directionX == "") directionX = "left";
 
 			// determine velocity
-			if (direction !== "left")
+			if (directionX !== "left")
 				velocity = this.velocity / this.velocityDampening;
 
 			// move left
@@ -204,10 +205,10 @@ export class Game extends Core {
 		// moving right
 		if (key.right.isDown) {
 			// determine direction
-			if (direction === "") direction = "right";
+			if (directionX === "") directionX = "right";
 
 			// determine velocity
-			if (direction !== "right")
+			if (directionX !== "right")
 				velocity = this.velocity / this.velocityDampening;
 
 			// move right
