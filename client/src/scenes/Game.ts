@@ -32,7 +32,7 @@ export class Game extends Core {
 		this.load.image("world_tiles", "assets/world/tiles.png");
 		this.load.tilemapTiledJSON("riverside", "assets/world/riverside.json");
 
-		// player character sprite sheet
+		// load player character sprite sheet
 		this.load.spritesheet("pp", "assets/character/pp.png", {
 			frameWidth: 9,
 			frameHeight: 7,
@@ -54,28 +54,15 @@ export class Game extends Core {
 		};
 
 		// create world
-		const map = this.make.tilemap({ key: "riverside" });
-		const tileset = map.addTilesetImage("tiles", "world_tiles");
-		map.createLayer(
-			"Grass",
-			tileset,
-			window.innerWidth / 2,
-			window.innerHeight / 2
-		);
-		map.createLayer(
-			"Water",
-			tileset,
-			window.innerWidth / 2,
-			window.innerHeight / 2
-		);
+		this.createWorld();
 
-		// add player to scene
+		// add player to world
 		this.player = this.addPlayer(
 			window.innerWidth / 2,
 			window.innerHeight / 2
 		);
 
-		// set up camera
+		// set up camera to follow player and resize view
 		this.cameras.main.startFollow(this.player, false, 1, 1, 0, 0);
 		this.cameras.main.setZoom(8);
 
@@ -84,6 +71,12 @@ export class Game extends Core {
 	}
 
 	update() {
+		// handle player movement
+		this.handlePlayerMovement();
+	}
+
+	// handle player movement and direction
+	handlePlayerMovement() {
 		// init direction
 		let direction: string = "";
 
@@ -227,6 +220,25 @@ export class Game extends Core {
 		}
 	}
 
+	// create tilemap world
+	createWorld() {
+		const map = this.make.tilemap({ key: "riverside" });
+		const tileset = map.addTilesetImage("tiles", "world_tiles");
+		map.createLayer(
+			"Grass",
+			tileset,
+			window.innerWidth / 2,
+			window.innerHeight / 2
+		);
+		map.createLayer(
+			"Water",
+			tileset,
+			window.innerWidth / 2,
+			window.innerHeight / 2
+		);
+	}
+
+	// add player to world
 	addPlayer(x: number, y: number) {
 		// create player
 		let player = this.physics.add.sprite(x, y, "pp").setOrigin(0.5, 0.5);
