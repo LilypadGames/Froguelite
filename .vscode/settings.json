@@ -10,6 +10,7 @@
         "Roguelike",
         "spritesheet",
         "Tilemap",
+        "Tileset",
         "WASD",
         "ymbols"
     ]
