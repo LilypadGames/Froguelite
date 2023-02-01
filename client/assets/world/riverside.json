@@ -61,20 +61,34 @@
         {
          "draworder":"topdown",
          "id":5,
-         "name":"Spawn",
+         "name":"Objects",
          "objects":[
                 {
                  "class":"",
                  "height":0,
                  "id":1,
-                 "name":"Spawn Point",
+                 "name":"Spawn",
                  "point":true,
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":131.666666666667,
-                 "y":142.666666666667
+                 "x":132,
+                 "y":142
+                }, 
+                {
+                 "class":"",
+                 "height":0,
+                 "id":3,
+                 "name":"Enemy, LSF",
+                 "point":true,
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":132,
+                 "y":44
                 }],
+         "offsetx":0.303977272727252,
+         "offsety":-1.13352272727273,
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -82,7 +96,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":2,
+ "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

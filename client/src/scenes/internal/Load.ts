@@ -7,10 +7,32 @@ import WebFont from "webfontloader";
 
 export class Load extends Phaser.Scene {
 	constructor() {
-		super({ key: "Load" });
+		super({
+			key: "Load",
+			pack: {
+				files: [
+					{
+						type: "json",
+						key: "enemyData",
+						url: "assets/data/enemy.json",
+					},
+				],
+			},
+		});
 	}
 
 	preload() {
+		// load enemy data
+		let enemyData = this.cache.json.get("enemyData");
+		Object.keys(enemyData).forEach((key) => {
+			// load enemy sprite
+			this.load.image(
+				key,
+				"assets/enemy/" + enemyData[key]["sprite"] + ".png"
+			);
+		});
+
+		// load fonts
 		WebFont.load({
 			active: () => {
 				// fonts are loaded, continue to next scene
@@ -18,8 +40,10 @@ export class Load extends Phaser.Scene {
 			},
 			// custom fonts
 			custom: {
-				families: ["Pix"]
+				families: ["Pix"],
 			},
 		});
 	}
+
+	create() {}
 }

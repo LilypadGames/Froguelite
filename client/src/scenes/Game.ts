@@ -244,9 +244,20 @@ export class Game extends Core {
 
 		// get spawnpoint
 		this.spawnpoint = map.findObject(
-			"Spawn",
-			(obj) => obj.name === "Spawn Point"
+			"Objects",
+			(obj) => obj.name === "Spawn"
 		);
+
+		// get enemies
+		map.filterObjects("Objects", (obj) =>
+			obj.name.includes("Enemy")
+		).forEach((obj) => {
+			this.spawnEnemy(
+				obj.name.split(",")[1].replace(" ", ""),
+				typeof obj.x === "number" ? obj.x : 0,
+				typeof obj.y === "number" ? obj.y : 0
+			);
+		});
 	}
 
 	// add player to world
@@ -292,5 +303,11 @@ export class Game extends Core {
 		});
 
 		return player;
+	}
+
+	// spawn enemy
+	spawnEnemy(id: string, x: number, y: number) {
+		// add enemy
+		this.physics.add.sprite(x, y, id);
 	}
 }
