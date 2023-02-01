@@ -150,40 +150,6 @@ export class Game extends Core {
 			},
 		};
 
-		// moving left
-		if (key.left.isDown) {
-			// determine direction
-			if (direction == "") direction = "left";
-
-			// determine velocity
-			if (direction !== "left")
-				velocity = this.velocity / this.velocityDampening;
-
-			// move left
-			this.player.setVelocityX(-velocity);
-
-			// play moving left animation
-			if (!this.input.activePointer.isDown)
-				this.player.anims.play("left", true);
-		}
-
-		// moving right
-		if (key.right.isDown) {
-			// determine direction
-			if (direction === "") direction = "right";
-
-			// determine velocity
-			if (direction !== "right")
-				velocity = this.velocity / this.velocityDampening;
-
-			// move right
-			this.player.setVelocityX(velocity);
-
-			// play moving right animation
-			if (!this.input.activePointer.isDown)
-				this.player.anims.play("right", true);
-		}
-
 		// moving up
 		if (key.up.isDown) {
 			// determine direction
@@ -216,6 +182,40 @@ export class Game extends Core {
 			// play moving down animation
 			if (!this.input.activePointer.isDown)
 				this.player.anims.play("front", true);
+		}
+
+		// moving left
+		if (key.left.isDown) {
+			// determine direction
+			if (direction == "") direction = "left";
+
+			// determine velocity
+			if (direction !== "left")
+				velocity = this.velocity / this.velocityDampening;
+
+			// move left
+			this.player.setVelocityX(-velocity);
+
+			// play moving left animation
+			if (!this.input.activePointer.isDown)
+				this.player.anims.play("left", true);
+		}
+
+		// moving right
+		if (key.right.isDown) {
+			// determine direction
+			if (direction === "") direction = "right";
+
+			// determine velocity
+			if (direction !== "right")
+				velocity = this.velocity / this.velocityDampening;
+
+			// move right
+			this.player.setVelocityX(velocity);
+
+			// play moving right animation
+			if (!this.input.activePointer.isDown)
+				this.player.anims.play("right", true);
 		}
 
 		// not moving left or right
