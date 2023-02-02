@@ -339,6 +339,11 @@ export class Game extends Core {
 		this.collisionLayers.push(map.createLayer("Water", tileset, 0, 0));
 		this.collisionLayers.push(map.createLayer("Bounds", tileset, 0, 0));
 
+		// add collisions
+		this.collisionLayers.forEach((layer) => {
+			layer.setCollisionByExclusion([-1]);
+		});
+
 		// get spawnpoint
 		this.spawnpoint = map.findObject(
 			"Objects",
@@ -363,9 +368,6 @@ export class Game extends Core {
 		let player = this.physics.add
 			.sprite(x, y, "pp", "2")
 			.setOrigin(0.5, 0.5);
-
-		// make player collide with world bounds
-		player.setCollideWorldBounds(true);
 
 		// create anims
 		this.anims.create({
@@ -393,10 +395,17 @@ export class Game extends Core {
 			repeat: -1,
 		});
 
-		// add collisions
+		// make player collide with world bounds
+		player.setCollideWorldBounds(true);
+
+		// add collisions with layers
 		this.collisionLayers.forEach((layer) => {
-			layer.setCollisionByExclusion([-1]);
 			this.physics.add.collider(player, layer);
+		});
+
+		// add collisions with enemies
+		this.enemyList.forEach((enemy) => {
+			this.physics.add.collider(player, enemy);
 		});
 
 		// add outline and glow effect
@@ -415,6 +424,24 @@ export class Game extends Core {
 		let enemy = this.physics.add
 			.sprite(x, y, id)
 			.setScale(enemyData[id]["scale"]);
+
+		// make player collide with world bounds
+		enemy.setCollideWorldBounds(true);
+
+		// prevent being pushed by player
+		enemy.setImmovable();
+
+		// add collisions with layers
+		this.collisionLayers.forEach((layer) => {
+			this.physics.add.collider(enemy, layer);
+		});
+
+		// add collisions with other enemies
+		if (this.enemyList.length != 0) {
+			this.enemyList.forEach((otherEnemy) => {
+				this.physics.add.collider(enemy, otherEnemy);
+			});
+		}
 
 		// add enemy to enemy list
 		this.enemyList.push(enemy);
