@@ -14,11 +14,16 @@ export class Game extends Core {
 		S: Phaser.Input.Keyboard.Key;
 		D: Phaser.Input.Keyboard.Key;
 	};
+	keyQE!: {
+		Q: Phaser.Input.Keyboard.Key;
+		E: Phaser.Input.Keyboard.Key;
+	};
 
 	// config
-	velocity: number = 50;
-	velocityDampening: number = 1.8;
+	speed: number = 50;
+	speedDampening: number = 1.8;
 	turnThreshold: number = 20;
+	rotationSpeed: number = 0.03;
 
 	// world
 	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
@@ -56,6 +61,10 @@ export class Game extends Core {
 			S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
 			D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
 		};
+		this.keyQE = {
+			Q: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
+			E: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+		};
 
 		// create world
 		this.createWorld();
@@ -72,8 +81,46 @@ export class Game extends Core {
 	}
 
 	update() {
+		// handle camera
+		this.handleCameraControls();
+
 		// handle player movement
 		this.handlePlayerMovement();
+	}
+
+	// handle camera controls
+	handleCameraControls() {
+		// rotate left
+		if (this.keyQE.Q.isDown) {
+			this.rotateView("left");
+		}
+		// rotate right
+		else if (this.keyQE.E.isDown) {
+			this.rotateView("right");
+		}
+	}
+
+	// rotate entire view with objects remaining straight
+	rotateView(direction: string) {
+		// get cam
+		const cam = this.cameras.main;
+
+		// rotate view to the left
+		if (direction === "left") {
+			// rotate cam
+			cam.rotation += this.rotationSpeed;
+
+			// rotate player
+			this.player.rotation -= this.rotationSpeed;
+		}
+		// rotate view to the right
+		else if (direction === "right") {
+			// rotate cam
+			cam.rotation -= this.rotationSpeed;
+
+			// rotate player
+			this.player.rotation += this.rotationSpeed;
+		}
 	}
 
 	// handle player movement and direction
@@ -83,7 +130,10 @@ export class Game extends Core {
 		let directionY: string = "";
 
 		// init velocity
-		let velocity: number = this.velocity;
+		let velocity: number = this.speed;
+
+		// init vector
+		let vector: Phaser.Math.Vector2 = new Phaser.Math.Vector2();
 
 		// if pointer down, make player face the pointer
 		if (this.input.activePointer.isDown) {
@@ -158,10 +208,14 @@ export class Game extends Core {
 
 			// determine velocity
 			if (directionY !== "up")
-				velocity = this.velocity / this.velocityDampening;
+				velocity = this.speed / this.speedDampening;
 
 			// move up
-			this.player.setVelocityY(-velocity);
+			vector = this.physics.velocityFromRotation(
+				this.player.rotation,
+				-velocity
+			);
+			[vector.x, vector.y] = [vector.y * -1, vector.x];
 
 			// play moving up animation
 			if (!this.input.activePointer.isDown)
@@ -175,10 +229,14 @@ export class Game extends Core {
 
 			// determine velocity
 			if (directionY !== "down")
-				velocity = this.velocity / this.velocityDampening;
+				velocity = this.speed / this.speedDampening;
 
 			// move down
-			this.player.setVelocityY(velocity);
+			vector = this.physics.velocityFromRotation(
+				this.player.rotation,
+				velocity
+			);
+			[vector.x, vector.y] = [vector.y * -1, vector.x];
 
 			// play moving down animation
 			if (!this.input.activePointer.isDown)
@@ -192,10 +250,17 @@ export class Game extends Core {
 
 			// determine velocity
 			if (directionX !== "left")
-				velocity = this.velocity / this.velocityDampening;
+				velocity = this.speed / this.speedDampening;
 
 			// move left
-			this.player.setVelocityX(-velocity);
+			let newVector = this.physics.velocityFromRotation(
+				this.player.rotation,
+				-velocity
+			);
+
+			// merge with up/down vector to move diagonally
+			vector.x = vector.x + newVector.x;
+			vector.y = vector.y + newVector.y;
 
 			// play moving left animation
 			if (!this.input.activePointer.isDown)
@@ -209,24 +274,34 @@ export class Game extends Core {
 
 			// determine velocity
 			if (directionX !== "right")
-				velocity = this.velocity / this.velocityDampening;
+				velocity = this.speed / this.speedDampening;
 
 			// move right
-			this.player.setVelocityX(velocity);
+			let newVector = this.physics.velocityFromRotation(
+				this.player.rotation,
+				velocity
+			);
+
+			// merge with up/down vector to move diagonally
+			vector.x = vector.x + newVector.x;
+			vector.y = vector.y + newVector.y;
 
 			// play moving right animation
 			if (!this.input.activePointer.isDown)
 				this.player.anims.play("right", true);
 		}
 
-		// not moving left or right
-		if (!key.left.isDown && !key.right.isDown) {
-			this.player.setVelocityX(0);
-		}
+		// move
+		this.player.setVelocity(vector.x, vector.y);
 
-		// not moving up or down
-		if (!key.up.isDown && !key.down.isDown) {
-			this.player.setVelocityY(0);
+		// not moving
+		if (
+			!key.left.isDown &&
+			!key.right.isDown &&
+			!key.up.isDown &&
+			!key.down.isDown
+		) {
+			this.player.setVelocity(0);
 		}
 	}
 
