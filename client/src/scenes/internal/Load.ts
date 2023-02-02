@@ -36,7 +36,6 @@ export class Load extends Phaser.Scene {
 		// load enemy data
 		let enemyData = this.cache.json.get("enemyData");
 		Object.keys(enemyData).forEach((key) => {
-			console.log(key);
 			// load enemy sprite
 			this.load.image(
 				enemyData[key]["texture"],
