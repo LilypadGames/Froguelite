@@ -1,3 +1,6 @@
+import { Enemy } from "./enemy";
+import { Player } from "./player";
+
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };
 
@@ -32,18 +35,15 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		};
 	}
 
-	update() {
+	handleRotation(objectList: Array<Player | Enemy>) {
 		// rotate left
 		if (this.keyQE.Q.isDown) {
 			// rotate cam
 			this.rotation += this.rotationSpeed;
 
-			// rotate player
-			this.scene.player.rotation -= this.rotationSpeed;
-
-			// rotate enemies
-			this.scene.enemyList.forEach((enemy) => {
-				enemy.rotation -= this.rotationSpeed;
+			// rotate objects counter to cameras rotation
+			objectList.forEach((object) => {
+				object.rotation -= this.rotationSpeed;
 			});
 		}
 		// rotate right
@@ -51,12 +51,9 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			// rotate cam
 			this.rotation -= this.rotationSpeed;
 
-			// rotate player
-			this.scene.player.rotation += this.rotationSpeed;
-
-			// rotate enemies
-			this.scene.enemyList.forEach((enemy) => {
-				enemy.rotation += this.rotationSpeed;
+			// rotate objects counter to cameras rotation
+			objectList.forEach((object) => {
+				object.rotation += this.rotationSpeed;
 			});
 		}
 	}

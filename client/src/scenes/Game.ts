@@ -56,6 +56,9 @@ export class Game extends Core {
 	update() {
 		// handle player
 		this.player.update();
+
+		// handle camera rotation (pass objects to rotate counter to the camera)
+		this.camera.handleRotation([this.player, ...this.enemyList]);
 	}
 
 	// create tilemap world
