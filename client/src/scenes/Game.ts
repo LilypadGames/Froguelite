@@ -1,4 +1,6 @@
 import { Core } from "./internal/Core";
+import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin";
+import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -24,10 +26,23 @@ export class Game extends Core {
 	speedDampening: number = 1.8;
 	turnThreshold: number = 20;
 	rotationSpeed: number = 0.03;
+	outline: OutlinePipelinePlugin.IConfig = {
+		thickness: 1,
+		outlineColor: 0x000000,
+	};
+	glow: GlowFilterPipelinePlugin.IConfig = {
+		distance: 15,
+		outerStrength: 1,
+		glowColor: 0x000000,
+		quality: 1,
+	};
 
 	// world
 	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
 	spawnpoint: any;
+
+	// enemy/object list
+	enemyList: Array<Phaser.Types.Physics.Arcade.SpriteWithDynamicBody> = [];
 
 	constructor() {
 		super({ key: "Game" });
@@ -102,24 +117,31 @@ export class Game extends Core {
 
 	// rotate entire view with objects remaining straight
 	rotateView(direction: string) {
-		// get cam
-		const cam = this.cameras.main;
-
 		// rotate view to the left
 		if (direction === "left") {
 			// rotate cam
-			cam.rotation += this.rotationSpeed;
+			this.cameras.main.rotation += this.rotationSpeed;
 
 			// rotate player
 			this.player.rotation -= this.rotationSpeed;
+
+			// rotate enemies
+			this.enemyList.forEach((enemy) => {
+				enemy.rotation -= this.rotationSpeed;
+			});
 		}
 		// rotate view to the right
 		else if (direction === "right") {
 			// rotate cam
-			cam.rotation -= this.rotationSpeed;
+			this.cameras.main.rotation -= this.rotationSpeed;
 
 			// rotate player
 			this.player.rotation += this.rotationSpeed;
+
+			// rotate enemies
+			this.enemyList.forEach((enemy) => {
+				enemy.rotation += this.rotationSpeed;
+			});
 		}
 	}
 
@@ -377,6 +399,10 @@ export class Game extends Core {
 			this.physics.add.collider(player, layer);
 		});
 
+		// add outline and glow effect
+		this.core.shader.outline().add(player, this.outline);
+		this.core.shader.glow().add(player, this.glow);
+
 		return player;
 	}
 
@@ -386,6 +412,15 @@ export class Game extends Core {
 		let enemyData = this.cache.json.get("enemyData");
 
 		// add enemy
-		this.physics.add.sprite(x, y, id).setScale(enemyData[id]["scale"]);
+		let enemy = this.physics.add
+			.sprite(x, y, id)
+			.setScale(enemyData[id]["scale"]);
+
+		// add enemy to enemy list
+		this.enemyList.push(enemy);
+
+		// add outline and glow effect
+		this.core.shader.outline().add(enemy, this.outline);
+		this.core.shader.glow().add(enemy, this.glow);
 	}
 }

@@ -26,6 +26,7 @@
   "nodeversion": "14.18.1",
   "npmversion": "8.13.2",
   "dependencies": {
+    "phaser3-rex-plugins": "^1.1.80",
     "webfontloader": "^1.6.28"
   }
 }

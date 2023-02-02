@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
+import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin.js";
 
 //
 // These are the settings for the game canvas and game itself.
@@ -15,12 +17,26 @@ export default {
 		height: window.innerHeight,
 	},
 	render: {
-        pixelArt: true,
-    },
+		pixelArt: true,
+	},
 	physics: {
-        default: 'arcade',
-        arcade: {
-            debug: false
-        }
-    },
+		default: "arcade",
+		arcade: {
+			debug: false,
+		},
+	},
+	plugins: {
+		global: [
+			{
+				key: "rexOutlinePipeline",
+				plugin: OutlinePipelinePlugin,
+				start: true,
+			},
+			{
+				key: "rexGlowFilterPipeline",
+				plugin: GlowFilterPipelinePlugin,
+				start: true,
+			},
+		],
+	},
 };
