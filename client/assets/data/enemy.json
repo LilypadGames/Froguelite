@@ -1,7 +1,7 @@
 {
     "LSF": {
         "name": "LSF",
-        "sprite": "lsf",
+        "texture": "lsf",
         "scale": 0.25
     }
 }

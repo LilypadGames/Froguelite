@@ -42,15 +42,6 @@ export class Core extends Phaser.Scene {
 				});
 			},
 		},
-		// shaders
-		shader: {
-			outline: () => {
-				return this.plugins.get("rexOutlinePipeline");
-			},
-			glow: () => {
-				return this.plugins.get("rexGlowFilterPipeline");
-			},
-		},
 	};
 
 	changeScene(scene: string) {
