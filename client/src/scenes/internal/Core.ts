@@ -56,17 +56,20 @@ export class Core extends Phaser.Scene {
 			init: () => {
 				// default cursor
 				this.input.setDefaultCursor(
+					"url(assets/input/cursors/cursor_large.cur) 16 16, pointer"
 				);
 
 				// change cursor on click
 				this.input.on("pointerdown", () => {
 					this.input.setDefaultCursor(
+						"url(assets/input/cursors/cursor_small.cur) 16 16, pointer"
 					);
 				});
 
 				// change cursor back when click released
 				this.input.on("pointerup", () => {
 					this.input.setDefaultCursor(
+						"url(assets/input/cursors/cursor_large.cur) 16 16, pointer"
 					);
 				});
 			},
