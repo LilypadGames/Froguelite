@@ -18,6 +18,20 @@ export class Menu extends Core {
 		// create core mechanics
 		this.core.create();
 
+		// populate key input
+		this.keyESC = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.ESC
+		);
+
+		// options menu
+		this.keyESC.on("down", () => {
+			// pause current scene
+			this.scene.pause();
+
+			// launch pause menu
+			this.scene.launch("Options", this);
+		});
+
 		// logo text
 		const logo = this.make.text({
 			x: window.innerWidth / 2,
@@ -63,7 +77,7 @@ export class Menu extends Core {
 
 		// on click, go to game
 		this.input.on("pointerdown", () => {
-			this.changeScene("Game")
+			this.changeScene("Game");
 		});
 	}
 }

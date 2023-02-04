@@ -14,19 +14,16 @@ type Button = {
 	};
 };
 
-export class Pause extends Core {
-	pausedScene!: Phaser.Scene;
-	worldView!: Phaser.Geom.Rectangle;
-	background!: Phaser.GameObjects.Rectangle;
-	menu!: Sizer;
+export class Options extends Core {
+	previousScene!: Phaser.Scene;
 
 	constructor() {
-		super({ key: "Pause" });
+		super({ key: "Options" });
 	}
 
-	init(pausedScene: Phaser.Scene) {
+	init(previousScene: Phaser.Scene) {
 		// save values
-		this.pausedScene = pausedScene;
+		this.previousScene = previousScene;
 	}
 
 	preload() {
@@ -37,7 +34,7 @@ export class Pause extends Core {
 
 		// pause or resume
 		this.keyESC.on("down", () => {
-			this.resume();
+			this.back();
 		});
 	}
 
@@ -46,7 +43,7 @@ export class Pause extends Core {
 		this.core.create();
 
 		// create transparent background overlay
-		this.background = this.add.rectangle(
+		const background = this.add.rectangle(
 			window.innerWidth / 2,
 			window.innerHeight / 2,
 			window.innerWidth,
@@ -56,7 +53,7 @@ export class Pause extends Core {
 		);
 
 		// create menu (title with buttons)
-		this.menu = new Sizer(this, {
+		const menu = new Sizer(this, {
 			x: window.innerWidth / 2,
 			y: window.innerHeight / 2.2,
 			width: window.innerWidth / 4,
@@ -64,7 +61,7 @@ export class Pause extends Core {
 		})
 			.add(
 				this.make.text({
-					text: "Paused",
+					text: "Options",
 					style: {
 						fontSize: "42px",
 						fontFamily: "Pix",
@@ -80,10 +77,11 @@ export class Pause extends Core {
 					width: window.innerWidth / 4,
 					orientation: "y",
 					buttons: [
-						this.button("Resume", "resume"),
-						this.button("Options", "options"),
-						this.button("Restart", "restart"),
-						// this.button("Quit", "quit"),
+						this.button(
+							"Low Performance Mode",
+							"lowperformancemode"
+						),
+						this.button("Back", "back"),
 					],
 					align: "center",
 					space: {
@@ -94,18 +92,9 @@ export class Pause extends Core {
 					.on(
 						"button.over",
 						(button: Button) => {
-							// special color for restart button
-							if (button.name === "restart") {
-								button
-									.getElement("background")
-									.setFillStyle(0xff0000, 0.5);
-							}
-							// other buttons
-							else {
-								button
-									.getElement("background")
-									.setFillStyle(0x000000, 0.5);
-							}
+							button
+								.getElement("background")
+								.setFillStyle(0x000000, 0.5);
 						},
 						this
 					)
@@ -122,35 +111,14 @@ export class Pause extends Core {
 					.on(
 						"button.click",
 						(button: Button) => {
-							// resume button
-							if (button.name === "resume") {
-								// go back to previous scene
-								this.resume();
-							}
-							// options menu
-							else if (button.name === "options") {
-								// hide pause menu
-								this.hide();
-
-								// pause the pause menu
-								this.scene.pause();
-
-								// launch the options menu
-								this.scene.launch("Options", this);
-							}
-							// restart button
-							else if (button.name === "restart") {
-								// reload the page to start from menu
-								this.core.restart();
+							if (button.name === "back") {
+								this.back();
 							}
 						},
 						this
 					)
 			)
 			.layout();
-
-		// show menu when resumed
-		this.events.on("resume", this.show, this);
 	}
 
 	button(text: string, id: string) {
@@ -179,21 +147,11 @@ export class Pause extends Core {
 		});
 	}
 
-	resume() {
+	back() {
 		// resume previous scene
-		this.scene.resume(this.pausedScene);
+		this.scene.resume(this.previousScene);
 
-		// stop pause menu
+		// stop options menu
 		this.scene.stop();
-	}
-
-	hide() {
-		this.background.setVisible(false);
-		this.menu.setVisible(false);
-	}
-
-	show() {
-		this.background.setVisible(true);
-		this.menu.setVisible(true);
 	}
 }

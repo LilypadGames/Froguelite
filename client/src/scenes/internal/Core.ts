@@ -19,7 +19,11 @@ export class Core extends Phaser.Scene {
 			this.input.mouse.disableContextMenu();
 
 			// set up pause menu key (if not in the main Menu or already in the Pause menu)
-			if (this.scene.key != "Pause" && this.scene.key != "Menu") {
+			if (
+				this.scene.key != "Pause" &&
+				this.scene.key != "Menu" &&
+				this.scene.key != "Options"
+			) {
 				// populate key input
 				this.keyESC = this.input.keyboard.addKey(
 					Phaser.Input.Keyboard.KeyCodes.ESC
