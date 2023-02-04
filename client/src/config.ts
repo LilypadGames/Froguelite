@@ -19,6 +19,10 @@ export default {
 	render: {
 		pixelArt: true,
 	},
+	fps: {
+		target: 30,
+		forceSetTimeOut: true
+	},
 	physics: {
 		default: "arcade",
 		arcade: {
