@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import store from "storejs";
 
 //
 // These are overall mechanics that are common to several different scenes, such as a custom cursor or other UI.
@@ -76,6 +77,12 @@ export class Core extends Phaser.Scene {
 						"url(assets/input/cursors/cursor_large.cur) 16 16, pointer"
 					);
 				});
+			},
+		},
+		highPerformanceMode: {
+			set: (mode: boolean) => {
+				// save option
+				store.set("settings.options.highPerformanceMode", mode);
 			},
 		},
 	};

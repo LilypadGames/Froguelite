@@ -2,6 +2,7 @@ import { Core } from "./internal/Core";
 import { Enemy } from "../scripts/Enemy";
 import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
+import store from "storejs";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -51,6 +52,9 @@ export class Game extends Core {
 
 		// fade in to begin
 		// this.camera.fadeIn();
+
+		// execute when game is resumed
+		this.events.on("resume", this.resume, this);
 	}
 
 	update() {
@@ -135,5 +139,11 @@ export class Game extends Core {
 		this.enemyList.push(enemy);
 
 		return enemy;
+	}
+
+	resume() {
+		[this.player, ...this.enemyList].forEach((object) => {
+			object.applyShaders(store.get("settings.options.highPerformanceMode"));
+		})
 	}
 }

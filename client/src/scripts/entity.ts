@@ -1,17 +1,29 @@
-import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin";
+import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin";
+import store from "storejs";
+import OutlinePostFxPipeline from "phaser3-rex-plugins/plugins/outlinepipeline";
+import GlowFilterPostFxPipeline from "phaser3-rex-plugins/plugins/glowfilter2pipeline";
 
 export class Entity extends Phaser.Physics.Arcade.Sprite {
-	isDead: boolean;
 	textureKey: string;
 
+	// shaders
+	outlineFxInstance!: OutlinePostFxPipeline;
+	glowFxInstance!: GlowFilterPostFxPipeline;
+	outlineFx = this.scene.plugins.get(
+		"rexOutlinePipeline"
+	) as OutlinePipelinePlugin;
+	glowFx = this.scene.plugins.get(
+		"rexGlowFilterPipeline"
+	) as GlowFilterPipelinePlugin;
+
 	// config
-	outline: OutlinePipelinePlugin.IConfig = {
+	outline = {
 		thickness: 1,
 		outlineColor: 0x000000,
 		quality: 1,
 	};
-	glow: GlowFilterPipelinePlugin.IConfig = {
+	glow = {
 		distance: 15,
 		outerStrength: 1,
 		glowColor: 0x000000,
@@ -27,19 +39,9 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 		this.textureKey = textureKey;
 		this.scene.add.existing(this);
 		this.scene.physics.world.enableBody(this, 0);
-		this.isDead = false;
 
 		// apply shader
-		this.applyShaders(true);
-	}
-
-	// kill entity
-	kill() {
-		// remove entity if not already dead
-		if (!this.isDead) {
-			this.isDead = true;
-			this.destroy();
-		}
+		this.applyShaders(store.get("settings.options.highPerformanceMode"));
 	}
 
 	applyShaders(performanceMode = false) {
@@ -48,15 +50,17 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 		let glowSettings = this.glow;
 
 		// performance mode enabled
-		if (performanceMode === true) {
+		if (performanceMode) {
 			outlineSettings.quality = 0.02;
 			glowSettings.quality = 0.02;
 		}
 
-		// apply outline
-		this.scene.plugins.get("rexOutlinePipeline").add(this, outlineSettings);
+		// remove FX
+		if (this.outlineFxInstance !== undefined) this.outlineFx.remove(this);
+		if (this.glowFxInstance !== undefined) this.glowFx.remove(this);
 
-		// apply glow
-		this.scene.plugins.get("rexGlowFilterPipeline").add(this, glowSettings);
+		// set FX
+		this.outlineFxInstance = this.outlineFx.add(this, outlineSettings);
+		this.glowFxInstance = this.glowFx.add(this, glowSettings);
 	}
 }

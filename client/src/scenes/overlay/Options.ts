@@ -4,21 +4,7 @@ import {
 	Label,
 	Buttons,
 } from "phaser3-rex-plugins/templates/ui/ui-components.js";
-
-type Button = {
-	name: string;
-	getElement: (element: string) => {
-		(): any;
-		new (): any;
-		setFillStyle: {
-			(
-				color: number | undefined,
-				transparency?: number | undefined
-			): void;
-			new (): any;
-		};
-	};
-};
+import store from "storejs";
 
 export class Options extends Core {
 	previousScene!: Phaser.Scene;
@@ -58,6 +44,11 @@ export class Options extends Core {
 			0.5
 		);
 
+		// get initial values
+		let highPerformanceMode = store.get(
+			"settings.options.highPerformanceMode"
+		);
+
 		// create menu (title with buttons)
 		const menu = new Sizer(this, {
 			x: window.innerWidth / 2,
@@ -84,7 +75,8 @@ export class Options extends Core {
 					buttons: [
 						this.checkbox(
 							"High Performance Mode",
-							"highPerformanceMode"
+							"highPerformanceMode",
+							highPerformanceMode
 						),
 					],
 					click: {
@@ -92,11 +84,16 @@ export class Options extends Core {
 						clickInterval: 100,
 					},
 					type: "checkboxes",
-					setValueCallback: (button, value) => {
+					setValueCallback: (button: any, value) => {
 						// fill in checkbox or empty it dependant on checkbox value
 						button
 							.getElement("icon")
 							.setFillStyle(value ? 0xffffff : undefined);
+
+						// high performance mode changed
+						if (button.name === "highPerformanceMode") {
+							this.core.highPerformanceMode.set(value);
+						}
 					},
 					align: "center",
 					space: {
@@ -104,9 +101,10 @@ export class Options extends Core {
 						top: 30,
 					},
 				})
+					.setButtonState("highPerformanceMode", highPerformanceMode)
 					.on(
 						"button.over",
-						(button: Button) => {
+						(button: any) => {
 							button
 								.getElement("background")
 								.setFillStyle(0x000000, 0.5);
@@ -115,7 +113,7 @@ export class Options extends Core {
 					)
 					.on(
 						"button.out",
-						(button: Button) => {
+						(button: any) => {
 							// revert to default style
 							button
 								.getElement("background")
@@ -140,7 +138,7 @@ export class Options extends Core {
 				})
 					.on(
 						"button.over",
-						(button: Button) => {
+						(button: any) => {
 							button
 								.getElement("background")
 								.setFillStyle(0x000000, 0.5);
@@ -149,7 +147,7 @@ export class Options extends Core {
 					)
 					.on(
 						"button.out",
-						(button: Button) => {
+						(button: any) => {
 							// revert to default style
 							button
 								.getElement("background")
@@ -159,7 +157,7 @@ export class Options extends Core {
 					)
 					.on(
 						"button.click",
-						(button: Button) => {
+						(button: any) => {
 							// back button
 							if (button.name === "back") {
 								this.back();
@@ -197,8 +195,8 @@ export class Options extends Core {
 		});
 	}
 
-	checkbox(text: string, id: string) {
-		return new Label(this, {
+	checkbox(text: string, id: string, initialValue: boolean) {
+		let checkbox = new Label(this, {
 			background: this.add.rectangle(0, 0, 400, 100, 0x000000, 0.2),
 			text: this.make.text({
 				text: text,
@@ -210,7 +208,10 @@ export class Options extends Core {
 				origin: { x: 0.5, y: 0.5 },
 				add: true,
 			}),
-			icon: this.add.rectangle(0, 0, 35, 35).setStrokeStyle(3, 0xffffff),
+			icon: this.add
+				.rectangle(0, 0, 35, 35)
+				.setStrokeStyle(3, 0xffffff)
+				.setFillStyle(initialValue ? 0xffffff : undefined),
 			align: "center",
 			space: {
 				left: 10,
@@ -222,6 +223,8 @@ export class Options extends Core {
 			},
 			name: id,
 		});
+
+		return checkbox;
 	}
 
 	back() {
