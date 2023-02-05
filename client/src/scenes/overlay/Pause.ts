@@ -59,7 +59,6 @@ export class Pause extends Core {
 		this.menu = new Sizer(this, {
 			x: window.innerWidth / 2,
 			y: window.innerHeight / 2.2,
-			width: window.innerWidth / 4,
 			orientation: "y",
 		})
 			.add(
