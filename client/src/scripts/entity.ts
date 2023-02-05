@@ -9,6 +9,7 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 	outline: OutlinePipelinePlugin.IConfig = {
 		thickness: 1,
 		outlineColor: 0x000000,
+		quality: 1,
 	};
 	glow: GlowFilterPipelinePlugin.IConfig = {
 		distance: 15,
@@ -28,11 +29,8 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 		this.scene.physics.world.enableBody(this, 0);
 		this.isDead = false;
 
-		// apply outline
-		scene.plugins.get("rexOutlinePipeline").add(this, this.outline);
-
-		// apply glow
-		scene.plugins.get("rexGlowFilterPipeline").add(this, this.glow);
+		// apply shader
+		this.applyShaders(true);
 	}
 
 	// kill entity
@@ -42,5 +40,23 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 			this.isDead = true;
 			this.destroy();
 		}
+	}
+
+	applyShaders(performanceMode = false) {
+		// get options
+		let outlineSettings = this.outline;
+		let glowSettings = this.glow;
+
+		// performance mode enabled
+		if (performanceMode === true) {
+			outlineSettings.quality = 0.02;
+			glowSettings.quality = 0.02;
+		}
+
+		// apply outline
+		this.scene.plugins.get("rexOutlinePipeline").add(this, outlineSettings);
+
+		// apply glow
+		this.scene.plugins.get("rexGlowFilterPipeline").add(this, glowSettings);
 	}
 }
