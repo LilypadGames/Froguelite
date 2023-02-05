@@ -1,6 +1,6 @@
-import { Entity } from "./entity";
+import { LivingEntity } from "./LivingEntity";
 
-export class Enemy extends Entity {
+export class Enemy extends LivingEntity {
 	id: string;
 
 	constructor(scene: Phaser.Scene, x: number, y: number, id: string) {

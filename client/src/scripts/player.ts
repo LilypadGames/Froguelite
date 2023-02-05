@@ -1,6 +1,6 @@
-import { Entity } from "./entity";
+import { LivingEntity } from "./LivingEntity";
 
-export class Player extends Entity {
+export class Player extends LivingEntity {
 	// typings
 	keyArrows!: Phaser.Types.Input.Keyboard.CursorKeys;
 	keyWASD!: {

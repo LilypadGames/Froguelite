@@ -1,7 +1,7 @@
 import { Core } from "./internal/Core";
-import { Player } from "../scripts/player";
-import { Enemy } from "../scripts/enemy";
-import { Camera } from "../scripts/camera";
+import { Enemy } from "../scripts/Enemy";
+import { Player } from "../scripts/Player";
+import { Camera } from "../scripts/Camera";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.

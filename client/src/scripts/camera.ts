@@ -1,5 +1,5 @@
-import { Enemy } from "./enemy";
-import { Player } from "./player";
+import { Enemy } from "./Enemy";
+import { Player } from "./Player";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };
