@@ -46,8 +46,8 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 
 	applyShaders(performanceMode = false) {
 		// get options
-		let outlineSettings = this.outline;
-		let glowSettings = this.glow;
+		let outlineSettings = JSON.parse(JSON.stringify(this.outline));
+		let glowSettings = JSON.parse(JSON.stringify(this.glow));
 
 		// performance mode enabled
 		if (performanceMode) {
@@ -55,11 +55,11 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 			glowSettings.quality = 0.02;
 		}
 
-		// remove FX
+		// remove old FX
 		if (this.outlineFxInstance !== undefined) this.outlineFx.remove(this);
 		if (this.glowFxInstance !== undefined) this.glowFx.remove(this);
 
-		// set FX
+		// set new FX
 		this.outlineFxInstance = this.outlineFx.add(this, outlineSettings);
 		this.glowFxInstance = this.glowFx.add(this, glowSettings);
 	}
