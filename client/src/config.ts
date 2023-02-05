@@ -21,7 +21,7 @@ export default {
 	},
 	fps: {
 		target: 30,
-		forceSetTimeOut: true
+		forceSetTimeOut: true,
 	},
 	physics: {
 		default: "arcade",

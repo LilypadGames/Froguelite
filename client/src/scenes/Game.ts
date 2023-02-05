@@ -143,7 +143,9 @@ export class Game extends Core {
 
 	resume() {
 		[this.player, ...this.enemyList].forEach((object) => {
-			object.applyShaders(store.get("settings.options.highPerformanceMode"));
-		})
+			object.applyShaders(
+				store.get("settings.options.highPerformanceMode")
+			);
+		});
 	}
 }
