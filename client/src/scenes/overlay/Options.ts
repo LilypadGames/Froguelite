@@ -7,10 +7,16 @@ import {
 
 type Button = {
 	name: string;
-	getElement: (arg0: string) => {
+	getElement: (element: string) => {
 		(): any;
 		new (): any;
-		setFillStyle: { (arg0: number, arg1: number): void; new (): any };
+		setFillStyle: {
+			(
+				color: number | undefined,
+				transparency?: number | undefined
+			): void;
+			new (): any;
+		};
 	};
 };
 
@@ -56,7 +62,6 @@ export class Options extends Core {
 		const menu = new Sizer(this, {
 			x: window.innerWidth / 2,
 			y: window.innerHeight / 2.2,
-			width: window.innerWidth / 4,
 			orientation: "y",
 		})
 			.add(
@@ -74,15 +79,25 @@ export class Options extends Core {
 			)
 			.add(
 				new Buttons(this, {
-					width: window.innerWidth / 4,
+					width: window.innerWidth / 3,
 					orientation: "y",
 					buttons: [
-						this.button(
-							"Low Performance Mode",
-							"lowperformancemode"
+						this.checkbox(
+							"High Performance Mode",
+							"highPerformanceMode"
 						),
-						this.button("Back", "back"),
 					],
+					click: {
+						mode: "pointerup",
+						clickInterval: 100,
+					},
+					type: "checkboxes",
+					setValueCallback: (button, value) => {
+						// fill in checkbox or empty it dependant on checkbox value
+						button
+							.getElement("icon")
+							.setFillStyle(value ? 0xffffff : undefined);
+					},
 					align: "center",
 					space: {
 						item: 20,
@@ -108,9 +123,44 @@ export class Options extends Core {
 						},
 						this
 					)
+			)
+			.add(
+				new Buttons(this, {
+					width: window.innerWidth / 3,
+					orientation: "y",
+					buttons: [this.button("Back", "back")],
+					click: {
+						mode: "pointerup",
+						clickInterval: 100,
+					},
+					align: "center",
+					space: {
+						item: 20,
+					},
+				})
+					.on(
+						"button.over",
+						(button: Button) => {
+							button
+								.getElement("background")
+								.setFillStyle(0x000000, 0.5);
+						},
+						this
+					)
+					.on(
+						"button.out",
+						(button: Button) => {
+							// revert to default style
+							button
+								.getElement("background")
+								.setFillStyle(0x000000, 0.2);
+						},
+						this
+					)
 					.on(
 						"button.click",
 						(button: Button) => {
+							// back button
 							if (button.name === "back") {
 								this.back();
 							}
@@ -141,6 +191,33 @@ export class Options extends Core {
 				top: 10,
 				bottom: 10,
 				icon: 10,
+				text: 10,
+			},
+			name: id,
+		});
+	}
+
+	checkbox(text: string, id: string) {
+		return new Label(this, {
+			background: this.add.rectangle(0, 0, 400, 100, 0x000000, 0.2),
+			text: this.make.text({
+				text: text,
+				style: {
+					fontSize: "26px",
+					fontFamily: "Pix",
+					color: "#ffffff",
+				},
+				origin: { x: 0.5, y: 0.5 },
+				add: true,
+			}),
+			icon: this.add.rectangle(0, 0, 35, 35).setStrokeStyle(3, 0xffffff),
+			align: "center",
+			space: {
+				left: 10,
+				right: 10,
+				top: 10,
+				bottom: 10,
+				icon: 30,
 				text: 10,
 			},
 			name: id,
