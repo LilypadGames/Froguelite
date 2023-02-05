@@ -76,6 +76,9 @@ export class Game extends Core {
 			// add layer
 			map.createLayer(layer.name, tileset, 0, 0);
 
+			// fix culling (fixes pop-in when player rotates camera)
+			layer.tilemapLayer.setCullPadding(4, 4)
+
 			// add collisions (if layer has them)
 			layer.properties.forEach((property: any) => {
 				if (property.name === "wall" && property.value) {
