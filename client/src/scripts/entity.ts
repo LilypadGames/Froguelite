@@ -37,8 +37,15 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 		// save values
 		this.scene = scene;
 		this.textureKey = textureKey;
+
+		// set up collisions
 		this.scene.add.existing(this);
 		this.scene.physics.world.enableBody(this, 0);
+		this.setCircle(
+			this.body.halfWidth,
+			0,
+			this.body.halfHeight - this.body.halfWidth
+		);
 
 		// apply shader
 		this.applyShaders(store.get("settings.options.highPerformanceMode"));
