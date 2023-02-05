@@ -71,15 +71,18 @@ export class Game extends Core {
 		const map = this.make.tilemap({ key: "riverside" });
 		const tileset = map.addTilesetImage("tiles", "world_tiles");
 
-		// add layers
-		map.createLayer("Grass", tileset, 0, 0);
-		map.createLayer("Sand", tileset, 0, 0);
-		this.collisionLayers.push(map.createLayer("Water", tileset, 0, 0));
-		this.collisionLayers.push(map.createLayer("Bounds", tileset, 0, 0));
+		// init layers
+		map.layers.forEach((layer) => {
+			// add layer
+			map.createLayer(layer.name, tileset, 0, 0);
 
-		// add collisions
-		this.collisionLayers.forEach((layer) => {
-			layer.setCollisionByExclusion([-1]);
+			// add collisions (if layer has them)
+			layer.properties.forEach((property: any) => {
+				if (property.name === "wall" && property.value) {
+					this.collisionLayers.push(layer.tilemapLayer);
+					layer.tilemapLayer.setCollisionByExclusion([-1]);
+				}
+			});
 		});
 
 		// get spawnpoint
