@@ -1,0 +1,8 @@
+{
+    "snot_bubble": {
+        "name": "Snot Bubble",
+        "texture": "snot_bubble",
+        "scale": 1,
+        "damage": 2
+    }
+}

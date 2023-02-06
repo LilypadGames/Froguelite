@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "anims",
+        "Cooldown",
         "Froguelike",
         "gameplay",
         "glowfilter",
@@ -16,6 +17,7 @@
         "Tilemaps",
         "Tileset",
         "WASD",
+        "worldstep",
         "ymbols",
         "yoyo"
     ]

@@ -19,6 +19,7 @@ export class Game extends Core {
 
 	// camera
 	camera!: Camera;
+	debug!: Phaser.GameObjects.Text;
 
 	constructor() {
 		super({ key: "Game" });
@@ -55,6 +56,9 @@ export class Game extends Core {
 
 		// execute when game is resumed
 		this.events.on("resume", this.resume, this);
+
+		// debug
+		this.scene.launch("Debug", { mainScene: this, player: this.player });
 	}
 
 	update() {
@@ -77,7 +81,7 @@ export class Game extends Core {
 			map.createLayer(layer.name, tileset, 0, 0);
 
 			// fix culling (fixes pop-in when player rotates camera)
-			layer.tilemapLayer.setCullPadding(4, 4)
+			layer.tilemapLayer.setCullPadding(4, 4);
 
 			// add collisions (if layer has them)
 			layer.properties.forEach((property: any) => {

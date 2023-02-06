@@ -16,6 +16,11 @@ export class Load extends Phaser.Scene {
 						key: "enemyData",
 						url: "assets/data/enemy.json",
 					},
+					{
+						type: "json",
+						key: "projectileData",
+						url: "assets/data/projectile.json",
+					},
 				],
 			},
 		});
@@ -40,6 +45,20 @@ export class Load extends Phaser.Scene {
 			this.load.image(
 				enemyData[key]["texture"],
 				"assets/enemy/" + enemyData[key]["texture"] + ".png"
+			);
+		});
+
+		// load projectile data
+		let projectileData = this.cache.json.get("projectileData");
+		Object.keys(projectileData).forEach((key) => {
+			// load projectile sprite
+			this.load.spritesheet(
+				projectileData[key]["texture"],
+				"assets/fx/" + projectileData[key]["texture"] + ".png",
+				{
+					frameWidth: 24,
+					frameHeight: 24,
+				}
 			);
 		});
 

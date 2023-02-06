@@ -1,4 +1,5 @@
 import { LivingEntity } from "./LivingEntity";
+import { Projectile, Projectiles } from "./Projectile";
 
 export class Player extends LivingEntity {
 	// typings
@@ -14,6 +15,11 @@ export class Player extends LivingEntity {
 	speed: number = 50;
 	speedDampening: number = 1.8;
 	turnThreshold: number = 20;
+	fireRate: number = 300;
+
+	// attack
+	fireCooldown: number = 0;
+	projectiles: Projectiles;
 
 	constructor(scene: Phaser.Scene, x: number, y: number, textureKey: string) {
 		// pass values
@@ -74,10 +80,54 @@ export class Player extends LivingEntity {
 
 		// make player collide with world bounds
 		this.setCollideWorldBounds(true);
+
+		// initialize projectiles
+		this.projectiles = new Projectiles(this.scene, "snot_bubble");
 	}
 
 	update() {
+		// handle attacking
+		this.handleAttack();
+
+		// handle movement
 		this.handleMovement();
+	}
+
+	handleAttack() {
+		// shoot projectiles
+		if (
+			this.scene.input.activePointer.isDown &&
+			this.scene.time.now > this.fireCooldown
+		) {
+			// reset cooldown
+			this.fireCooldown = this.scene.time.now + this.fireRate;
+
+			// get mouse position relative to the camera view
+			let mouse = {
+				x:
+					this.scene.input.activePointer.x /
+					this.scene.cameras.main.zoomX,
+				y:
+					this.scene.input.activePointer.y /
+					this.scene.cameras.main.zoomY,
+			};
+
+			// get player position relative to the camera view
+			let player = {
+				x: this.scene.cameras.main.worldView.width / 2,
+				y: this.scene.cameras.main.worldView.height / 2,
+			};
+
+			// fire projectile from the current player position to the current mouse position
+			this.projectiles.fire(
+				this.x,
+				this.y,
+				player.x,
+				player.y,
+				mouse.x,
+				mouse.y
+			);
+		}
 	}
 
 	handleMovement() {
