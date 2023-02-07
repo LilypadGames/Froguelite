@@ -1,4 +1,5 @@
 import { Player } from "../../scripts/Player";
+import { Game } from "../Game";
 import { Core } from "../internal/Core";
 
 export class Debug extends Core {
@@ -10,10 +11,10 @@ export class Debug extends Core {
 		super({ key: "Debug" });
 	}
 
-	init(data: { mainScene: Phaser.Scene; player: Player }) {
+	init(mainScene: Game) {
 		// save values
-		this.mainScene = data.mainScene;
-		this.player = data.player;
+		this.mainScene = mainScene;
+		this.player = mainScene.player;
 	}
 
 	preload() {}

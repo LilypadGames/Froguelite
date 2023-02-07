@@ -7,6 +7,7 @@ import store from "storejs";
 
 export class Core extends Phaser.Scene {
 	keyESC!: Phaser.Input.Keyboard.Key;
+	keySHIFT!: Phaser.Input.Keyboard.Key;
 
 	constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
 		super(config);
@@ -19,7 +20,7 @@ export class Core extends Phaser.Scene {
 			// disable right-click context menu
 			this.input.mouse.disableContextMenu();
 
-			// set up pause menu key (if not in the main Menu or already in the Pause menu)
+			// pause menu
 			if (
 				this.scene.key != "Pause" &&
 				this.scene.key != "Menu" &&
@@ -30,13 +31,38 @@ export class Core extends Phaser.Scene {
 					Phaser.Input.Keyboard.KeyCodes.ESC
 				);
 
-				// pause or resume
+				// toggle pause menu
 				this.keyESC.on("down", () => {
 					// pause current scene
 					this.scene.pause();
 
 					// launch pause menu
 					this.scene.launch("Pause", this);
+				});
+			}
+
+			// debug info
+			if (this.scene.key === "Game") {
+				// populate key input
+				this.keySHIFT = this.input.keyboard.addKey(
+					Phaser.Input.Keyboard.KeyCodes.SHIFT
+				);
+
+				// toggle debug info
+				this.keySHIFT.on("down", () => {
+					// if debug scene is already open, close it
+					if (
+						this.game.scene
+							.getScenes(true)
+							.some((scene) => scene.scene.key === "Debug")
+					) {
+						this.scene.stop("Debug");
+					}
+					// open debug scene
+					else {
+						// launch debug info overlay
+						this.scene.launch("Debug", this);
+					}
 				});
 			}
 

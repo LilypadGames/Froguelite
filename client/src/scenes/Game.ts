@@ -56,9 +56,6 @@ export class Game extends Core {
 
 		// execute when game is resumed
 		this.events.on("resume", this.resume, this);
-
-		// debug
-		this.scene.launch("Debug", { mainScene: this, player: this.player });
 	}
 
 	update() {
