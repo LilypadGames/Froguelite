@@ -1,10 +1,14 @@
-import { Vector } from "matter";
+import { Circle } from "phaser3-rex-plugins/plugins/gameobjects/shape/shapes/geoms";
 
 export class Projectile extends Phaser.Physics.Arcade.Sprite {
 	dir!: string;
 
-	speed: number = 100;
-	lifespan: number = 1000;
+	// visual
+	depth: number = 11;
+
+	// stats
+	speed: number = 120;
+	lifespan: number = 1;
 	state: number = 0;
 
 	constructor(scene: Phaser.Scene, x: number, y: number, id: string) {
@@ -19,62 +23,70 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		this.x = x;
 		this.y = y;
 
+		// create anims
+		scene.anims.create({
+			key: "bubble",
+			frames: this.anims.generateFrameNumbers(
+				projectileData[id]["texture"],
+				{
+					start: 2,
+					end: 2,
+				}
+			),
+			frameRate: 1,
+			repeat: -1,
+		});
+		scene.anims.create({
+			key: "pop",
+			frames: this.anims.generateFrameNumbers(
+				projectileData[id]["texture"],
+				{
+					start: 3,
+					end: 3,
+				}
+			),
+			frameRate: 1,
+			repeat: -1,
+		});
+
 		// update projectile
-		this.scene.physics.world.on("worldstep", this.update);
+		scene.physics.world.on("worldstep", this.update, this);
+
+		// set depth (renders under/over other sprites)
+		this.setDepth(this.depth);
 
 		// hide
 		this.hide();
 	}
 
 	update(delta: number) {
-		console.log("yo");
 		if (this.state > 0) {
 			// lower lifespan
 			this.state -= delta;
 
-			// if at 0, hide
-			if (this.state === 0) this.hide();
+			// hide projectile when its reached the end of its lifespan
+			if (this.state <= 0) {
+				// reset velocity
+				this.body.reset(this.x, this.y);
+
+				// hide
+				this.hide();
+			}
 		}
 	}
 
 	// fire projectile towards coords
 	fire(
-		actualOriginX: number,
-		actualOriginY: number,
 		originX: number,
 		originY: number,
 		destinationX: number,
 		destinationY: number
 	) {
-		// get angle from origin to destination
-		let angle = Phaser.Math.Angle.Between(
-			originX,
-			originY,
-			destinationX,
-			destinationY
-		);
-
 		// reset velocity
-		this.body.reset(actualOriginX, actualOriginY);
+		this.body.reset(originX, originY);
 
-		// set angle of projectile
-		this.rotation = angle;
-
-		// set velocity
-		let vector = this.scene.physics.velocityFromAngle(angle, this.speed);
-		this.setVelocity(vector.x, vector.y);
-
-		console.log(
-			[
-				"Angle: " + angle,
-				"Vector: " + JSON.stringify(vector),
-				"Origin X: " + originX + " Origin Y: " + originY,
-				"Destination X: " +
-					destinationX +
-					" Destination Y: " +
-					destinationY,
-			].join("\n")
-		);
+		// move projectile in direction of destination
+		this.scene.physics.moveTo(this, destinationX, destinationY);
 
 		// reset lifespan
 		this.setState(this.lifespan);
@@ -84,11 +96,17 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	show() {
+		// reset to default frame
+		this.anims.play("bubble", true);
+
 		this.setActive(true);
 		this.setVisible(true);
 	}
 
 	hide() {
+		// pop effect
+		this.anims.play("pop", true);
+
 		this.setActive(false);
 		this.setVisible(false);
 	}
@@ -104,8 +122,13 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 
 		// create projectiles and hide them
 		this.createMultiple({
-			frameQuantity: 10,
+			quantity: 10,
 			key: projectileData[id]["texture"],
+			frame: 2,
+			setScale: projectileData[id]["scale"],
+			setOrigin: { x: 0.5, y: 0.5 },
+			// hitArea: scene.add.circle(300, 250, 128, 0xff00ff),
+			// hitAreaCallback: () => {},
 			active: false,
 			visible: false,
 			classType: Projectile,
@@ -113,8 +136,6 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 	}
 
 	fire(
-		actualOriginX: number,
-		actualOriginY: number,
 		originX: number,
 		originY: number,
 		destinationX: number,
@@ -125,20 +146,7 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 
 		// if a projectile was found, then fire it
 		if (projectile) {
-			projectile.fire(
-				actualOriginX,
-				actualOriginY,
-				originX,
-				originY,
-				destinationX,
-				destinationY
-			);
+			projectile.fire(originX, originY, destinationX, destinationY);
 		}
-	}
-
-	update(time) {
-		this.children.iterate((projectile) => {
-			projectile.update(time);
-		});
 	}
 }

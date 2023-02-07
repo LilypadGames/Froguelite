@@ -10,6 +10,9 @@ export class Player extends LivingEntity {
 		S: Phaser.Input.Keyboard.Key;
 		D: Phaser.Input.Keyboard.Key;
 	};
+	
+	// visuals
+	depth: number = 10;
 
 	// stats
 	speed: number = 50;
@@ -81,6 +84,9 @@ export class Player extends LivingEntity {
 		// make player collide with world bounds
 		this.setCollideWorldBounds(true);
 
+		// set depth (renders under/over other sprites)
+		this.setDepth(this.depth);
+
 		// initialize projectiles
 		this.projectiles = new Projectiles(this.scene, "snot_bubble");
 	}
@@ -102,30 +108,12 @@ export class Player extends LivingEntity {
 			// reset cooldown
 			this.fireCooldown = this.scene.time.now + this.fireRate;
 
-			// get mouse position relative to the camera view
-			let mouse = {
-				x:
-					this.scene.input.activePointer.x /
-					this.scene.cameras.main.zoomX,
-				y:
-					this.scene.input.activePointer.y /
-					this.scene.cameras.main.zoomY,
-			};
-
-			// get player position relative to the camera view
-			let player = {
-				x: this.scene.cameras.main.worldView.width / 2,
-				y: this.scene.cameras.main.worldView.height / 2,
-			};
-
-			// fire projectile from the current player position to the current mouse position
+			// fire projectile from the current actual world player position to the current actual world mouse position
 			this.projectiles.fire(
 				this.x,
 				this.y,
-				player.x,
-				player.y,
-				mouse.x,
-				mouse.y
+				this.scene.input.activePointer.worldX,
+				this.scene.input.activePointer.worldY
 			);
 		}
 	}

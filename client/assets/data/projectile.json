@@ -2,7 +2,7 @@
     "snot_bubble": {
         "name": "Snot Bubble",
         "texture": "snot_bubble",
-        "scale": 1,
+        "scale": 10,
         "damage": 2
     }
 }
