@@ -1,5 +1,3 @@
-import { Circle } from "phaser3-rex-plugins/plugins/gameobjects/shape/shapes/geoms";
-
 export class Projectile extends Phaser.Physics.Arcade.Sprite {
 	dir!: string;
 
@@ -23,32 +21,6 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		this.x = x;
 		this.y = y;
 
-		// create anims
-		scene.anims.create({
-			key: "bubble",
-			frames: this.anims.generateFrameNumbers(
-				projectileData[id]["texture"],
-				{
-					start: 2,
-					end: 2,
-				}
-			),
-			frameRate: 1,
-			repeat: -1,
-		});
-		scene.anims.create({
-			key: "pop",
-			frames: this.anims.generateFrameNumbers(
-				projectileData[id]["texture"],
-				{
-					start: 3,
-					end: 3,
-				}
-			),
-			frameRate: 1,
-			repeat: -1,
-		});
-
 		// update projectile
 		scene.physics.world.on("worldstep", this.update, this);
 
@@ -59,6 +31,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		this.hide();
 	}
 
+	// runs constantly on active projectiles
 	update(delta: number) {
 		if (this.state > 0) {
 			// lower lifespan
@@ -75,7 +48,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
-	// fire projectile towards coords
+	// fire projectile towards given coords
 	fire(
 		originX: number,
 		originY: number,
@@ -95,23 +68,20 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		this.show();
 	}
 
+	// show and activate projectile
 	show() {
-		// reset to default frame
-		this.anims.play("bubble", true);
-
 		this.setActive(true);
 		this.setVisible(true);
 	}
 
+	// hide and de-activate projectile
 	hide() {
-		// pop effect
-		this.anims.play("pop", true);
-
 		this.setActive(false);
 		this.setVisible(false);
 	}
 }
 
+// group of projectiles. its better to spawn a ton of projectiles, hide them all, then show them one at a time as needed and hide them again when done.
 export class Projectiles extends Phaser.Physics.Arcade.Group {
 	constructor(scene: Phaser.Scene, id: string) {
 		// get projectile data
@@ -124,9 +94,8 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 		this.createMultiple({
 			quantity: 10,
 			key: projectileData[id]["texture"],
-			frame: 2,
-			setScale: projectileData[id]["scale"],
 			setOrigin: { x: 0.5, y: 0.5 },
+			setScale: { x: 0.75, y: 0.75 },
 			// hitArea: scene.add.circle(300, 250, 128, 0xff00ff),
 			// hitAreaCallback: () => {},
 			active: false,
@@ -135,6 +104,7 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 		});
 	}
 
+	// fire projectile. this finds a hidden projectile and fires it.
 	fire(
 		originX: number,
 		originY: number,
