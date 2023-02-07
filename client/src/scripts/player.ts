@@ -1,5 +1,5 @@
 import { LivingEntity } from "./LivingEntity";
-import { Projectile, Projectiles } from "./Projectile";
+import { Projectiles } from "./Projectile";
 
 export class Player extends LivingEntity {
 	// typings
@@ -10,7 +10,7 @@ export class Player extends LivingEntity {
 		S: Phaser.Input.Keyboard.Key;
 		D: Phaser.Input.Keyboard.Key;
 	};
-	
+
 	// visuals
 	depth: number = 10;
 

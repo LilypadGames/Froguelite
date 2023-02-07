@@ -1,5 +1,6 @@
 import { Enemy } from "./Enemy";
 import { Player } from "./Player";
+import { Projectile } from "./Projectile";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };
@@ -35,7 +36,11 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		};
 	}
 
-	handleRotation(objectList: Array<Player | Enemy>) {
+	handleRotation(
+		objectList: Array<
+			Player | Enemy | Projectile | Phaser.GameObjects.GameObject
+		>
+	) {
 		// rotate left
 		if (this.keyQE.Q.isDown) {
 			// rotate cam
