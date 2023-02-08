@@ -22,10 +22,10 @@ export class Enemy extends LivingEntity {
 		this.setScale(enemyData[id]["scale"]);
 
 		// make enemy collide with world bounds
-		this.setCollideWorldBounds(true);
+		// this.setCollideWorldBounds(true);
 
 		// prevent being pushed by player
-		this.setImmovable();
+		// this.setImmovable();
 	}
 
 	update() {}

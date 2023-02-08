@@ -3,8 +3,9 @@ import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pip
 import OutlinePostFxPipeline from "phaser3-rex-plugins/plugins/outlinepipeline";
 import GlowFilterPostFxPipeline from "phaser3-rex-plugins/plugins/glowfilter2pipeline";
 import store from "storejs";
+import { Game } from "../scenes/Game";
 
-export class Entity extends Phaser.Physics.Arcade.Sprite {
+export class Entity extends Phaser.Physics.Matter.Sprite {
 	textureKey: string;
 
 	// shaders
@@ -30,22 +31,24 @@ export class Entity extends Phaser.Physics.Arcade.Sprite {
 		quality: 1,
 	};
 
-	constructor(scene: Phaser.Scene, x: number, y: number, textureKey: string) {
+	constructor(scene: Game, x: number, y: number, textureKey: string) {
 		// pass values
-		super(scene, x, y, textureKey);
+		super(scene.matter.world, x, y, textureKey, null, );
 
 		// save values
 		this.scene = scene;
 		this.textureKey = textureKey;
 
-		// set up collisions
+		// add entity to scene
 		this.scene.add.existing(this);
-		this.scene.physics.world.enableBody(this, 0);
-		this.setCircle(
-			this.body.halfWidth,
-			0,
-			this.body.halfHeight - this.body.halfWidth
-		);
+
+		// set up collisions
+		// this.scene.physics.world.enableBody(this, 0);
+		// this.setCircle(
+		// 	this.body.halfWidth,
+		// 	0,
+		// 	this.body.halfHeight - this.body.halfWidth
+		// );
 
 		// apply shader
 		this.applyShaders(store.get("settings.options.highPerformanceMode"));

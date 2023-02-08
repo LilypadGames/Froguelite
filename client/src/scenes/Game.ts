@@ -36,6 +36,12 @@ export class Game extends Core {
 		// create core mechanics
 		this.core.create();
 
+		// disable gravity
+		this.matter.world.disableGravity();
+
+		// set world bounds
+		this.matter.world.setBounds(0, 0, this.game.canvas.width, this.game.canvas.height);
+
 		// init fixed objects group (objects that rotate with the camera)
 		this.fixedObjectsGroup = this.add.group();
 
@@ -121,11 +127,11 @@ export class Game extends Core {
 
 		// add collisions with layers
 		this.collisionLayers.forEach((layer) => {
-			this.physics.add.collider(player, layer);
+			// this.physics.add.collider(player, layer);
 		});
 
 		// add collisions with enemies
-		this.physics.add.collider(player, this.enemyGroup);
+		// this.physics.add.collider(player, this.enemyGroup);
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(player);
@@ -140,14 +146,14 @@ export class Game extends Core {
 
 		// add collisions with layers
 		this.collisionLayers.forEach((layer) => {
-			this.physics.add.collider(enemy, layer);
+			// this.physics.add.collider(enemy, layer);
 		});
 
 		// add collisions with other enemies
 		if (this.enemyGroup.getChildren().length != 0) {
 			this.enemyGroup.getChildren().forEach((otherEnemy) => {
 				if (enemy != otherEnemy) {
-					this.physics.add.collider(enemy, otherEnemy);
+					// this.physics.add.collider(enemy, otherEnemy);
 				}
 			});
 		}

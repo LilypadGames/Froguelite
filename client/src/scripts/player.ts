@@ -83,7 +83,7 @@ export class Player extends LivingEntity {
 		this.setFrame(2);
 
 		// make player collide with world bounds
-		this.setCollideWorldBounds(true);
+		// this.setCollideWorldBounds(true);
 
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);

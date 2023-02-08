@@ -9,7 +9,15 @@ export class Boot extends Phaser.Scene {
 		super({ key: "Boot" });
 	}
 
-	preload() {}
+	preload() {
+		// file loading error
+		this.load.on("loaderror", (err: object) => {
+			alert(
+				`Sorry, the game failed to load a file... please try refreshing. 💀`
+			);
+			this.game.destroy(true);
+		});
+	}
 
 	create() {
 		this.scene.start("Load");

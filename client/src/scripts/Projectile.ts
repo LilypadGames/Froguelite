@@ -25,7 +25,8 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		this.y = y;
 
 		// update projectile
-		scene.physics.world.on("worldstep", this.update, this);
+		// scene.physics.world.on("worldstep", this.update, this);
+		scene.matter.world.on("worldstep", this.update, this);
 
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);
@@ -94,10 +95,10 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 		let projectileData = scene.cache.json.get("projectileData");
 
 		// pass values
-		super(scene.physics.world, scene);
+		super(scene, scene);
 
 		// create projectiles and hide them
-		let projectiles = this.createMultiple({
+		this.createMultiple({
 			quantity: 10,
 			key: projectileData[id]["texture"],
 			setOrigin: { x: 0.5, y: 0.5 },
@@ -110,20 +111,20 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 		});
 
 		// add world and enemy collisions to projectiles
-		scene.physics.add.collider(
-			this,
-			scene.collisionLayers,
-			this.collideWall,
-			undefined,
-			scene
-		);
-		scene.physics.add.collider(
-			this,
-			scene.enemyGroup,
-			this.collideEnemy,
-			undefined,
-			scene
-		);
+		// scene.physics.add.collider(
+		// 	this,
+		// 	scene.collisionLayers,
+		// 	this.collideWall,
+		// 	undefined,
+		// 	scene
+		// );
+		// scene.physics.add.collider(
+		// 	this,
+		// 	scene.enemyGroup,
+		// 	this.collideEnemy,
+		// 	undefined,
+		// 	scene
+		// );
 	}
 
 	// fire projectile. this finds a hidden projectile and fires it.
