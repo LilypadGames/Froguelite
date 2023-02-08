@@ -1,3 +1,4 @@
+import { Game } from "../scenes/Game";
 import { LivingEntity } from "./LivingEntity";
 import { Projectiles } from "./Projectile";
 
@@ -24,7 +25,7 @@ export class Player extends LivingEntity {
 	fireCooldown: number = 0;
 	projectiles: Projectiles;
 
-	constructor(scene: Phaser.Scene, x: number, y: number, textureKey: string) {
+	constructor(scene: Game, x: number, y: number, textureKey: string) {
 		// pass values
 		super(scene, x, y, textureKey);
 
@@ -88,7 +89,7 @@ export class Player extends LivingEntity {
 		this.setDepth(this.depth);
 
 		// initialize projectiles
-		this.projectiles = new Projectiles(this.scene, "snot_bubble");
+		this.projectiles = new Projectiles(scene, "snot_bubble");
 	}
 
 	update() {

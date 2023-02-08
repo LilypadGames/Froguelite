@@ -1,8 +1,8 @@
 import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin";
-import store from "storejs";
 import OutlinePostFxPipeline from "phaser3-rex-plugins/plugins/outlinepipeline";
 import GlowFilterPostFxPipeline from "phaser3-rex-plugins/plugins/glowfilter2pipeline";
+import store from "storejs";
 
 export class Entity extends Phaser.Physics.Arcade.Sprite {
 	textureKey: string;
