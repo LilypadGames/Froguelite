@@ -33,7 +33,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 
 	constructor(scene: Game, x: number, y: number, textureKey: string) {
 		// pass values
-		super(scene.matter.world, x, y, textureKey, null, );
+		super(scene.matter.world, x, y, textureKey, undefined);
 
 		// save values
 		this.scene = scene;
@@ -49,6 +49,21 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		// 	0,
 		// 	this.body.halfHeight - this.body.halfWidth
 		// );
+		this.setBody(
+			{ type: "rectangle", width: 63, height: 63 },
+			{
+				label: "cottonhead",
+				isSensor: false,
+				density: 2,
+				collisionFilter: {
+					group: scene.CollisionGroup.Enemy,
+					category: scene.CollisionCategory.Enemy,
+					mask:
+						scene.CollisionCategory.Projectile |
+						scene.CollisionCategory.Player,
+				},
+			}
+		);
 
 		// apply shader
 		this.applyShaders(store.get("settings.options.highPerformanceMode"));

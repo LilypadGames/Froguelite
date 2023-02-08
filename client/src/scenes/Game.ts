@@ -13,6 +13,16 @@ export class Game extends Core {
 	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
 	spawnpoint: any;
 
+	// collisions
+	CollisionGroup = {
+		Enemy: 0b0010
+	};
+	CollisionCategory = {
+		Player: 0b0001,
+		Enemy: 0b0010,
+		Projectile: 0b0100,
+	};
+
 	// player
 	player!: Player;
 
@@ -40,7 +50,12 @@ export class Game extends Core {
 		this.matter.world.disableGravity();
 
 		// set world bounds
-		this.matter.world.setBounds(0, 0, this.game.canvas.width, this.game.canvas.height);
+		this.matter.world.setBounds(
+			0,
+			0,
+			this.game.canvas.width,
+			this.game.canvas.height
+		);
 
 		// init fixed objects group (objects that rotate with the camera)
 		this.fixedObjectsGroup = this.add.group();
