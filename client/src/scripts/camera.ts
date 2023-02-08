@@ -1,15 +1,14 @@
-import { Enemy } from "./Enemy";
-import { Player } from "./Player";
-import { Projectile } from "./Projectile";
+import { Game } from "../scenes/Game";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };
 
 	// config
 	rotationSpeed: number = 0.03;
+	scene: Game;
 
 	constructor(
-		scene: Phaser.Scene,
+		scene: Game,
 		x: number,
 		y: number,
 		width: number,
@@ -36,18 +35,19 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		};
 	}
 
-	handleRotation(
-		objectList: Array<
-			Player | Enemy | Projectile | Phaser.GameObjects.GameObject
-		>
-	) {
+	update() {
+		this.handleRotation();
+	}
+
+	// handle rotation of objects that are to be fixed to camera rotation
+	handleRotation() {
 		// rotate left
 		if (this.keyQE.Q.isDown) {
 			// rotate cam
 			this.rotation += this.rotationSpeed;
 
 			// rotate objects counter to cameras rotation
-			objectList.forEach((object) => {
+			this.scene.fixedObjectsGroup.getChildren().forEach((object) => {
 				object.rotation -= this.rotationSpeed;
 			});
 		}
@@ -57,7 +57,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			this.rotation -= this.rotationSpeed;
 
 			// rotate objects counter to cameras rotation
-			objectList.forEach((object) => {
+			this.scene.fixedObjectsGroup.getChildren().forEach((object) => {
 				object.rotation += this.rotationSpeed;
 			});
 		}

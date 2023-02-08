@@ -13,13 +13,15 @@ export class Game extends Core {
 	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
 	spawnpoint: any;
 
-	// player/enemies/objects
+	// player
 	player!: Player;
-	enemyList: Array<Enemy> = [];
+
+	// enemy
+	enemyGroup!: Phaser.GameObjects.Group;
 
 	// camera
 	camera!: Camera;
-	debug!: Phaser.GameObjects.Text;
+	fixedObjectsGroup!: Phaser.GameObjects.Group;
 
 	constructor() {
 		super({ key: "Game" });
@@ -33,6 +35,14 @@ export class Game extends Core {
 	create() {
 		// create core mechanics
 		this.core.create();
+
+		// init fixed objects group (objects that rotate with the camera)
+		this.fixedObjectsGroup = this.add.group();
+
+		// init enemy group
+		this.enemyGroup = this.add.group({
+			classType: Enemy,
+		});
 
 		// create world and add objects/enemies within it
 		this.createWorld();
@@ -61,13 +71,6 @@ export class Game extends Core {
 	update() {
 		// handle player
 		this.player.update();
-
-		// handle camera rotation (pass objects to rotate counter to the camera)
-		this.camera.handleRotation([
-			this.player,
-			...this.enemyList,
-			...this.player.projectiles.children.getArray(),
-		]);
 	}
 
 	// create tilemap world
@@ -122,9 +125,10 @@ export class Game extends Core {
 		});
 
 		// add collisions with enemies
-		this.enemyList.forEach((enemy) => {
-			this.physics.add.collider(player, enemy);
-		});
+		this.physics.add.collider(player, this.enemyGroup);
+
+		// rotate with camera rotation
+		this.fixedObjectsGroup.add(player);
 
 		return player;
 	}
@@ -140,23 +144,30 @@ export class Game extends Core {
 		});
 
 		// add collisions with other enemies
-		if (this.enemyList.length != 0) {
-			this.enemyList.forEach((otherEnemy) => {
-				this.physics.add.collider(enemy, otherEnemy);
+		if (this.enemyGroup.getChildren().length != 0) {
+			this.enemyGroup.getChildren().forEach((otherEnemy) => {
+				if (enemy != otherEnemy) {
+					this.physics.add.collider(enemy, otherEnemy);
+				}
 			});
 		}
 
-		// add enemy to enemy list
-		this.enemyList.push(enemy);
+		// rotate with camera rotation
+		this.fixedObjectsGroup.add(enemy);
+
+		// add enemy to enemy group
+		this.enemyGroup.add(enemy);
 
 		return enemy;
 	}
 
 	resume() {
-		[this.player, ...this.enemyList].forEach((object) => {
-			object.applyShaders(
-				store.get("settings.options.highPerformanceMode")
-			);
-		});
+		[this.player, ...this.enemyGroup.getChildren()].forEach(
+			(object: Player | Enemy) => {
+				object.applyShaders(
+					store.get("settings.options.highPerformanceMode")
+				);
+			}
+		);
 	}
 }

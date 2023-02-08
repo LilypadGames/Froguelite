@@ -1,3 +1,6 @@
+import { Game } from "../scenes/Game";
+import { Enemy } from "./Enemy";
+
 export class Projectile extends Phaser.Physics.Arcade.Sprite {
 	dir!: string;
 
@@ -9,7 +12,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 	lifespan: number = 1;
 	state: number = 0;
 
-	constructor(scene: Phaser.Scene, x: number, y: number, id: string) {
+	constructor(scene: Game, x: number, y: number, id: string) {
 		// get projectile data
 		let projectileData = scene.cache.json.get("projectileData");
 
@@ -26,6 +29,9 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);
+
+		// rotate with camera rotation
+		scene.fixedObjectsGroup.add(this);
 
 		// hide
 		this.hide();
@@ -83,7 +89,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 
 // group of projectiles. its better to spawn a ton of projectiles, hide them all, then show them one at a time as needed and hide them again when done.
 export class Projectiles extends Phaser.Physics.Arcade.Group {
-	constructor(scene: Phaser.Scene, id: string) {
+	constructor(scene: Game, id: string) {
 		// get projectile data
 		let projectileData = scene.cache.json.get("projectileData");
 
@@ -91,7 +97,7 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 		super(scene.physics.world, scene);
 
 		// create projectiles and hide them
-		this.createMultiple({
+		let projectiles = this.createMultiple({
 			quantity: 10,
 			key: projectileData[id]["texture"],
 			setOrigin: { x: 0.5, y: 0.5 },
@@ -102,6 +108,22 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 			visible: false,
 			classType: Projectile,
 		});
+
+		// add world and enemy collisions to projectiles
+		scene.physics.add.collider(
+			this,
+			scene.collisionLayers,
+			this.collideWall,
+			undefined,
+			scene
+		);
+		scene.physics.add.collider(
+			this,
+			scene.enemyGroup,
+			this.collideEnemy,
+			undefined,
+			scene
+		);
 	}
 
 	// fire projectile. this finds a hidden projectile and fires it.
@@ -118,5 +140,15 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 		if (projectile) {
 			projectile.fire(originX, originY, destinationX, destinationY);
 		}
+	}
+
+	collideWall(projectile: Projectile) {
+		console.log("Collided with Wall");
+		projectile.hide();
+	}
+
+	collideEnemy(enemy: Enemy, projectile: Projectile) {
+		console.log("Collided with " + enemy.name);
+		projectile.hide();
 	}
 }
