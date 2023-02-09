@@ -89,12 +89,12 @@ export class Player extends LivingEntity {
 		this.setDepth(this.depth);
 
 		// initialize projectiles
-		this.projectiles = new Projectiles(scene, "snot_bubble");
+		// this.projectiles = new Projectiles(scene, "snot_bubble");
 	}
 
 	update() {
 		// handle attacking
-		this.handleAttack();
+		// this.handleAttack();
 
 		// handle movement
 		this.handleMovement();
@@ -210,7 +210,7 @@ export class Player extends LivingEntity {
 				velocity = this.speed / this.speedDampening;
 
 			// move up
-			vector = this.scene.physics.velocityFromRotation(
+			vector = this.scene.matter.velocityFromRotation(
 				this.rotation,
 				-velocity
 			);

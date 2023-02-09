@@ -50,18 +50,16 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		// 	this.body.halfHeight - this.body.halfWidth
 		// );
 		this.setBody(
-			{ type: "rectangle", width: 63, height: 63 },
+			{ type: "rectangle", width: this.width, height: this.height },
 			{
-				label: "cottonhead",
 				isSensor: false,
-				density: 2,
-				collisionFilter: {
-					group: scene.CollisionGroup.Enemy,
-					category: scene.CollisionCategory.Enemy,
-					mask:
-						scene.CollisionCategory.Projectile |
-						scene.CollisionCategory.Player,
-				},
+				// collisionFilter: {
+				// 	group: scene.CollisionGroup.Enemy,
+				// 	category: scene.CollisionCategory.Enemy,
+				// 	mask:
+				// 		scene.CollisionCategory.Projectile |
+				// 		scene.CollisionCategory.Player,
+				// },
 			}
 		);
 
