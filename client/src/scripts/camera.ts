@@ -1,4 +1,5 @@
 import { Game } from "../scenes/Game";
+import { Entity } from "./Entity";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };
@@ -57,7 +58,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			this.rotation -= this.rotationSpeed;
 
 			// rotate objects counter to cameras rotation
-			this.scene.fixedObjectsGroup.getChildren().forEach((object) => {
+			this.scene.fixedObjectsGroup.getChildren().forEach((object: Entity) => {
 				object.rotation += this.rotationSpeed;
 			});
 		}

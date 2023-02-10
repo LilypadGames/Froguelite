@@ -63,6 +63,11 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 			}
 		);
 
+		// prevent rotation when moving
+		this.setFixedRotation();
+		this.setFriction(1, 0.2, 10);
+		this.setBounce(0);
+
 		// apply shader
 		this.applyShaders(store.get("settings.options.highPerformanceMode"));
 	}

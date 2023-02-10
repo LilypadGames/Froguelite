@@ -1,3 +1,4 @@
+import { Vector } from "matter";
 import { Game } from "../scenes/Game";
 import { LivingEntity } from "./LivingEntity";
 import { Projectiles } from "./Projectile";
@@ -16,14 +17,14 @@ export class Player extends LivingEntity {
 	depth: number = 10;
 
 	// stats
-	speed: number = 50;
+	speed: number = 0.00003;
 	speedDampening: number = 1.8;
 	turnThreshold: number = 20;
 	fireRate: number = 300;
 
 	// attack
 	fireCooldown: number = 0;
-	projectiles: Projectiles;
+	// projectiles: Projectiles;
 
 	constructor(scene: Game, x: number, y: number, textureKey: string) {
 		// pass values
@@ -210,11 +211,12 @@ export class Player extends LivingEntity {
 				velocity = this.speed / this.speedDampening;
 
 			// move up
-			vector = this.scene.matter.velocityFromRotation(
-				this.rotation,
-				-velocity
-			);
-			[vector.x, vector.y] = [vector.y * -1, vector.x];
+			vector.y = -velocity;
+			// vector = this.scene.matter.velocityFromRotation(
+			// 	this.rotation,
+			// 	-velocity
+			// );
+			// [vector.x, vector.y] = [vector.y * -1, vector.x];
 
 			// play moving up animation
 			if (!this.scene.input.activePointer.isDown)
@@ -222,7 +224,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving down
-		if (key.down.isDown) {
+		else if (key.down.isDown) {
 			// determine direction
 			if (directionY === "") directionY = "down";
 
@@ -231,11 +233,12 @@ export class Player extends LivingEntity {
 				velocity = this.speed / this.speedDampening;
 
 			// move down
-			vector = this.scene.physics.velocityFromRotation(
-				this.rotation,
-				velocity
-			);
-			[vector.x, vector.y] = [vector.y * -1, vector.x];
+			vector.y = velocity;
+			// vector = this.scene.physics.velocityFromRotation(
+			// 	this.rotation,
+			// 	velocity
+			// );
+			// [vector.x, vector.y] = [vector.y * -1, vector.x];
 
 			// play moving down animation
 			if (!this.scene.input.activePointer.isDown)
@@ -252,14 +255,15 @@ export class Player extends LivingEntity {
 				velocity = this.speed / this.speedDampening;
 
 			// move left
-			let newVector = this.scene.physics.velocityFromRotation(
-				this.rotation,
-				-velocity
-			);
+			vector.x = -velocity;
+			// let newVector = this.scene.physics.velocityFromRotation(
+			// 	this.rotation,
+			// 	-velocity
+			// );
 
 			// merge with up/down vector to move diagonally
-			vector.x = vector.x + newVector.x;
-			vector.y = vector.y + newVector.y;
+			// vector.x = vector.x + newVector.x;
+			// vector.y = vector.y + newVector.y;
 
 			// play moving left animation
 			if (!this.scene.input.activePointer.isDown)
@@ -267,7 +271,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving right
-		if (key.right.isDown) {
+		else if (key.right.isDown) {
 			// determine direction
 			if (directionX === "") directionX = "right";
 
@@ -276,14 +280,15 @@ export class Player extends LivingEntity {
 				velocity = this.speed / this.speedDampening;
 
 			// move right
-			let newVector = this.scene.physics.velocityFromRotation(
-				this.rotation,
-				velocity
-			);
+			vector.x = velocity;
+			// let newVector = this.scene.physics.velocityFromRotation(
+			// 	this.rotation,
+			// 	velocity
+			// );
 
 			// merge with up/down vector to move diagonally
-			vector.x = vector.x + newVector.x;
-			vector.y = vector.y + newVector.y;
+			// vector.x = vector.x + newVector.x;
+			// vector.y = vector.y + newVector.y;
 
 			// play moving right animation
 			if (!this.scene.input.activePointer.isDown)
@@ -291,7 +296,7 @@ export class Player extends LivingEntity {
 		}
 
 		// move
-		this.setVelocity(vector.x, vector.y);
+		this.applyForce(vector);
 
 		// not moving
 		if (
@@ -300,7 +305,7 @@ export class Player extends LivingEntity {
 			!key.up.isDown &&
 			!key.down.isDown
 		) {
-			this.setVelocity(0);
+			this.setVelocity(0, 0);
 		}
 	}
 }
