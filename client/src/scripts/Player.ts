@@ -111,12 +111,12 @@ export class Player extends LivingEntity {
 			this.fireCooldown = this.scene.time.now + this.fireRate;
 
 			// fire projectile from the current actual world player position to the current actual world mouse position
-			this.projectiles.fire(
-				this.x,
-				this.y,
-				this.scene.input.activePointer.worldX,
-				this.scene.input.activePointer.worldY
-			);
+			// this.projectiles.fire(
+			// 	this.x,
+			// 	this.y,
+			// 	this.scene.input.activePointer.worldX,
+			// 	this.scene.input.activePointer.worldY
+			// );
 		}
 	}
 
@@ -130,23 +130,23 @@ export class Player extends LivingEntity {
 
 		// init vector
 		let vector: Phaser.Math.Vector2 = new Phaser.Math.Vector2();
+		let rotatedVector: Phaser.Math.Vector2 = new Phaser.Math.Vector2();
+
+		// get camera
+		let camera = this.scene.cameras.main;
 
 		// if pointer down, make player face the pointer
 		if (this.scene.input.activePointer.isDown) {
 			// get mouse position relative to the camera view
 			let mouse = {
-				x:
-					this.scene.input.activePointer.x /
-					this.scene.cameras.main.zoomX,
-				y:
-					this.scene.input.activePointer.y /
-					this.scene.cameras.main.zoomY,
+				x: this.scene.input.activePointer.x / camera.zoomX,
+				y: this.scene.input.activePointer.y / camera.zoomY,
 			};
 
 			// get player position relative to the camera view
 			let player = {
-				x: this.scene.cameras.main.worldView.width / 2,
-				y: this.scene.cameras.main.worldView.height / 2,
+				x: camera.worldView.width / 2,
+				y: camera.worldView.height / 2,
 			};
 
 			// get difference between player position and mouse position to determine where the pointer is relative to the player
@@ -212,11 +212,6 @@ export class Player extends LivingEntity {
 
 			// move up
 			vector.y = -velocity;
-			// vector = this.scene.matter.velocityFromRotation(
-			// 	this.rotation,
-			// 	-velocity
-			// );
-			// [vector.x, vector.y] = [vector.y * -1, vector.x];
 
 			// play moving up animation
 			if (!this.scene.input.activePointer.isDown)
@@ -234,11 +229,6 @@ export class Player extends LivingEntity {
 
 			// move down
 			vector.y = velocity;
-			// vector = this.scene.physics.velocityFromRotation(
-			// 	this.rotation,
-			// 	velocity
-			// );
-			// [vector.x, vector.y] = [vector.y * -1, vector.x];
 
 			// play moving down animation
 			if (!this.scene.input.activePointer.isDown)
@@ -256,14 +246,6 @@ export class Player extends LivingEntity {
 
 			// move left
 			vector.x = -velocity;
-			// let newVector = this.scene.physics.velocityFromRotation(
-			// 	this.rotation,
-			// 	-velocity
-			// );
-
-			// merge with up/down vector to move diagonally
-			// vector.x = vector.x + newVector.x;
-			// vector.y = vector.y + newVector.y;
 
 			// play moving left animation
 			if (!this.scene.input.activePointer.isDown)
@@ -281,22 +263,20 @@ export class Player extends LivingEntity {
 
 			// move right
 			vector.x = velocity;
-			// let newVector = this.scene.physics.velocityFromRotation(
-			// 	this.rotation,
-			// 	velocity
-			// );
-
-			// merge with up/down vector to move diagonally
-			// vector.x = vector.x + newVector.x;
-			// vector.y = vector.y + newVector.y;
 
 			// play moving right animation
 			if (!this.scene.input.activePointer.isDown)
 				this.anims.play("right", true);
 		}
 
+		// rotate vector dependant on current camera rotation
+		rotatedVector = this.scene.matter.vector.rotate(
+			vector,
+			-camera.rotation
+		) as Phaser.Math.Vector2;
+
 		// move
-		this.applyForce(vector);
+		this.applyForce(rotatedVector);
 
 		// not moving
 		if (
