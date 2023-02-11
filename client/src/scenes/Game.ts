@@ -15,7 +15,7 @@ export class Game extends Core {
 
 	// collisions
 	CollisionGroup = {
-		Enemy: 0b0010
+		Enemy: 0b0010,
 	};
 	CollisionCategory = {
 		Player: 0b0001,
@@ -112,7 +112,8 @@ export class Game extends Core {
 			layer.properties.forEach((property: any) => {
 				if (property.name === "wall" && property.value) {
 					this.collisionLayers.push(layer.tilemapLayer);
-					layer.tilemapLayer.setCollisionByExclusion([-1]);
+					layer.tilemapLayer.setCollisionByExclusion([-1, 0]);
+					this.matter.world.convertTilemapLayer(layer.tilemapLayer);
 				}
 			});
 		});
