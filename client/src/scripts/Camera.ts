@@ -10,6 +10,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	// config
 	rotationSpeed: number = 0.03;
 	scene: Game;
+	zoomInterval: number = 1;
 
 	constructor(
 		scene: Game,
@@ -53,13 +54,19 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 
 	// handle zoom of camera
 	handleZoom(scroll: number) {
-		// change zoom
-		this.zoomY -= scroll / 50;
+		// zoom out
+		if (scroll > 0) {
+			this.zoom -= this.zoomInterval;
+		}
+		// zoom in
+		else if (scroll < 0) {
+			this.zoom += this.zoomInterval;
+		}
 
 		// max
-		if (this.zoomY > 18) this.zoomY = 18;
+		if (this.zoom > 18) this.zoom = 18;
 		// min
-		else if (this.zoomY < 0) this.zoomY = 0;
+		else if (this.zoom < 5) this.zoom = 5;
 	}
 
 	// handle rotation of objects that are to be fixed to camera rotation
