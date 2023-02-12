@@ -14,14 +14,14 @@ export class Game extends Core {
 	spawnpoint: any;
 
 	// collisions
-	CollisionGroup = {
-		Enemy: 0b0010,
-	};
-	CollisionCategory = {
-		Player: 0b0001,
-		Enemy: 0b0010,
-		Projectile: 0b0100,
-	};
+	// CollisionGroup = {
+	// 	Enemy: 0b0010,
+	// };
+	// CollisionCategory = {
+	// 	Player: 0b0001,
+	// 	Enemy: 0b0010,
+	// 	Projectile: 0b0100,
+	// };
 
 	// player
 	player!: Player;
@@ -142,9 +142,9 @@ export class Game extends Core {
 		let player = new Player(this, x, y, "pp").setOrigin(0.5, 0.5);
 
 		// add collisions with layers
-		this.collisionLayers.forEach((layer) => {
-			// this.physics.add.collider(player, layer);
-		});
+		// this.collisionLayers.forEach((layer) => {
+		// 	this.physics.add.collider(player, layer);
+		// });
 
 		// add collisions with enemies
 		// this.physics.add.collider(player, this.enemyGroup);
@@ -161,18 +161,18 @@ export class Game extends Core {
 		let enemy = new Enemy(this, x, y, id);
 
 		// add collisions with layers
-		this.collisionLayers.forEach((layer) => {
-			// this.physics.add.collider(enemy, layer);
-		});
+		// this.collisionLayers.forEach((layer) => {
+		// 	this.physics.add.collider(enemy, layer);
+		// });
 
-		// add collisions with other enemies
-		if (this.enemyGroup.getChildren().length != 0) {
-			this.enemyGroup.getChildren().forEach((otherEnemy) => {
-				if (enemy != otherEnemy) {
-					// this.physics.add.collider(enemy, otherEnemy);
-				}
-			});
-		}
+		// // add collisions with other enemies
+		// if (this.enemyGroup.getChildren().length != 0) {
+		// 	this.enemyGroup.getChildren().forEach((otherEnemy) => {
+		// 		if (enemy != otherEnemy) {
+		// 			this.physics.add.collider(enemy, otherEnemy);
+		// 		}
+		// 	});
+		// }
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(enemy);

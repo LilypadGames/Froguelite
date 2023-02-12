@@ -25,8 +25,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		this.y = y;
 
 		// update projectile
-		// scene.physics.world.on("worldstep", this.update, this);
-		// scene.matter.world.on("worldstep", this.update, this);
+		scene.matter.world.on("worldstep", this.update, this);
 
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);
