@@ -1,4 +1,3 @@
-import { Vector } from "matter";
 import { Game } from "../scenes/Game";
 import { LivingEntity } from "./LivingEntity";
 import { Projectiles } from "./Projectile";
