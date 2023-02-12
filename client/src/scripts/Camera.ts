@@ -57,13 +57,9 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	// handle zoom of camera
 	handleZoom(scroll: number) {
 		// zoom out
-		if (scroll > 0) {
-			this.zoom -= this.zoomInterval;
-		}
+		if (scroll > 0) this.zoom -= this.zoomInterval;
 		// zoom in
-		else if (scroll < 0) {
-			this.zoom += this.zoomInterval;
-		}
+		else if (scroll < 0) this.zoom += this.zoomInterval;
 
 		// max
 		if (this.zoom > this.zoomMax) this.zoom = this.zoomMax;
