@@ -7,7 +7,7 @@ import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pip
 //
 
 export default {
-	type: Phaser.AUTO,
+	type: Phaser.WEBGL,
 	parent: "game",
 	backgroundColor: "#111",
 	scale: {
@@ -24,10 +24,14 @@ export default {
 		forceSetTimeOut: true,
 	},
 	physics: {
-		default: "arcade",
-		arcade: {
-			debug: true,
-		},
+		default: "matter",
+		matter: {
+			enableSleeping: true,
+			debug: {
+				showBody: true,
+				showStaticBody: true
+			}
+		}
 	},
 	plugins: {
 		global: [

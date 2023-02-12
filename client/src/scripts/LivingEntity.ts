@@ -1,12 +1,20 @@
+import { Game } from "../scenes/Game";
 import { Entity } from "./Entity";
 
 export class LivingEntity extends Entity {
 	isDead: boolean;
 	textureKey: string;
+	scene: Game;
 
-	constructor(scene: Phaser.Scene, x: number, y: number, textureKey: string) {
+	constructor(
+		scene: Game,
+		x: number,
+		y: number,
+		textureKey: string,
+		label: string
+	) {
 		// pass values
-		super(scene, x, y, textureKey);
+		super(scene, x, y, textureKey, label);
 
 		// save values
 		this.scene = scene;

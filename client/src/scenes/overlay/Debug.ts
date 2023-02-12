@@ -3,57 +3,86 @@ import { Game } from "../Game";
 import { Core } from "../internal/Core";
 
 export class Debug extends Core {
-	debugText!: Phaser.GameObjects.Text;
+	sceneGame!: Game;
 	player!: Player;
-	mainScene!: Phaser.Scene;
+	camera!: Phaser.Cameras.Scene2D.Camera;
+	debugText!: Phaser.GameObjects.Text;
 
 	constructor() {
 		super({ key: "Debug" });
 	}
 
-	init(mainScene: Game) {
+	init(sceneGame: Game) {
 		// save values
-		this.mainScene = mainScene;
-		this.player = mainScene.player;
+		this.sceneGame = sceneGame;
+
+		// get player
+		this.player = sceneGame.player;
+
+		// get camera
+		this.camera = sceneGame.cameras.main;
 	}
 
 	preload() {}
 
 	create() {
+		// init debug info text
 		this.debugText = this.add.text(0, 0, "").setScrollFactor(0);
+
+		// enable debug lines
+		this.sceneGame.matter.world.drawDebug = true;
 	}
 
 	update() {
 		// get actual mouse position
-		let pointer = this.mainScene.input.activePointer;
+		let pointer = this.sceneGame.input.activePointer;
 
 		// get mouse position relative to the camera view
 		let mouse = {
 			x:
-				this.mainScene.input.activePointer.x /
-				this.mainScene.cameras.main.zoomX,
+				this.sceneGame.input.activePointer.x /
+				this.sceneGame.cameras.main.zoomX,
 			y:
-				this.mainScene.input.activePointer.y /
-				this.mainScene.cameras.main.zoomY,
+				this.sceneGame.input.activePointer.y /
+				this.sceneGame.cameras.main.zoomY,
 		};
 
-		// get player position relative to the camera view
-		let player = {
-			x: this.mainScene.cameras.main.worldView.width / 2,
-			y: this.mainScene.cameras.main.worldView.height / 2,
-		};
+		// init pressed keys
+		let pressedKeys: Array<string> = [];
+
+		// populate pressed keys
+		if (this.player.keyArrows.up.isDown) pressedKeys.push("Up Arrow");
+		if (this.player.keyArrows.down.isDown) pressedKeys.push("Down Arrow");
+		if (this.player.keyArrows.left.isDown) pressedKeys.push("Left Arrow");
+		if (this.player.keyArrows.right.isDown) pressedKeys.push("Right Arrow");
+		if (this.player.keyWASD.W.isDown) pressedKeys.push("W Key (Up)");
+		if (this.player.keyWASD.S.isDown) pressedKeys.push("S Key (Down)");
+		if (this.player.keyWASD.A.isDown) pressedKeys.push("A Key (Left)");
+		if (this.player.keyWASD.D.isDown) pressedKeys.push("D Key (Right)");
 
 		// update debug
 		this.debugText.setText([
-			"Actual Mouse x: " + pointer.x,
-			"Actual Mouse y: " + pointer.y,
-			"Actual Player x: " + this.player.x,
-			"Actual Player y: " + this.player.y,
+			"Actual Mouse Pos: (" + pointer.x + ", " + pointer.y + ")",
 			"",
-			"Relative Mouse x: " + mouse.x,
-			"Relative Mouse y: " + mouse.y,
-			"Relative Player x: " + player.x,
-			"Relative Player y: " + player.y,
+			"World Mouse Pos: (" + pointer.worldX + ", " + pointer.worldY + ")",
+			"World Player Pos: (" + this.player.x + ", " + this.player.y + ")",
+			"",
+			"Relative To Camera Mouse Pos: (" + mouse.x + ", " + mouse.y + ")",
+			"Relative To Camera Player Pos: (" +
+				this.player.relativePos.x +
+				", " +
+				this.player.relativePos.y +
+				")",
+			"",
+			"Camera Rotation: " + this.camera.rotation,
+			"Player Rotation: " + this.player.rotation,
+			"",
+			"Player Velocity: (" +
+				this.player.body.velocity.x +
+				", " +
+				this.player.body.velocity.y +
+				")",
+			"Pressed Keys: " + pressedKeys.join(", "),
 		]);
 	}
 }

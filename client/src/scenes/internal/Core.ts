@@ -56,7 +56,12 @@ export class Core extends Phaser.Scene {
 							.getScenes(true)
 							.some((scene) => scene.scene.key === "Debug")
 					) {
+						// stop debug scene
 						this.scene.stop("Debug");
+
+						// turn off and remove debug lines
+						this.matter.world.drawDebug = false;
+						this.matter.world.debugGraphic.clear();
 					}
 					// open debug scene
 					else {
@@ -64,6 +69,11 @@ export class Core extends Phaser.Scene {
 						this.scene.launch("Debug", this);
 					}
 				});
+			}
+
+			// turn off debug
+			if (this.scene.key !== "Debug") {
+				this.matter.world.drawDebug = false;
 			}
 
 			// init cursor

@@ -1,4 +1,8 @@
 import { Game } from "../scenes/Game";
+import { Enemy } from "./Enemy";
+import { Entity } from "./Entity";
+import { LivingEntity } from "./LivingEntity";
+import { Player } from "./Player";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };
@@ -47,9 +51,11 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			this.rotation += this.rotationSpeed;
 
 			// rotate objects counter to cameras rotation
-			this.scene.fixedObjectsGroup.getChildren().forEach((object) => {
-				object.rotation -= this.rotationSpeed;
-			});
+			this.scene.fixedObjectsGroup
+				.getChildren()
+				.forEach((object: Entity | LivingEntity | Player | Enemy) => {
+					object.rotation -= this.rotationSpeed;
+				});
 		}
 		// rotate right
 		else if (this.keyQE.E.isDown) {
@@ -57,9 +63,11 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			this.rotation -= this.rotationSpeed;
 
 			// rotate objects counter to cameras rotation
-			this.scene.fixedObjectsGroup.getChildren().forEach((object) => {
-				object.rotation += this.rotationSpeed;
-			});
+			this.scene.fixedObjectsGroup
+				.getChildren()
+				.forEach((object: Entity | LivingEntity | Player | Enemy) => {
+					object.rotation += this.rotationSpeed;
+				});
 		}
 	}
 }

@@ -1,15 +1,13 @@
 import { Game } from "../scenes/Game";
 import { Enemy } from "./Enemy";
 
-export class Projectile extends Phaser.Physics.Arcade.Sprite {
-	dir!: string;
-
+export class Projectile extends Phaser.Physics.Matter.Sprite {
 	// visual
 	depth: number = 11;
 
 	// stats
-	speed: number = 120;
-	lifespan: number = 1;
+	speed!: number;
+	lifespan!: number;
 	state: number = 0;
 
 	constructor(scene: Game, x: number, y: number, id: string) {
@@ -17,15 +15,37 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		let projectileData = scene.cache.json.get("projectileData");
 
 		// pass values
-		super(scene, x, y, projectileData[id]["texture"]);
+		super(scene.matter.world, x, y, projectileData[id]["texture"]);
 
 		// save values
 		this.scene = scene;
 		this.x = x;
 		this.y = y;
+		this.lifespan = projectileData[id]["lifespan"];
+		this.speed = projectileData[id]["speed"];
 
 		// update projectile
-		scene.physics.world.on("worldstep", this.update, this);
+		scene.matter.world.on("afterupdate", this.update, this);
+
+		// trigger collisions, but don't actually collide
+		this.setSensor(true);
+
+		// detect specific collisions
+		this.setOnCollide(
+			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// collided with enemy
+				if (entities.bodyA.gameObject instanceof Enemy) {
+					this.collideEnemy(entities.bodyA);
+				}
+				// collided with wall
+				else if (
+					entities.bodyA.gameObject instanceof
+					Phaser.Physics.Matter.TileBody
+				) {
+					this.collideWall();
+				}
+			}
+		);
 
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);
@@ -37,8 +57,9 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		this.hide();
 	}
 
-	// runs constantly on active projectiles
-	update(delta: number) {
+	// runs on projectiles after physics have been applied
+	update() {
+		let delta = this.scene.matter.world.getDelta();
 		if (this.state > 0) {
 			// lower lifespan
 			this.state -= delta;
@@ -46,7 +67,8 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 			// hide projectile when its reached the end of its lifespan
 			if (this.state <= 0) {
 				// reset velocity
-				this.body.reset(this.x, this.y);
+				this.setPosition(this.x, this.y);
+				this.setVelocity(0, 0);
 
 				// hide
 				this.hide();
@@ -62,16 +84,48 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 		destinationY: number
 	) {
 		// reset velocity
-		this.body.reset(originX, originY);
+		this.setPosition(originX, originY);
+		this.setVelocity(0, 0);
 
-		// move projectile in direction of destination
-		this.scene.physics.moveTo(this, destinationX, destinationY);
+		// get angle
+		let angle = Phaser.Math.Angle.Between(
+			originX,
+			originY,
+			destinationX,
+			destinationY
+		);
+
+		// get vector
+		let vector = this.scene.matter.vector.rotate(
+			new Phaser.Math.Vector2(this.speed, 0),
+			angle
+		);
+
+		// apply force
+		this.applyForce(vector as Phaser.Math.Vector2);
 
 		// reset lifespan
 		this.setState(this.lifespan);
 
 		// show projectile
 		this.show();
+	}
+
+	// collided with enemy
+	collideEnemy(enemyBody: MatterJS.BodyType) {
+		// get enemy
+		let enemy: Enemy = enemyBody.gameObject;
+
+		console.log("Collided with Enemy: " + enemy.name);
+
+		// hide projectile
+		this.hide();
+	}
+
+	// collided with wall
+	collideWall() {
+		console.log("Collided with Wall");
+		this.hide();
 	}
 
 	// show and activate projectile
@@ -88,42 +142,24 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 }
 
 // group of projectiles. its better to spawn a ton of projectiles, hide them all, then show them one at a time as needed and hide them again when done.
-export class Projectiles extends Phaser.Physics.Arcade.Group {
+export class Projectiles extends Phaser.GameObjects.Group {
 	constructor(scene: Game, id: string) {
 		// get projectile data
 		let projectileData = scene.cache.json.get("projectileData");
 
 		// pass values
-		super(scene.physics.world, scene);
+		super(scene);
 
 		// create projectiles and hide them
-		let projectiles = this.createMultiple({
+		this.createMultiple({
 			quantity: 10,
 			key: projectileData[id]["texture"],
 			setOrigin: { x: 0.5, y: 0.5 },
 			setScale: { x: 0.75, y: 0.75 },
-			// hitArea: scene.add.circle(300, 250, 128, 0xff00ff),
-			// hitAreaCallback: () => {},
 			active: false,
 			visible: false,
 			classType: Projectile,
 		});
-
-		// add world and enemy collisions to projectiles
-		scene.physics.add.collider(
-			this,
-			scene.collisionLayers,
-			this.collideWall,
-			undefined,
-			scene
-		);
-		scene.physics.add.collider(
-			this,
-			scene.enemyGroup,
-			this.collideEnemy,
-			undefined,
-			scene
-		);
 	}
 
 	// fire projectile. this finds a hidden projectile and fires it.
@@ -140,15 +176,5 @@ export class Projectiles extends Phaser.Physics.Arcade.Group {
 		if (projectile) {
 			projectile.fire(originX, originY, destinationX, destinationY);
 		}
-	}
-
-	collideWall(projectile: Projectile) {
-		console.log("Collided with Wall");
-		projectile.hide();
-	}
-
-	collideEnemy(enemy: Enemy, projectile: Projectile) {
-		console.log("Collided with " + enemy.name);
-		projectile.hide();
 	}
 }
