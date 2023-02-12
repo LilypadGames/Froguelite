@@ -37,10 +37,29 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			Q: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
 			E: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
 		};
+		scene.input.on(
+			"wheel",
+			(pointer: Phaser.Input.Pointer) => {
+				this.handleZoom(pointer.deltaY);
+			},
+			this
+		);
 	}
 
 	update() {
+		// rotate camera
 		this.handleRotation();
+	}
+
+	// handle zoom of camera
+	handleZoom(scroll: number) {
+		// change zoom
+		this.zoomY -= scroll / 50;
+
+		// max
+		if (this.zoomY > 18) this.zoomY = 18;
+		// min
+		else if (this.zoomY < 0) this.zoomY = 0;
 	}
 
 	// handle rotation of objects that are to be fixed to camera rotation
