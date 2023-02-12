@@ -13,16 +13,6 @@ export class Game extends Core {
 	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
 	spawnpoint: any;
 
-	// collisions
-	// CollisionGroup = {
-	// 	Enemy: 0b0010,
-	// };
-	// CollisionCategory = {
-	// 	Player: 0b0001,
-	// 	Enemy: 0b0010,
-	// 	Projectile: 0b0100,
-	// };
-
 	// player
 	player!: Player;
 
@@ -110,8 +100,12 @@ export class Game extends Core {
 
 			// add collisions (if layer has them)
 			layer.properties.forEach((property: any) => {
+				// this layer is a wall
 				if (property.name === "wall" && property.value) {
+					// add layer to list of collide=able layers
 					this.collisionLayers.push(layer.tilemapLayer);
+
+					// add collision
 					layer.tilemapLayer.setCollisionByExclusion([-1, 0]);
 					this.matter.world.convertTilemapLayer(layer.tilemapLayer);
 				}
@@ -141,14 +135,6 @@ export class Game extends Core {
 		// create player
 		let player = new Player(this, x, y, "pp").setOrigin(0.5, 0.5);
 
-		// add collisions with layers
-		// this.collisionLayers.forEach((layer) => {
-		// 	this.physics.add.collider(player, layer);
-		// });
-
-		// add collisions with enemies
-		// this.physics.add.collider(player, this.enemyGroup);
-
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(player);
 
@@ -159,20 +145,6 @@ export class Game extends Core {
 	spawnEnemy(id: string, x: number, y: number) {
 		// create enemy
 		let enemy = new Enemy(this, x, y, id);
-
-		// add collisions with layers
-		// this.collisionLayers.forEach((layer) => {
-		// 	this.physics.add.collider(enemy, layer);
-		// });
-
-		// // add collisions with other enemies
-		// if (this.enemyGroup.getChildren().length != 0) {
-		// 	this.enemyGroup.getChildren().forEach((otherEnemy) => {
-		// 		if (enemy != otherEnemy) {
-		// 			this.physics.add.collider(enemy, otherEnemy);
-		// 		}
-		// 	});
-		// }
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(enemy);

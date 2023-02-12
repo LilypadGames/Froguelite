@@ -30,6 +30,23 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		// trigger collisions, but don't actually collide
 		this.setSensor(true);
 
+		// detect specific collisions
+		this.setOnCollide(
+			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// collided with enemy
+				if (entities.bodyA.gameObject instanceof Enemy) {
+					this.collideEnemy(entities.bodyA);
+				}
+				// collided with wall
+				else if (
+					entities.bodyA.gameObject instanceof
+					Phaser.Physics.Matter.TileBody
+				) {
+					this.collideWall();
+				}
+			}
+		);
+
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);
 
@@ -94,6 +111,23 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		this.show();
 	}
 
+	// collided with enemy
+	collideEnemy(enemyBody: MatterJS.BodyType) {
+		// get enemy
+		let enemy: Enemy = enemyBody.gameObject;
+
+		console.log("Collided with Enemy: " + enemy.name);
+
+		// hide projectile
+		this.hide();
+	}
+
+	// collided with wall
+	collideWall() {
+		console.log("Collided with Wall");
+		this.hide();
+	}
+
 	// show and activate projectile
 	show() {
 		this.setActive(true);
@@ -142,15 +176,5 @@ export class Projectiles extends Phaser.GameObjects.Group {
 		if (projectile) {
 			projectile.fire(originX, originY, destinationX, destinationY);
 		}
-	}
-
-	collideWall(projectile: Projectile) {
-		console.log("Collided with Wall");
-		projectile.hide();
-	}
-
-	collideEnemy(enemy: Enemy, projectile: Projectile) {
-		console.log("Collided with " + enemy.name);
-		projectile.hide();
 	}
 }

@@ -31,7 +31,13 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		quality: 1,
 	};
 
-	constructor(scene: Game, x: number, y: number, textureKey: string) {
+	constructor(
+		scene: Game,
+		x: number,
+		y: number,
+		textureKey: string,
+		label: string
+	) {
 		// pass values
 		super(scene.matter.world, x, y, textureKey, undefined);
 
@@ -47,6 +53,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 			{ type: "rectangle", width: this.width, height: this.height },
 			{
 				isSensor: false,
+				label: label,
 			}
 		);
 

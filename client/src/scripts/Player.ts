@@ -31,7 +31,7 @@ export class Player extends LivingEntity {
 
 	constructor(scene: Game, x: number, y: number, textureKey: string) {
 		// pass values
-		super(scene, x, y, textureKey);
+		super(scene, x, y, textureKey, "Player");
 
 		// save values
 		this.scene = scene;
