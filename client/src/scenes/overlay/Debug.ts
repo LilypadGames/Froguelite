@@ -26,7 +26,11 @@ export class Debug extends Core {
 	preload() {}
 
 	create() {
+		// init debug info text
 		this.debugText = this.add.text(0, 0, "").setScrollFactor(0);
+
+		// enable debug lines
+		this.sceneGame.matter.world.drawDebug = true;
 	}
 
 	update() {
