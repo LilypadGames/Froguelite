@@ -24,7 +24,10 @@ export class Player extends LivingEntity {
 
 	// attack
 	fireCooldown: number = 0;
-	// projectiles: Projectiles;
+	projectiles: Projectiles;
+
+	// relative position
+	relativePos!: { x: number; y: number };
 
 	constructor(scene: Game, x: number, y: number, textureKey: string) {
 		// pass values
@@ -83,19 +86,25 @@ export class Player extends LivingEntity {
 		// default frame
 		this.setFrame(2);
 
-		// make player collide with world bounds
-		// this.setCollideWorldBounds(true);
-
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);
 
 		// initialize projectiles
-		// this.projectiles = new Projectiles(scene, "snot_bubble");
+		this.projectiles = new Projectiles(scene, "snot_bubble");
 	}
 
 	update() {
+		// get camera
+		let camera = this.scene.cameras.main;
+
+		// calculate relative position
+		this.relativePos = {
+			x: camera.worldView.width / 2,
+			y: camera.worldView.height / 2,
+		};
+
 		// handle attacking
-		// this.handleAttack();
+		this.handleAttack();
 
 		// handle movement
 		this.handleMovement();
@@ -110,13 +119,16 @@ export class Player extends LivingEntity {
 			// reset cooldown
 			this.fireCooldown = this.scene.time.now + this.fireRate;
 
+			// update mouse world position
+			this.scene.input.activePointer.updateWorldPoint(this.scene.camera);
+
 			// fire projectile from the current actual world player position to the current actual world mouse position
-			// this.projectiles.fire(
-			// 	this.x,
-			// 	this.y,
-			// 	this.scene.input.activePointer.worldX,
-			// 	this.scene.input.activePointer.worldY
-			// );
+			this.projectiles.fire(
+				this.x,
+				this.y,
+				this.scene.input.activePointer.worldX,
+				this.scene.input.activePointer.worldY
+			);
 		}
 	}
 
@@ -143,16 +155,10 @@ export class Player extends LivingEntity {
 				y: this.scene.input.activePointer.y / camera.zoomY,
 			};
 
-			// get player position relative to the camera view
-			let player = {
-				x: camera.worldView.width / 2,
-				y: camera.worldView.height / 2,
-			};
-
 			// get difference between player position and mouse position to determine where the pointer is relative to the player
 			let difference = {
-				x: player.x - mouse.x,
-				y: player.y - mouse.y,
+				x: this.relativePos.x - mouse.x,
+				y: this.relativePos.y - mouse.y,
 			};
 
 			// player looking left

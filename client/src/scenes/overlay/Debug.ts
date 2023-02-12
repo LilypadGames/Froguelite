@@ -47,12 +47,6 @@ export class Debug extends Core {
 				this.sceneGame.cameras.main.zoomY,
 		};
 
-		// get player position relative to the camera view
-		let player = {
-			x: this.sceneGame.cameras.main.worldView.width / 2,
-			y: this.sceneGame.cameras.main.worldView.height / 2,
-		};
-
 		// init pressed keys
 		let pressedKeys: Array<string> = [];
 
@@ -69,10 +63,16 @@ export class Debug extends Core {
 		// update debug
 		this.debugText.setText([
 			"Actual Mouse Pos: (" + pointer.x + ", " + pointer.y + ")",
-			"Actual Player Pos: (" + this.player.x + ", " + this.player.y + ")",
 			"",
-			"Relative Mouse Pos: (" + mouse.x + ", " + mouse.y + ")",
-			"Relative Player Pos: (" + player.x + ", " + player.y + ")",
+			"World Mouse Pos: (" + pointer.worldX + ", " + pointer.worldY + ")",
+			"World Player Pos: (" + this.player.x + ", " + this.player.y + ")",
+			"",
+			"Relative To Camera Mouse Pos: (" + mouse.x + ", " + mouse.y + ")",
+			"Relative To Camera Player Pos: (" +
+				this.player.relativePos.x +
+				", " +
+				this.player.relativePos.y +
+				")",
 			"",
 			"Camera Rotation: " + this.camera.rotation,
 			"Player Rotation: " + this.player.rotation,
