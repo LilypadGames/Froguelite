@@ -30,6 +30,7 @@ export class Load extends Phaser.Scene {
 		// load world
 		this.load.image("world_tiles", "assets/world/tiles.png");
 		this.load.tilemapTiledJSON("riverside", "assets/world/riverside.json");
+		this.load.tilemapTiledJSON("dungeon", "assets/world/dungeon.json");
 
 		// load player character sprite sheet
 		this.load.spritesheet("pp", "assets/character/pp.png", {

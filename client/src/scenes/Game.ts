@@ -87,7 +87,7 @@ export class Game extends Core {
 	// create tilemap world
 	createWorld() {
 		// make map
-		const map = this.make.tilemap({ key: "riverside" });
+		const map = this.make.tilemap({ key: "dungeon" });
 		const tileset = map.addTilesetImage("tiles", "world_tiles");
 
 		// init layers
