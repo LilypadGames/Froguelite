@@ -34,7 +34,11 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		scene.cameras.addExisting(this, true);
 
 		// set camera zoom
-		this.setZoom(store.get("settings.options.zoom") ? store.get("settings.options.zoom") : this.zoomDefault);
+		this.setZoom(
+			store.get("settings.options.zoom")
+				? store.get("settings.options.zoom")
+				: this.zoomDefault
+		);
 
 		// populate key inputs
 		this.keyQE = {
@@ -68,7 +72,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		else if (this.zoom < this.zoomMin) this.zoom = this.zoomMin;
 
 		// store
-		store.set("settings.options.zoom", this.zoom)
+		store.set("settings.options.zoom", this.zoom);
 	}
 
 	// handle rotation of objects that are to be fixed to camera rotation
