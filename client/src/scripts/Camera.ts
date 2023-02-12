@@ -3,24 +3,25 @@ import { Enemy } from "./Enemy";
 import { Entity } from "./Entity";
 import { LivingEntity } from "./LivingEntity";
 import { Player } from "./Player";
+import store from "storejs";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };
+	scene: Game;
 
 	// config
 	rotationSpeed: number = 0.03;
-	scene: Game;
 	zoomInterval: number = 1;
 	zoomMax: number = 18;
 	zoomMin: number = 5;
+	zoomDefault: number = 8;
 
 	constructor(
 		scene: Game,
 		x: number,
 		y: number,
 		width: number,
-		height: number,
-		zoom: number
+		height: number
 	) {
 		// pass values
 		super(x, y, width, height);
@@ -33,7 +34,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		scene.cameras.addExisting(this, true);
 
 		// set camera zoom
-		this.setZoom(zoom);
+		this.setZoom(store.get("settings.options.zoom") ? store.get("settings.options.zoom") : this.zoomDefault);
 
 		// populate key inputs
 		this.keyQE = {
@@ -65,6 +66,9 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		if (this.zoom > this.zoomMax) this.zoom = this.zoomMax;
 		// min
 		else if (this.zoom < this.zoomMin) this.zoom = this.zoomMin;
+
+		// store
+		store.set("settings.options.zoom", this.zoom)
 	}
 
 	// handle rotation of objects that are to be fixed to camera rotation

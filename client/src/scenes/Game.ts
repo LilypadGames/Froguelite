@@ -67,8 +67,7 @@ export class Game extends Core {
 			0,
 			0,
 			window.innerWidth,
-			window.innerHeight,
-			8
+			window.innerHeight
 		);
 		this.camera.startFollow(this.player, false, 1, 1, 0, 0);
 
