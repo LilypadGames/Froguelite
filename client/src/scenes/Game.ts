@@ -4,12 +4,16 @@ import { Enemy } from "../scripts/Enemy";
 import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
 import { Teleport } from "../scripts/Teleport";
+import { HUD } from "./overlay/HUD";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
 //
 
 export class Game extends Core {
+	// HUD
+	HUD!: HUD;
+
 	// world
 	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
 	spawnpoint!: {
@@ -79,6 +83,9 @@ export class Game extends Core {
 			window.innerHeight
 		);
 		this.camera.startFollow(this.player, false, 1, 1, 0, 0);
+
+		// start HUD
+		this.scene.launch("HUD", this);
 
 		// fade in to begin
 		// this.camera.fadeIn();
