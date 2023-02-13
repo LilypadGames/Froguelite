@@ -49,10 +49,36 @@ export class Load extends Phaser.Scene {
 			spacing: 1,
 		});
 
+		// load healthbar data
+		let healthbarData = this.cache.json.get("healthbarData");
+		Object.keys(healthbarData).forEach((key) => {
+			healthbarData[key]["texture"].array.forEach(
+				(textureType: {
+					left: string;
+					middle: string;
+					right: string;
+				}) => {
+					textureType.array.forEach((texture: string) => {
+						// load health bar
+						this.load.image(
+							key + "_" + textureType + "_" + texture,
+							"assets/gui/healthbar/" +
+								key +
+								"_" +
+								textureType +
+								"_" +
+								texture +
+								".png"
+						);
+					});
+				}
+			);
+		});
+
 		// load teleport data
 		let teleportData = this.cache.json.get("teleportData");
 		Object.keys(teleportData).forEach((key) => {
-			// load enemy sprite
+			// load teleport sprite
 			this.load.image(
 				teleportData[key]["texture"],
 				"assets/teleport/" + teleportData[key]["texture"] + ".png"
