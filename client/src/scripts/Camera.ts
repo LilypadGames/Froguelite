@@ -86,8 +86,8 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			this.scene.fixedObjectsGroup
 				.getChildren()
 				.forEach((object: Entity | LivingEntity | Player | Enemy) => {
-					object.rotation -= this.rotationSpeed;
-				});
+					object.rotation = -this.rotation;
+				}, this);
 		}
 		// rotate right
 		else if (this.keyQE.E.isDown) {
@@ -98,8 +98,8 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			this.scene.fixedObjectsGroup
 				.getChildren()
 				.forEach((object: Entity | LivingEntity | Player | Enemy) => {
-					object.rotation += this.rotationSpeed;
-				});
+					object.rotation = -this.rotation;
+				}, this);
 		}
 	}
 }
