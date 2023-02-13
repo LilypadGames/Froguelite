@@ -24,4 +24,8 @@ export class Teleport extends Interactable {
 		this.id = id;
 		this.teleportTo = teleportTo;
 	}
+
+	interact() {
+		this.scene.changeScene("Game", this.teleportTo);
+	}
 }

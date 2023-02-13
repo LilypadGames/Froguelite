@@ -46,14 +46,22 @@ export class Interactable extends Entity {
 
 	// player colliding with this interactable object
 	collidePlayer(player: Player) {
+		// show tip
 		this.scene.HUD.setTip("[F] " + this.tip);
+
+		// set last contact
+		player.lastContact = this;
 	}
 
 	// player no longer colliding with this interactable object
 	collideEndPlayer(player: Player) {
+		// hide tip
 		this.scene.HUD.setTip("");
+
+		// remove last contact
+		if (player.lastContact == this) player.lastContact = undefined;
 	}
 
 	// player interacted
-	playerInteracted() {}
+	interact() {}
 }

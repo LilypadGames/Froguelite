@@ -1,16 +1,25 @@
 import { Game } from "../scenes/Game";
+import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
 import { Projectiles } from "./Projectile";
+import { Teleport } from "./Teleport";
 
 export class Player extends LivingEntity {
 	// typings
-	keyArrows!: Phaser.Types.Input.Keyboard.CursorKeys;
-	keyWASD!: {
+	keyArrows: Phaser.Types.Input.Keyboard.CursorKeys;
+	keyWASD: {
 		W: Phaser.Input.Keyboard.Key;
 		A: Phaser.Input.Keyboard.Key;
 		S: Phaser.Input.Keyboard.Key;
 		D: Phaser.Input.Keyboard.Key;
 	};
+	keyF: Phaser.Input.Keyboard.Key;
+
+	// relative position
+	relativePos!: { x: number; y: number };
+
+	// interaction
+	lastContact!: undefined | Interactable | Teleport;
 
 	// visuals
 	depth: number = 10;
@@ -24,9 +33,6 @@ export class Player extends LivingEntity {
 	// attack
 	fireCooldown: number = 0;
 	projectiles: Projectiles;
-
-	// relative position
-	relativePos!: { x: number; y: number };
 
 	constructor(scene: Game, x: number, y: number, textureKey: string) {
 		// pass values
@@ -43,6 +49,16 @@ export class Player extends LivingEntity {
 			S: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
 			D: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
 		};
+		this.keyF = scene.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.F
+		);
+		this.keyF.on(
+			"down",
+			() => {
+				this.handleInteract();
+			},
+			this
+		);
 
 		// create anims
 		scene.anims.create({
@@ -109,6 +125,14 @@ export class Player extends LivingEntity {
 		this.handleMovement();
 	}
 
+	// check if player is interacting
+	handleInteract() {
+		if (this.keyF.isDown && this.lastContact !== undefined) {
+			this.lastContact.interact();
+		}
+	}
+
+	// check if player is attacking
 	handleAttack() {
 		// shoot projectiles
 		if (
@@ -131,6 +155,7 @@ export class Player extends LivingEntity {
 		}
 	}
 
+	// check if player is moving
 	handleMovement() {
 		// init direction
 		let directionX: string = "";
