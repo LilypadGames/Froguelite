@@ -3,7 +3,7 @@ import { LivingEntity } from "./LivingEntity";
 
 export class Enemy extends LivingEntity {
 	id: string;
-	
+
 	constructor(scene: Game, x: number, y: number, id: string) {
 		// get enemy data
 		let enemyData = scene.cache.json.get("enemyData");

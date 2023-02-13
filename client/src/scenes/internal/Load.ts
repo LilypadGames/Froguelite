@@ -13,6 +13,11 @@ export class Load extends Phaser.Scene {
 				files: [
 					{
 						type: "json",
+						key: "teleportData",
+						url: "assets/data/teleport.json",
+					},
+					{
+						type: "json",
 						key: "enemyData",
 						url: "assets/data/enemy.json",
 					},
@@ -20,6 +25,11 @@ export class Load extends Phaser.Scene {
 						type: "json",
 						key: "projectileData",
 						url: "assets/data/projectile.json",
+					},
+					{
+						type: "json",
+						key: "worldData",
+						url: "assets/data/world.json",
 					},
 				],
 			},
@@ -37,6 +47,16 @@ export class Load extends Phaser.Scene {
 			frameWidth: 9,
 			frameHeight: 7,
 			spacing: 1,
+		});
+
+		// load teleport data
+		let teleportData = this.cache.json.get("teleportData");
+		Object.keys(teleportData).forEach((key) => {
+			// load enemy sprite
+			this.load.image(
+				teleportData[key]["texture"],
+				"assets/teleport/" + teleportData[key]["texture"] + ".png"
+			);
 		});
 
 		// load enemy data

@@ -101,8 +101,14 @@
                  "class":"",
                  "height":0,
                  "id":1,
-                 "name":"Spawn",
+                 "name":"Spawn Point",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"spawn"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":0,
@@ -112,14 +118,35 @@
                 {
                  "class":"",
                  "height":0,
-                 "id":3,
-                 "name":"Enemy, LSF",
+                 "id":4,
+                 "name":"Cave To Dungeon",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"string",
+                         "value":"cave"
+                        }, 
+                        {
+                         "name":"teleportTo",
+                         "type":"string",
+                         "value":"dungeon"
+                        }, 
+                        {
+                         "name":"tip",
+                         "type":"string",
+                         "value":"Enter the Dungeon"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"teleport"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":110,
-                 "y":66
+                 "x":109.696022727273,
+                 "y":36.1335227272727
                 }],
          "offsetx":0.303977272727252,
          "offsety":-1.13352272727273,
@@ -130,7 +157,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":4,
+ "nextobjectid":6,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

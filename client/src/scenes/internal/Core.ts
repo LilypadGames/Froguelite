@@ -123,7 +123,7 @@ export class Core extends Phaser.Scene {
 		},
 	};
 
-	changeScene(scene: string) {
+	changeScene(scene: string, data: string | object) {
 		// remove listeners
 		// this.input.removeAllListeners();
 
@@ -131,6 +131,6 @@ export class Core extends Phaser.Scene {
 		this.scene.stop();
 
 		// start next scene
-		this.scene.start(scene);
+		this.scene.start(scene, data);
 	}
 }

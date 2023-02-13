@@ -83,7 +83,7 @@ export class Menu extends Core {
 
 		// on click, go to game
 		this.input.on("pointerdown", () => {
-			this.changeScene("Game");
+			this.changeScene("Game", this.cache.json.get("worldData").start);
 		});
 
 		// show menu when resumed

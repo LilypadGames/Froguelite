@@ -1,8 +1,9 @@
 import { Core } from "./internal/Core";
+import store from "storejs";
 import { Enemy } from "../scripts/Enemy";
 import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
-import store from "storejs";
+import { Teleport } from "../scripts/Teleport";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -11,7 +12,11 @@ import store from "storejs";
 export class Game extends Core {
 	// world
 	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
-	spawnpoint: any;
+	spawnpoint!: {
+		x: number;
+		y: number;
+	};
+	level!: string;
 
 	// player
 	player!: Player;
@@ -25,6 +30,10 @@ export class Game extends Core {
 
 	constructor() {
 		super({ key: "Game" });
+	}
+
+	init(level: string) {
+		this.level = level;
 	}
 
 	preload() {
@@ -86,7 +95,7 @@ export class Game extends Core {
 	// create tilemap world
 	createWorld() {
 		// make map
-		const map = this.make.tilemap({ key: "dungeon" });
+		const map = this.make.tilemap({ key: this.level });
 		const tileset = map.addTilesetImage("tiles", "world_tiles");
 
 		// init layers
@@ -111,22 +120,47 @@ export class Game extends Core {
 			});
 		});
 
-		// get spawnpoint
-		this.spawnpoint = map.findObject(
-			"Objects",
-			(obj) => obj.name === "Spawn"
-		);
+		// populate objects
+		map.objects.forEach((objects) => {
+			objects.objects.forEach((object) => {
+				// get properties
+				let properties = {};
+				object.properties.forEach(
+					(property: {
+						name: string;
+						type: string;
+						value: string;
+					}) => {
+						properties[property.name] = property.value;
+					},
+					this
+				);
 
-		// spawn enemies
-		map.filterObjects("Objects", (obj) =>
-			obj.name.includes("Enemy")
-		).forEach((obj) => {
-			this.spawnEnemy(
-				obj.name.split(",")[1].replace(" ", ""),
-				typeof obj.x === "number" ? obj.x : 0,
-				typeof obj.y === "number" ? obj.y : 0
-			);
-		});
+				// spawn
+				if (properties["type"] === "spawn") {
+					this.spawnpoint = {
+						x: object.x as number,
+						y: object.y as number,
+					};
+				}
+
+				// teleport
+				if (properties["type"] === "teleport") {
+					this.spawnTeleport(
+						properties["id"],
+						object.x,
+						object.y,
+						properties["tip"],
+						properties["teleportTo"]
+					);
+				}
+
+				// enemy
+				if (properties["type"] === "enemy") {
+					this.spawnEnemy(properties["id"], object.x, object.y);
+				}
+			}, this);
+		}, this);
 	}
 
 	// add player to world
@@ -150,8 +184,21 @@ export class Game extends Core {
 
 		// add enemy to enemy group
 		this.enemyGroup.add(enemy);
+	}
 
-		return enemy;
+	// spawn teleport
+	spawnTeleport(
+		id: string,
+		x: number,
+		y: number,
+		tip: string,
+		teleportTo: string
+	) {
+		// create teleport
+		let teleport = new Teleport(this, x, y, id, tip, teleportTo);
+
+		// rotate with camera rotation
+		this.fixedObjectsGroup.add(teleport);
 	}
 
 	resume() {
