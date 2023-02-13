@@ -70,8 +70,8 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 				this.setPosition(this.x, this.y);
 				this.setVelocity(0, 0);
 
-				// hide
-				this.hide();
+				// pop
+				this.pop();
 			}
 		}
 	}
@@ -107,6 +107,9 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		// reset lifespan
 		this.setState(this.lifespan);
 
+		// reset to normal look
+		this.setFrame(0);
+
 		// show projectile
 		this.show();
 	}
@@ -119,13 +122,26 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		console.log("Collided with Enemy: " + enemy.name);
 
 		// hide projectile
-		this.hide();
+		this.pop();
 	}
 
 	// collided with wall
 	collideWall() {
 		console.log("Collided with Wall");
-		this.hide();
+		this.pop();
+	}
+
+	// projectile has collided/ended
+	pop() {
+		// change to popped look
+		this.setFrame(1);
+
+		// stop movement
+		this.setVelocity(0, 0);
+
+		setTimeout(() => {
+			this.hide();
+		}, 80);
 	}
 
 	// show and activate projectile

@@ -72,9 +72,13 @@ export class Load extends Phaser.Scene {
 		// load projectile data
 		let projectileData = this.cache.json.get("projectileData");
 		Object.keys(projectileData).forEach((key) => {
-			this.load.image(
+			this.load.spritesheet(
 				projectileData[key]["texture"],
-				"assets/projectile/" + projectileData[key]["texture"] + ".png"
+				"assets/projectile/" + projectileData[key]["texture"] + ".png",
+				{
+					frameWidth: 13,
+					frameHeight: 13,
+				}
 			);
 		});
 
