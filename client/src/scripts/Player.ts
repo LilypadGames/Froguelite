@@ -119,7 +119,7 @@ export class Player extends LivingEntity {
 		};
 
 		// handle attacking
-		this.handleAttack();
+		if (this.scene.time.now > 2000) this.handleAttack();
 
 		// handle movement
 		this.handleMovement();
