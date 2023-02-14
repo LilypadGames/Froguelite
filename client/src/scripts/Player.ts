@@ -330,10 +330,12 @@ export class Player extends LivingEntity {
 		}
 	}
 
+	// get the realtime player health percent
 	getHealthPercent() {
 		return this.health / this.healthMax;
 	}
 
+	// change player health. returns false if nothing changed, or will return a number representing how much the health changed.
 	changeHealth(change: number) {
 		// change is 0, healing when health is already maxed, or damaging when health is already 0
 		if (
