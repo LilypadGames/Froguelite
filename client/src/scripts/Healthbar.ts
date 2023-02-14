@@ -13,7 +13,7 @@ export class Healthbar {
 	x: number;
 	y: number;
 	bar: Bar;
-	shadowBar: Bar;
+	emptyBar: Bar;
 
 	constructor(scene: Game, x: number, y: number, id: string, width: number) {
 		// save values
@@ -23,18 +23,18 @@ export class Healthbar {
 		this.x = x;
 		this.y = y;
 
-		// create bar shadow
-		this.shadowBar = this.createBar(x, y, {
-			left: id + "_shadow_left",
-			middle: id + "_shadow_middle",
-			right: id + "_shadow_right",
+		// create bar empty
+		this.emptyBar = this.createBar(x, y, {
+			left: id + "_empty_left",
+			middle: id + "_empty_middle",
+			right: id + "_empty_right",
 		});
 
 		// create bar
 		this.bar = this.createBar(x, y, {
-			left: id + "_health_left",
-			middle: id + "_health_middle",
-			right: id + "_health_right",
+			left: id + "_full_left",
+			middle: id + "_full_middle",
+			right: id + "_full_right",
 		});
 
 		// initialize bar to full

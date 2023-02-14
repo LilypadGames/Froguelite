@@ -1,15 +1,15 @@
 {
     "player": {
         "texture": {
-            "shadow": {
-                "left": "bar_empty_slice",
-                "middle": "bar_empty_slice",
-                "right": "bar_empty_slice"
+            "empty": {
+                "left": "empty",
+                "middle": "empty",
+                "right": "empty"
             },
-            "health": {
-                "left": "bar_full_slice_left",
-                "middle": "bar_full_slice_middle",
-                "right": "bar_full_slice_right"
+            "full": {
+                "left": "full_left",
+                "middle": "full_middle",
+                "right": "full_right"
             }
         }
     }

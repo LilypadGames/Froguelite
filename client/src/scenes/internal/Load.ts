@@ -42,12 +42,14 @@ export class Load extends Phaser.Scene {
 	}
 
 	preload() {
-		// load world
+		// load world texture
 		this.load.image("world_tiles", "assets/world/tiles.png");
+
+		// load tilemap json
 		this.load.tilemapTiledJSON("riverside", "assets/world/riverside.json");
 		this.load.tilemapTiledJSON("dungeon", "assets/world/dungeon.json");
 
-		// load player character sprite sheet
+		// load player texture
 		this.load.spritesheet("pp", "assets/character/pp.png", {
 			frameWidth: 9,
 			frameHeight: 7,
@@ -57,24 +59,26 @@ export class Load extends Phaser.Scene {
 		// load healthbar data
 		let healthbarData = this.cache.json.get("healthbarData");
 		Object.keys(healthbarData).forEach((key) => {
-			Object.keys(healthbarData[key]["texture"]).forEach((textureType) => {
-					Object.keys(healthbarData[key]["texture"][textureType]).forEach((texture) => {
-						console.log("assets/gui/healthbar/" +
-						key +
-						"/" +
-						textureType +
-						"_" +
-						texture +
-						".png")
-						// load health bar
+			Object.keys(healthbarData[key]["texture"]).forEach(
+				(textureType) => {
+					Object.keys(
+						healthbarData[key]["texture"][textureType]
+					).forEach((texture) => {
+						// load health bar texture
 						this.load.image(
-							key + "_" + textureType + "_" + texture,
+							"healthbar" +
+								"_" +
+								key +
+								"_" +
+								textureType +
+								"_" +
+								texture,
 							"assets/gui/healthbar/" +
 								key +
 								"/" +
-								textureType +
-								"_" +
-								texture +
+								healthbarData[key]["texture"][textureType][
+									texture
+								] +
 								".png"
 						);
 					});
@@ -85,7 +89,7 @@ export class Load extends Phaser.Scene {
 		// load teleport data
 		let teleportData = this.cache.json.get("teleportData");
 		Object.keys(teleportData).forEach((key) => {
-			// load teleport sprite
+			// load teleport texture
 			this.load.image(
 				teleportData[key]["texture"],
 				"assets/teleport/" + teleportData[key]["texture"] + ".png"
@@ -95,7 +99,7 @@ export class Load extends Phaser.Scene {
 		// load enemy data
 		let enemyData = this.cache.json.get("enemyData");
 		Object.keys(enemyData).forEach((key) => {
-			// load enemy sprite
+			// load enemy texture
 			this.load.image(
 				enemyData[key]["texture"],
 				"assets/enemy/" + enemyData[key]["texture"] + ".png"
@@ -105,6 +109,7 @@ export class Load extends Phaser.Scene {
 		// load projectile data
 		let projectileData = this.cache.json.get("projectileData");
 		Object.keys(projectileData).forEach((key) => {
+			// load projectile texture
 			this.load.spritesheet(
 				projectileData[key]["texture"],
 				"assets/projectile/" + projectileData[key]["texture"] + ".png",
