@@ -13,6 +13,11 @@ export class Load extends Phaser.Scene {
 				files: [
 					{
 						type: "json",
+						key: "healthbarData",
+						url: "assets/data/healthbar.json",
+					},
+					{
+						type: "json",
 						key: "teleportData",
 						url: "assets/data/teleport.json",
 					},
@@ -52,19 +57,21 @@ export class Load extends Phaser.Scene {
 		// load healthbar data
 		let healthbarData = this.cache.json.get("healthbarData");
 		Object.keys(healthbarData).forEach((key) => {
-			healthbarData[key]["texture"].array.forEach(
-				(textureType: {
-					left: string;
-					middle: string;
-					right: string;
-				}) => {
-					textureType.array.forEach((texture: string) => {
+			Object.keys(healthbarData[key]["texture"]).forEach((textureType) => {
+					Object.keys(healthbarData[key]["texture"][textureType]).forEach((texture) => {
+						console.log("assets/gui/healthbar/" +
+						key +
+						"/" +
+						textureType +
+						"_" +
+						texture +
+						".png")
 						// load health bar
 						this.load.image(
 							key + "_" + textureType + "_" + texture,
 							"assets/gui/healthbar/" +
 								key +
-								"_" +
+								"/" +
 								textureType +
 								"_" +
 								texture +
