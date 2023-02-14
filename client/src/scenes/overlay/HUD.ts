@@ -1,3 +1,4 @@
+import { Healthbar } from "../../scripts/Healthbar";
 import { Player } from "../../scripts/Player";
 import { Game } from "../Game";
 import { Core } from "../internal/Core";
@@ -6,6 +7,7 @@ export class HUD extends Core {
 	sceneGame!: Game;
 	player!: Player;
 	tip!: Phaser.GameObjects.Text;
+	playerHealthbar!: Healthbar;
 
 	constructor() {
 		super({ key: "HUD" });
@@ -25,7 +27,7 @@ export class HUD extends Core {
 	preload() {}
 
 	create() {
-		// init debug info text
+		// init tip text
 		this.tip = this.add
 			.text(window.innerWidth / 2, (window.innerHeight / 5) * 2.2, "", {
 				fontSize: "28px",
@@ -37,6 +39,9 @@ export class HUD extends Core {
 			})
 			.setOrigin(0.5, 0.5)
 			.setScrollFactor(0);
+
+		// create player healthbar
+		this.playerHealthbar = new Healthbar(this, window.innerWidth / 150, window.innerWidth / 80, "player", 150);
 	}
 
 	update() {}

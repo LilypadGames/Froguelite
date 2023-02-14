@@ -1,5 +1,6 @@
 {
     "player": {
+        "scale": 6,
         "texture": {
             "empty": {
                 "left": "empty",

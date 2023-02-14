@@ -66,8 +66,7 @@ export class Load extends Phaser.Scene {
 					).forEach((texture) => {
 						// load health bar texture
 						this.load.image(
-							"healthbar" +
-								"_" +
+							"healthbar_" +
 								key +
 								"_" +
 								textureType +
