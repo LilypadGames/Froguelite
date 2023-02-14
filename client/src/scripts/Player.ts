@@ -24,22 +24,33 @@ export class Player extends LivingEntity {
 	// visuals
 	depth: number = 10;
 
-	// stats
-	speed: number = 0.00003;
-	speedDampening: number = 1.8;
+	// movement
 	turnThreshold: number = 20;
-	fireRate: number = 300;
+	speedDampening: number = 1.8;
 
-	// attack
+	// attacking
 	fireCooldown: number = 0;
 	projectiles: Projectiles;
 
+	// stats
+	health: number;
+	healthMax: number;
+	speed: number;
+	fireRate: number;
+
 	constructor(scene: Game, x: number, y: number, textureKey: string) {
+		// get player data
+		let playerData = scene.cache.json.get("playerData");
+
 		// pass values
 		super(scene, x, y, textureKey, "Player");
 
 		// save values
 		this.scene = scene;
+		this.healthMax = playerData["health"];
+		this.health = playerData["health"];
+		this.speed = playerData["speed"];
+		this.fireRate = playerData["fireRate"];
 
 		// populate key inputs
 		this.keyArrows = scene.input.keyboard.createCursorKeys();
@@ -317,5 +328,52 @@ export class Player extends LivingEntity {
 		) {
 			this.setVelocity(0, 0);
 		}
+	}
+
+	getHealthPercent() {
+		return this.health / this.healthMax;
+	}
+
+	changeHealth(change: number) {
+		// change is 0, healing when health is already maxed, or damaging when health is already 0
+		if (
+			(change > 0 && this.health === this.healthMax) ||
+			(change < 0 && this.health === 0) ||
+			change === 0
+		)
+			return false;
+
+		// init difference to provided change
+		let difference = change;
+
+		// max out health
+		if (this.health + change > this.healthMax) {
+			// get difference between max and current health
+			difference = this.healthMax - this.health;
+
+			// set health to max
+			this.health = this.healthMax;
+		}
+		// death
+		else if (this.health + change < 0) {
+			// get health left as the difference
+			difference = this.health;
+
+			// set health to 0
+			this.health = 0;
+		}
+		// normal health change
+		else {
+			// change health
+			this.health += change;
+		}
+
+		// animate health bar
+		this.scene.HUD.playerHealthbar.setPercentAnimated(
+			this.getHealthPercent()
+		);
+
+		// return how much health was changed
+		return difference;
 	}
 }

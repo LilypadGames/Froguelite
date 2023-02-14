@@ -41,7 +41,14 @@ export class HUD extends Core {
 			.setScrollFactor(0);
 
 		// create player healthbar
-		this.playerHealthbar = new Healthbar(this, window.innerWidth / 150, window.innerWidth / 80, "player", 150);
+		this.playerHealthbar = new Healthbar(
+			this,
+			window.innerWidth / 150,
+			window.innerWidth / 80,
+			"player",
+			150,
+			this.player.getHealthPercent()
+		);
 	}
 
 	update() {}
