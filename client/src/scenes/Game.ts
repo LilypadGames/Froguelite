@@ -90,8 +90,9 @@ export class Game extends Core {
 		// fade in to begin
 		// this.camera.fadeIn();
 
-		// execute when game is resumed
-		this.events.on("resume", this.resume, this);
+		// execute when game is paused/resumed
+		this.events.on("pause", this.onPause, this);
+		this.events.on("resume", this.onResume, this);
 	}
 
 	update() {
@@ -208,7 +209,16 @@ export class Game extends Core {
 		this.fixedObjectsGroup.add(teleport);
 	}
 
-	resume() {
+	onPause() {
+		// pause HUD
+		this.HUD.scene.pause();
+	}
+
+	onResume() {
+		// resume HUD
+		this.HUD.scene.resume();
+
+		// reload shaders
 		[this.player, ...this.enemyGroup.getChildren()].forEach(
 			(object: Player | Enemy) => {
 				object.applyShaders(

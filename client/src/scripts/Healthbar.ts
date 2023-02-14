@@ -1,3 +1,4 @@
+import { Container } from "phaser3-rex-plugins/templates/ui/ui-components";
 import { Game } from "../scenes/Game";
 
 type Bar = {
@@ -12,8 +13,9 @@ export class Healthbar {
 	width: number;
 	x: number;
 	y: number;
-	bar: Bar;
+	fullBar: Bar;
 	emptyBar: Bar;
+	bar: Phaser.GameObjects.Container;
 	scale: number;
 	protected percent: number;
 
@@ -38,18 +40,28 @@ export class Healthbar {
 		this.percent = percent;
 
 		// create bar empty
-		this.emptyBar = this.createBar(x, y, {
+		this.emptyBar = this.createBar(0, 0, {
 			left: "healthbar_" + id + "_empty_left",
 			middle: "healthbar_" + id + "_empty_middle",
 			right: "healthbar_" + id + "_empty_right",
 		});
 
 		// create bar
-		this.bar = this.createBar(x, y, {
+		this.fullBar = this.createBar(0, 0, {
 			left: "healthbar_" + id + "_full_left",
 			middle: "healthbar_" + id + "_full_middle",
 			right: "healthbar_" + id + "_full_right",
 		});
+
+		// create healthbar container
+		this.bar = scene.add.container(x, y, [
+			this.emptyBar.left,
+			this.emptyBar.middle,
+			this.emptyBar.right,
+			this.fullBar.left,
+			this.fullBar.middle,
+			this.fullBar.right,
+		]);
 
 		// initialize bar to full
 		this.setPercent(percent);
@@ -66,15 +78,15 @@ export class Healthbar {
 
 		// left slice
 		bar.left = this.scene.add
-			.image(x, y, texture.left)
-			.setScale(this.scale)
+			.image(x - (this.width / 2) * 1.05, y, texture.left)
+			.setScale(this.scale, this.scale)
 			.setOrigin(0, 0.5)
 			.setScrollFactor(0);
 
 		// middle slice
 		bar.middle = this.scene.add
 			.image(bar.left.x + bar.left.width * this.scale, y, texture.middle)
-			.setScale(this.scale)
+			.setScale(this.scale, this.scale)
 			.setOrigin(0, 0.5)
 			.setScrollFactor(0);
 		bar.middle.displayWidth = this.width;
@@ -82,11 +94,16 @@ export class Healthbar {
 		// right slice
 		bar.right = this.scene.add
 			.image(bar.middle.x + bar.middle.displayWidth, y, texture.right)
-			.setScale(this.scale)
+			.setScale(this.scale, this.scale)
 			.setOrigin(0, 0.5)
 			.setScrollFactor(0);
 
 		return bar as Bar;
+	}
+
+	// returns the current percent of the bar
+	getPercent() {
+		return this.percent;
 	}
 
 	// instantly changes the bars percent
@@ -95,10 +112,11 @@ export class Healthbar {
 		const width = this.width * percent;
 
 		// set to new width
-		this.bar.middle.displayWidth = width;
+		this.fullBar.middle.displayWidth = width;
 
 		// move right slice along with the new middle width
-		this.bar.right.x = this.bar.middle.x + this.bar.middle.displayWidth;
+		this.fullBar.right.x =
+			this.fullBar.middle.x + this.fullBar.middle.displayWidth;
 
 		// set percent
 		this.percent = percent;
@@ -111,26 +129,29 @@ export class Healthbar {
 
 		// animate bar change
 		this.scene.tweens.add({
-			targets: this.bar.middle,
+			targets: this.fullBar.middle,
 			displayWidth: width,
 			duration,
 			ease: Phaser.Math.Easing.Sine.Out,
 			onUpdate: () => {
 				// update right slice
-				this.bar.right.x =
-					this.bar.middle.x + this.bar.middle.displayWidth;
+				this.fullBar.right.x =
+					this.fullBar.middle.x + this.fullBar.middle.displayWidth;
 
 				// change left slice
-				this.bar.left.visible = this.bar.middle.displayWidth > 0;
+				this.fullBar.left.visible =
+					this.fullBar.middle.displayWidth > 0;
 
 				// change middle slice
-				this.bar.middle.visible = this.bar.middle.displayWidth > 0;
+				this.fullBar.middle.visible =
+					this.fullBar.middle.displayWidth > 0;
 
 				// change right slice
-				this.bar.right.visible = this.bar.middle.displayWidth > 0;
+				this.fullBar.right.visible =
+					this.fullBar.middle.displayWidth > 0;
 
 				// update percent as the bar is animated
-				this.percent = this.bar.middle.displayWidth / this.width;
+				this.percent = this.fullBar.middle.displayWidth / this.width;
 			},
 		});
 	}
