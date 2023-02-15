@@ -9,6 +9,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 	speed!: number;
 	lifespan!: number;
 	state: number = 0;
+	damage: number;
 
 	constructor(scene: Game, x: number, y: number, id: string) {
 		// get projectile data
@@ -23,6 +24,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		this.y = y;
 		this.lifespan = projectileData[id]["lifespan"];
 		this.speed = projectileData[id]["speed"];
+		this.damage = projectileData[id]["damage"];
 
 		// update projectile
 		scene.matter.world.on("afterupdate", this.update, this);
@@ -118,6 +120,8 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 	collideEnemy(enemyBody: MatterJS.BodyType) {
 		// get enemy
 		let enemy: Enemy = enemyBody.gameObject;
+
+		enemy.changeHealth(-this.damage);
 
 		console.log("Collided with Enemy: " + enemy.name);
 
