@@ -5,6 +5,8 @@ import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
 import { Teleport } from "../scripts/Teleport";
 import { HUD } from "./overlay/HUD";
+import { GameObjects } from "phaser";
+import { Entity } from "../scripts/Entity";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -250,13 +252,14 @@ export class Game extends Core {
 		this.HUD.scene.resume();
 
 		// reload shaders
-		[this.player, ...this.enemyGroup.getChildren()].forEach(
-			(object: Player | Enemy) => {
-				object.applyShaders(
-					store.get("settings.options.highPerformanceMode")
-				);
-			}
-		);
+		[
+			this.player as Entity,
+			...(this.enemyGroup.getChildren() as Array<Entity>),
+		].forEach((object: Entity) => {
+			object.applyShaders(
+				store.get("settings.options.highPerformanceMode")
+			);
+		});
 	}
 
 	onStop() {
