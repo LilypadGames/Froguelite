@@ -1,5 +1,5 @@
-import { Container } from "phaser3-rex-plugins/templates/ui/ui-components";
-import { Game } from "../scenes/Game";
+import { HUD } from "../scenes/overlay/HUD";
+import { LivingEntity } from "./LivingEntity";
 
 type Bar = {
 	left: Phaser.GameObjects.Image;
@@ -8,19 +8,27 @@ type Bar = {
 };
 
 export class Healthbar {
-	scene: Phaser.Scene;
+	scene: HUD;
 	id: string;
-	width: number;
-	x: number;
-	y: number;
+
+	// owner reference
+	owner: LivingEntity;
+
+	// bar references
 	fullBar: Bar;
 	emptyBar: Bar;
 	bar: Phaser.GameObjects.Container;
+
+	// information
+	width: number;
+	x: number;
+	y: number;
 	scale: number;
 	protected percent: number;
 
 	constructor(
-		scene: Phaser.Scene,
+		scene: HUD,
+		owner: LivingEntity,
 		x: number,
 		y: number,
 		id: string,
@@ -32,6 +40,7 @@ export class Healthbar {
 
 		// save values
 		this.scene = scene;
+		this.owner = owner;
 		this.id = id;
 		this.width = width;
 		this.x = x;
@@ -65,6 +74,12 @@ export class Healthbar {
 
 		// initialize bar to full
 		this.setPercent(percent);
+
+		// hide
+		this.hide();
+
+		// update bar
+		scene.events.on("update", this.update, this);
 	}
 
 	// creates a bar
@@ -80,23 +95,20 @@ export class Healthbar {
 		bar.left = this.scene.add
 			.image(x - (this.width / 2) * 1.05, y, texture.left)
 			.setScale(this.scale, this.scale)
-			.setOrigin(0, 0.5)
-			.setScrollFactor(0);
+			.setOrigin(0, 0.5);
 
 		// middle slice
 		bar.middle = this.scene.add
 			.image(bar.left.x + bar.left.width * this.scale, y, texture.middle)
 			.setScale(this.scale, this.scale)
-			.setOrigin(0, 0.5)
-			.setScrollFactor(0);
+			.setOrigin(0, 0.5);
 		bar.middle.displayWidth = this.width;
 
 		// right slice
 		bar.right = this.scene.add
 			.image(bar.middle.x + bar.middle.displayWidth, y, texture.right)
 			.setScale(this.scale, this.scale)
-			.setOrigin(0, 0.5)
-			.setScrollFactor(0);
+			.setOrigin(0, 0.5);
 
 		return bar as Bar;
 	}
@@ -154,5 +166,47 @@ export class Healthbar {
 				this.percent = this.fullBar.middle.displayWidth / this.width;
 			},
 		});
+	}
+
+	// show
+	show() {
+		this.bar.setVisible(true);
+	}
+
+	// hide
+	hide() {
+		this.bar.setVisible(false);
+	}
+
+	// update healthbar position and scale when in use
+	update() {
+		// get owner health percent from health
+		let percent = this.owner.getHealthPercent();
+
+		// get owner position
+		let relativePos = this.owner.getRelativePositionCanvas(
+			this.scene.sceneGame.camera
+		);
+
+		//show and update healthbar (less than max but not at 0)
+		if (percent < 1 && percent > 0) {
+			// set position
+			this.bar.setPosition(
+				relativePos.x,
+				relativePos.y +
+					(this.owner.height * this.scene.camera.zoom) / 1.4
+			);
+
+			// set scale
+			this.bar.setScale(this.scene.camera.zoom / 20);
+
+			// show
+			if (this.bar.visible === false) this.show();
+		}
+		// hide healthbar
+		else {
+			// hide
+			if (this.bar.visible === true) this.hide();
+		}
 	}
 }

@@ -47,6 +47,10 @@ export class Debug extends Core {
 				this.sceneGame.cameras.main.zoomY,
 		};
 
+		// get relative positions
+		let relativePosCamera = this.player.getRelativePosition(this.camera);
+		// let relativePosCanvas = this.player.getRelativePositionToCanvas();
+
 		// init pressed keys
 		let pressedKeys: Array<string> = [];
 
@@ -62,6 +66,14 @@ export class Debug extends Core {
 
 		// update debug
 		this.debugText.setText([
+			"Camera World View: (" +
+				this.camera.worldView.x +
+				", " +
+				this.camera.worldView.y +
+				")",
+			"Camera Zoom: " + this.camera.zoom,
+			"Camera Rotation: " + this.camera.rotation,
+			"",
 			"Actual Mouse Pos: (" + pointer.x + ", " + pointer.y + ")",
 			"",
 			"World Mouse Pos: (" + pointer.worldX + ", " + pointer.worldY + ")",
@@ -69,14 +81,17 @@ export class Debug extends Core {
 			"",
 			"Relative To Camera Mouse Pos: (" + mouse.x + ", " + mouse.y + ")",
 			"Relative To Camera Player Pos: (" +
-				this.player.relativePos.x +
+				relativePosCamera.x +
 				", " +
-				this.player.relativePos.y +
+				relativePosCamera.y +
 				")",
+			// "Relative To Canvas Player Pos: (" +
+			// 	relativePosCanvas.x +
+			// 	", " +
+			// 	relativePosCanvas.y +
+			// 	")",
 			"",
-			"Camera Rotation: " + this.camera.rotation,
 			"Player Rotation: " + this.player.rotation,
-			"",
 			"Player Velocity: (" +
 				this.player.body.velocity.x +
 				", " +

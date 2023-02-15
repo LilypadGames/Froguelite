@@ -2,6 +2,8 @@
     "lsf": {
         "name": "LSF",
         "texture": "lsf",
-        "scale": 0.25
+        "scale": 0.25,
+        "health": 200,
+        "healthbar": "enemy"
     }
 }

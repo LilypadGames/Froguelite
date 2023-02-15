@@ -93,9 +93,12 @@ export class Game extends Core {
 		// execute when game is paused/resumed
 		this.events.on("pause", this.onPause, this);
 		this.events.on("resume", this.onResume, this);
+		this.events.on("shutdown", this.onStop, this);
 	}
 
 	update() {
+		this.player.setHealth(10);
+
 		// handle player
 		this.player.update();
 	}
@@ -226,5 +229,11 @@ export class Game extends Core {
 				);
 			}
 		);
+	}
+
+	onStop() {
+		// stop HUD
+		this.HUD.events.removeListener("update");
+		this.HUD.scene.stop();
 	}
 }

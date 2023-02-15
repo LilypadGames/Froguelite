@@ -1,16 +1,31 @@
 {
-    "player": {
+    "Player": {
         "scale": 6,
         "texture": {
             "empty": {
-                "left": "empty",
-                "middle": "empty",
-                "right": "empty"
+                "left": "player/empty",
+                "middle": "player/empty",
+                "right": "player/empty"
             },
             "full": {
-                "left": "full_left",
-                "middle": "full_middle",
-                "right": "full_right"
+                "left": "player/full_left",
+                "middle": "player/full_middle",
+                "right": "player/full_right"
+            }
+        }
+    },
+    "Enemy": {
+        "scale": 6,
+        "texture": {
+            "empty": {
+                "left": "player/empty",
+                "middle": "player/empty",
+                "right": "player/empty"
+            },
+            "full": {
+                "left": "player/full_left",
+                "middle": "player/full_middle",
+                "right": "player/full_right"
             }
         }
     }

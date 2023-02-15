@@ -78,8 +78,6 @@ export class Load extends Phaser.Scene {
 								"_" +
 								texture,
 							"assets/gui/healthbar/" +
-								key +
-								"/" +
 								healthbarData[key]["texture"][textureType][
 									texture
 								] +

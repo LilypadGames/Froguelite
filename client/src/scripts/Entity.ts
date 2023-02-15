@@ -6,6 +6,7 @@ import store from "storejs";
 import { Game } from "../scenes/Game";
 
 export class Entity extends Phaser.Physics.Matter.Sprite {
+	scene: Game;
 	textureKey: string;
 
 	// shaders
@@ -84,5 +85,19 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		// set new FX
 		this.outlineFxInstance = this.outlineFx.add(this, outlineSettings);
 		this.glowFxInstance = this.glowFx.add(this, glowSettings);
+	}
+
+	getRelativePosition(camera: Phaser.Cameras.Scene2D.Camera) {
+		return {
+			x: (this.x - camera.scrollX) / camera.zoom,
+			y: (this.y - camera.scrollY) / camera.zoom,
+		};
+	}
+
+	getRelativePositionCanvas(camera: Phaser.Cameras.Scene2D.Camera) {
+		return {
+			x: this.x - camera.scrollX,
+			y: this.y - camera.scrollY,
+		};
 	}
 }

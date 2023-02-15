@@ -15,9 +15,6 @@ export class Player extends LivingEntity {
 	};
 	keyF: Phaser.Input.Keyboard.Key;
 
-	// relative position
-	relativePos!: { x: number; y: number };
-
 	// interaction
 	lastContact!: undefined | Interactable | Teleport;
 
@@ -33,8 +30,6 @@ export class Player extends LivingEntity {
 	projectiles: Projectiles;
 
 	// stats
-	health: number;
-	healthMax: number;
 	speed: number;
 	fireRate: number;
 
@@ -43,12 +38,13 @@ export class Player extends LivingEntity {
 		let playerData = scene.cache.json.get("playerData");
 
 		// pass values
-		super(scene, x, y, textureKey, "Player");
+		super(scene, x, y, textureKey, "Player", {
+			health: playerData["health"],
+			healthMax: playerData["health"],
+		});
 
 		// save values
 		this.scene = scene;
-		this.healthMax = playerData["health"];
-		this.health = playerData["health"];
 		this.speed = playerData["speed"];
 		this.fireRate = playerData["fireRate"];
 
@@ -120,15 +116,6 @@ export class Player extends LivingEntity {
 	}
 
 	update() {
-		// get camera
-		let camera = this.scene.cameras.main;
-
-		// calculate relative position
-		this.relativePos = {
-			x: camera.worldView.width / 2,
-			y: camera.worldView.height / 2,
-		};
-
 		// handle attacking
 		if (this.scene.time.now > 2000) this.handleAttack();
 
@@ -190,10 +177,13 @@ export class Player extends LivingEntity {
 				y: this.scene.input.activePointer.y / camera.zoomY,
 			};
 
+			// get relative position of player to camera
+			let relativePos = this.getRelativePosition(camera);
+
 			// get difference between player position and mouse position to determine where the pointer is relative to the player
 			let difference = {
-				x: this.relativePos.x - mouse.x,
-				y: this.relativePos.y - mouse.y,
+				x: relativePos.x - mouse.x,
+				y: relativePos.y - mouse.y,
 			};
 
 			// player looking left
@@ -328,54 +318,5 @@ export class Player extends LivingEntity {
 		) {
 			this.setVelocity(0, 0);
 		}
-	}
-
-	// get the realtime player health percent
-	getHealthPercent() {
-		return this.health / this.healthMax;
-	}
-
-	// change player health. returns false if nothing changed, or will return a number representing how much the health changed.
-	changeHealth(change: number) {
-		// change is 0, healing when health is already maxed, or damaging when health is already 0
-		if (
-			(change > 0 && this.health === this.healthMax) ||
-			(change < 0 && this.health === 0) ||
-			change === 0
-		)
-			return false;
-
-		// init difference to provided change
-		let difference = change;
-
-		// max out health
-		if (this.health + change > this.healthMax) {
-			// get difference between max and current health
-			difference = this.healthMax - this.health;
-
-			// set health to max
-			this.health = this.healthMax;
-		}
-		// death
-		else if (this.health + change < 0) {
-			// get health left as the difference
-			difference = this.health;
-
-			// set health to 0
-			this.health = 0;
-		}
-		// normal health change
-		else {
-			// change health
-			this.health += change;
-		}
-
-		// animate health bar
-		this.scene.HUD.playerHealthbar.setPercentAnimated(
-			this.getHealthPercent()
-		);
-
-		// return how much health was changed
-		return difference;
 	}
 }
