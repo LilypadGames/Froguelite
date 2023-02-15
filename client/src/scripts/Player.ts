@@ -171,19 +171,16 @@ export class Player extends LivingEntity {
 
 		// if pointer down, make player face the pointer
 		if (this.scene.input.activePointer.isDown) {
-			// get mouse position relative to the camera view
-			let mouse = {
-				x: this.scene.input.activePointer.x / camera.zoomX,
-				y: this.scene.input.activePointer.y / camera.zoomY,
-			};
+			// get pointer position relative to the camera view
+			let pointer = this.scene.input.activePointer;
 
 			// get relative position of player to camera
 			let relativePos = this.getRelativePosition(camera);
 
-			// get difference between player position and mouse position to determine where the pointer is relative to the player
+			// get difference between player position and pointer position to determine where the pointer is relative to the player
 			let difference = {
-				x: relativePos.x - mouse.x,
-				y: relativePos.y - mouse.y,
+				x: relativePos.x - pointer.x,
+				y: relativePos.y - pointer.y,
 			};
 
 			// player looking left

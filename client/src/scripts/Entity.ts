@@ -89,13 +89,6 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 
 	getRelativePosition(camera: Phaser.Cameras.Scene2D.Camera) {
 		return {
-			x: (this.x - camera.scrollX) / camera.zoom,
-			y: (this.y - camera.scrollY) / camera.zoom,
-		};
-	}
-
-	getRelativePositionCanvas(camera: Phaser.Cameras.Scene2D.Camera) {
-		return {
 			x: this.x - camera.scrollX,
 			y: this.y - camera.scrollY,
 		};

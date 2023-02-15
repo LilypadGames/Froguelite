@@ -184,7 +184,7 @@ export class Healthbar {
 		let percent = this.owner.getHealthPercent();
 
 		// get owner position
-		let relativePos = this.owner.getRelativePositionCanvas(
+		let relativePos = this.owner.getRelativePosition(
 			this.scene.sceneGame.camera
 		);
 

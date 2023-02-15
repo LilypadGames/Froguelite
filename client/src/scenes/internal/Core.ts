@@ -123,10 +123,7 @@ export class Core extends Phaser.Scene {
 		},
 	};
 
-	changeScene(scene: string, data: object) {
-		// remove listeners
-		// this.input.removeAllListeners();
-
+	changeScene(scene: string, data?: object) {
 		// stop current scene
 		this.scene.stop();
 

@@ -37,19 +37,8 @@ export class Debug extends Core {
 		// get actual mouse position
 		let pointer = this.sceneGame.input.activePointer;
 
-		// get mouse position relative to the camera view
-		let mouse = {
-			x:
-				this.sceneGame.input.activePointer.x /
-				this.sceneGame.cameras.main.zoomX,
-			y:
-				this.sceneGame.input.activePointer.y /
-				this.sceneGame.cameras.main.zoomY,
-		};
-
 		// get relative positions
 		let relativePosCamera = this.player.getRelativePosition(this.camera);
-		// let relativePosCanvas = this.player.getRelativePositionToCanvas();
 
 		// init pressed keys
 		let pressedKeys: Array<string> = [];
@@ -74,22 +63,15 @@ export class Debug extends Core {
 			"Camera Zoom: " + this.camera.zoom,
 			"Camera Rotation: " + this.camera.rotation,
 			"",
-			"Actual Mouse Pos: (" + pointer.x + ", " + pointer.y + ")",
-			"",
 			"World Mouse Pos: (" + pointer.worldX + ", " + pointer.worldY + ")",
 			"World Player Pos: (" + this.player.x + ", " + this.player.y + ")",
 			"",
-			"Relative To Camera Mouse Pos: (" + mouse.x + ", " + mouse.y + ")",
-			"Relative To Camera Player Pos: (" +
+			"Canvas-Relative Player Pos: (" +
 				relativePosCamera.x +
 				", " +
 				relativePosCamera.y +
 				")",
-			// "Relative To Canvas Player Pos: (" +
-			// 	relativePosCanvas.x +
-			// 	", " +
-			// 	relativePosCanvas.y +
-			// 	")",
+			"Canvas-Relative Mouse Pos: (" + pointer.x + ", " + pointer.y + ")",
 			"",
 			"Player Rotation: " + this.player.rotation,
 			"Player Velocity: (" +
