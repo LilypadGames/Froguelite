@@ -194,7 +194,10 @@ export class Healthbar {
 			this.bar.setPosition(
 				relativePos.x,
 				relativePos.y +
-					(this.owner.height * this.scene.camera.zoom) / 1.4
+					(this.owner.height *
+						this.owner.scale *
+						this.scene.camera.zoom) /
+						1.4
 			);
 
 			// set scale

@@ -88,9 +88,26 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	}
 
 	getRelativePosition(camera: Phaser.Cameras.Scene2D.Camera) {
-		return {
-			x: this.x - camera.scrollX,
-			y: this.y - camera.scrollY,
-		};
+		// get ox/oy
+		let ox = camera.originX * camera.width;
+		let oy = camera.originY * camera.height;
+
+		// transform point
+		let relativePos: Phaser.Geom.Point = Phaser.Math.TransformXY(
+			this.x,
+			this.y,
+			ox + camera.scrollX,
+			oy + camera.scrollY,
+			-(camera as any).rotation,
+			1 / camera.zoom,
+			1 / camera.zoom
+		) as Phaser.Geom.Point;
+
+		// translate back
+		relativePos.x += ox;
+		relativePos.y += oy;
+
+		// return
+		return relativePos;
 	}
 }
