@@ -38,7 +38,7 @@ export class Game extends Core {
 		super({ key: "Game" });
 	}
 
-	init(data: {level: string}) {
+	init(data: { level: string }) {
 		this.level = data.level;
 	}
 

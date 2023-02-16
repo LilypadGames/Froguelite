@@ -29,9 +29,9 @@ export default {
 			enableSleeping: true,
 			debug: {
 				showBody: true,
-				showStaticBody: true
-			}
-		}
+				showStaticBody: true,
+			},
+		},
 	},
 	plugins: {
 		global: [
