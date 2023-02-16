@@ -107,8 +107,10 @@ export class Game extends Core {
 	// create tilemap world
 	createWorld() {
 		// make map
-		const map = this.make.tilemap({ key: this.level });
-		const tileset = map.addTilesetImage("tiles", "world_tiles");
+		let map = this.make.tilemap({ key: this.level });
+
+		// add tileset to map
+		let tileset = map.addTilesetImage("tiles", "world_tiles");
 
 		// init layers
 		map.layers.forEach((layer) => {
@@ -132,76 +134,72 @@ export class Game extends Core {
 			});
 		});
 
-		// populate objects
-		if (typeof map.objects.forEach === "function") {
-			// each object layer
-			map.objects.forEach((objectLayer) => {
-				// each object
-				objectLayer.objects.forEach((object) => {
-					// has x/y
-					if (object.x === undefined || object.y === undefined)
-						return;
-					// general properties
-					type properties = {
+		// populate objects in object layer
+		map.objects.forEach((objectLayer) => {
+			// each object
+			objectLayer.objects.forEach((object) => {
+				// has x/y
+				if (object.x === undefined || object.y === undefined) return;
+				// general properties
+				type properties = {
+					type: string;
+				};
+				// object properties
+				interface gameObjectProperties extends properties {
+					id: string;
+				}
+				// teleport properties
+				interface teleportProperties extends gameObjectProperties {
+					tip: string;
+					teleportTo: string;
+				}
+
+				// init properties
+				let properties: properties = {
+					type: "",
+				};
+
+				// format properties
+				object.properties.forEach(
+					(property: {
+						name: string;
 						type: string;
-					};
-					// object properties
-					interface gameObjectProperties extends properties {
-						id: string;
-					}
-					// teleport properties
-					interface teleportProperties extends gameObjectProperties {
-						tip: string;
-						teleportTo: string;
-					}
+						value: string;
+					}) => {
+						(properties as any)[property.name] = property.value;
+					},
+					this
+				);
 
-					// init properties
-					let properties: properties = {
-						type: "",
+				// spawn
+				if (properties.type === "spawn") {
+					this.spawnpoint = {
+						x: object.x,
+						y: object.y,
 					};
+				}
 
-					// format properties
-					object.properties.forEach(
-						(property: {
-							name: string;
-							type: string;
-							value: string;
-						}) => {
-							(properties as any)[property.name] = property.value;
-						},
-						this
+				// enemy
+				if (properties.type === "enemy") {
+					this.spawnEnemy(
+						(properties as gameObjectProperties)["id"],
+						object.x,
+						object.y
 					);
+				}
 
-					// spawn
-					if (properties.type === "spawn") {
-						this.spawnpoint = {
-							x: object.x as number,
-							y: object.y as number,
-						};
-					}
-
-					// enemy
-					if (properties.type === "enemy") {
-						this.spawnEnemy(
-							(properties as gameObjectProperties)["id"],
-							object.x,
-							object.y
-						);
-					}
-
-					// teleport
-					if (properties.type === "teleport") {
-						this.spawnTeleport(
-							(properties as teleportProperties).id,
-							(object as any).x,
-							(object as any).y,
-							(properties as teleportProperties).tip,
-							(properties as teleportProperties).tip
-						);
-					}
-				}, this);
+				// teleport
+				if (properties.type === "teleport") {
+					this.spawnTeleport(
+						(properties as teleportProperties).id,
+						(object as any).x,
+						(object as any).y,
+						(properties as teleportProperties).tip,
+						(properties as teleportProperties).teleportTo
+					);
+				}
 			}, this);
-		}
+		}, this);
 	}
 
 	// add player to world

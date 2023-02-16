@@ -122,18 +122,16 @@ export class Load extends Phaser.Scene {
 			);
 		});
 
-		// load fonts
+		// load font
 		WebFont.load({
-			active: () => {
-				// fonts are loaded, continue to next scene
-				this.scene.start("Menu");
-			},
-			// custom fonts
 			custom: {
 				families: ["Pix"],
 			},
 		});
 	}
 
-	create() {}
+	create() {
+		// Menu
+		this.scene.start("Menu");
+	}
 }
