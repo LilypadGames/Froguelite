@@ -11,7 +11,7 @@ export class Boot extends Phaser.Scene {
 
 	preload() {
 		// file loading error
-		this.load.on("loaderror", (err: object) => {
+		this.load.on("loaderror", () => {
 			alert(
 				`Sorry, the game failed to load a file... please try refreshing. 💀`
 			);

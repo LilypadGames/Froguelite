@@ -61,7 +61,7 @@ export class Debug extends Core {
 				this.camera.worldView.y +
 				")",
 			"Camera Zoom: " + this.camera.zoom,
-			"Camera Rotation: " + this.camera.rotation,
+			"Camera Rotation: " + (this.camera as any).rotation,
 			"",
 			"World Mouse Pos: (" + pointer.worldX + ", " + pointer.worldY + ")",
 			"World Player Pos: (" + this.player.x + ", " + this.player.y + ")",

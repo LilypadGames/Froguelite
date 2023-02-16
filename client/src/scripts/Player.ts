@@ -300,7 +300,7 @@ export class Player extends LivingEntity {
 		// rotate vector dependant on current camera rotation
 		rotatedVector = this.scene.matter.vector.rotate(
 			vector,
-			-camera.rotation
+			-(camera as any).rotation
 		) as Phaser.Math.Vector2;
 
 		// move

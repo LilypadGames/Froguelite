@@ -38,8 +38,8 @@ export class Game extends Core {
 		super({ key: "Game" });
 	}
 
-	init(level: string) {
-		this.level = level;
+	init(data: {level: string}) {
+		this.level = data.level;
 	}
 
 	preload() {

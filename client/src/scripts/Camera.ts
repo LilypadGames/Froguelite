@@ -1,8 +1,5 @@
 import { Game } from "../scenes/Game";
-import { Enemy } from "./Enemy";
-import { Entity } from "./Entity";
-import { LivingEntity } from "./LivingEntity";
-import { Player } from "./Player";
+import { GameObjects } from "phaser";
 import store from "storejs";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
@@ -80,25 +77,25 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		// rotate left
 		if (this.keyQE.Q.isDown) {
 			// rotate cam
-			this.rotation += this.rotationSpeed;
+			(this as any).rotation += this.rotationSpeed;
 
 			// rotate objects counter to cameras rotation
 			this.scene.fixedObjectsGroup
 				.getChildren()
-				.forEach((object: Entity | LivingEntity | Player | Enemy) => {
-					object.rotation = -this.rotation;
+				.forEach((object: GameObjects.GameObject) => {
+					(object as any).rotation = -(this as any).rotation;
 				}, this);
 		}
 		// rotate right
 		else if (this.keyQE.E.isDown) {
 			// rotate cam
-			this.rotation -= this.rotationSpeed;
+			(this as any).rotation -= this.rotationSpeed;
 
 			// rotate objects counter to cameras rotation
 			this.scene.fixedObjectsGroup
 				.getChildren()
-				.forEach((object: Entity | LivingEntity | Player | Enemy) => {
-					object.rotation = -this.rotation;
+				.forEach((object: GameObjects.GameObject) => {
+					(object as any).rotation = -(this as any).rotation;
 				}, this);
 		}
 	}
