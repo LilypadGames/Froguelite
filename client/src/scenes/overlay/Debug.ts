@@ -60,6 +60,11 @@ export class Debug extends Core {
 				", " +
 				this.camera.worldView.y +
 				")",
+			"Camera Scroll: (" +
+				this.camera.scrollX +
+				", " +
+				this.camera.scrollY +
+				")",
 			"Camera Zoom: " + this.camera.zoom,
 			"Camera Rotation: " + (this.camera as any).rotation,
 			"",
