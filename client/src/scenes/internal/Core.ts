@@ -120,6 +120,9 @@ export class Core extends Phaser.Scene {
 				// save option
 				store.set("settings.options.highPerformanceMode", mode);
 			},
+			get: () => {
+				store.get("settings.options.highPerformanceMode")
+			}
 		},
 	};
 

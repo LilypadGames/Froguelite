@@ -107,6 +107,18 @@ export class Game extends Core {
 
 		// handle bosses
 		if (this.bossGroup.getLength() > 0) this.handleBosses();
+
+		// detect low performance
+		if (this.game.loop.actualFps < 5) {
+			// high performance mode is off
+			if (this.core.highPerformanceMode.get() === false) {
+				// turn on high performance mode
+				this.core.highPerformanceMode.set(true);
+
+				// reload graphics
+				this.reloadGraphics();
+			}
+		}
 	}
 
 	onPause() {
@@ -118,7 +130,11 @@ export class Game extends Core {
 		// resume HUD
 		this.HUD.scene.resume();
 
-		// reload shaders
+		// reload graphics
+		this.reloadGraphics();
+	}
+
+	reloadGraphics() {
 		[
 			this.player as Entity,
 			...(this.enemyGroup.getChildren() as Array<Entity>),
