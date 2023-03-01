@@ -34,7 +34,7 @@ export class Player extends LivingEntity {
 		let playerData = scene.cache.json.get("playerData");
 
 		// pass values
-		super(scene, x, y, textureKey, "Player", playerData["stats"]);
+		super(scene, x, y, textureKey, "Player", playerData["stats"], playerData["details"]);
 
 		// save values
 		this.scene = scene;
@@ -129,7 +129,7 @@ export class Player extends LivingEntity {
 			this.scene.time.now > this.fireCooldown
 		) {
 			// reset cooldown
-			this.fireCooldown = this.scene.time.now + Number(this.fireRate);
+			this.fireCooldown = this.scene.time.now + Number(this.stats.fireRate);
 
 			// update mouse world position
 			this.scene.input.activePointer.updateWorldPoint(this.scene.camera);
@@ -151,7 +151,7 @@ export class Player extends LivingEntity {
 		let directionY: string = "";
 
 		// init velocity
-		let velocity: number = this.speed;
+		let velocity: number = this.stats.speed;
 
 		// init vector
 		let vector: Phaser.Math.Vector2 = new Phaser.Math.Vector2();
@@ -227,7 +227,7 @@ export class Player extends LivingEntity {
 
 			// determine velocity
 			if (directionY !== "up")
-				velocity = this.speed / this.speedDampening;
+				velocity = this.stats.speed / this.speedDampening;
 
 			// move up
 			vector.y = -velocity;
@@ -244,7 +244,7 @@ export class Player extends LivingEntity {
 
 			// determine velocity
 			if (directionY !== "down")
-				velocity = this.speed / this.speedDampening;
+				velocity = this.stats.speed / this.speedDampening;
 
 			// move down
 			vector.y = velocity;
@@ -261,7 +261,7 @@ export class Player extends LivingEntity {
 
 			// determine velocity
 			if (directionX !== "left")
-				velocity = this.speed / this.speedDampening;
+				velocity = this.stats.speed / this.speedDampening;
 
 			// move left
 			vector.x = -velocity;
@@ -278,7 +278,7 @@ export class Player extends LivingEntity {
 
 			// determine velocity
 			if (directionX !== "right")
-				velocity = this.speed / this.speedDampening;
+				velocity = this.stats.speed / this.speedDampening;
 
 			// move right
 			vector.x = velocity;

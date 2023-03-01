@@ -9,7 +9,7 @@ export class Enemy extends LivingEntity {
 		let enemyData = scene.cache.json.get("enemyData");
 
 		// pass values
-		super(scene, x, y, enemyData[id]["texture"], "Enemy", enemyData[id]["stats"]);
+		super(scene, x, y, enemyData[id]["texture"], "Enemy", enemyData[id]["stats"], enemyData[id]["details"]);
 
 		// save values
 		this.textureKey = enemyData[id]["texture"];

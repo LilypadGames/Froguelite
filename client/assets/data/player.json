@@ -4,5 +4,7 @@
         "speed": 0.00003,
         "fireRate": 300
     },
-    "healthbar": "player"
+    "details": {
+        "healthbarID": "player"
+    }
 }

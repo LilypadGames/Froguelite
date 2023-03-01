@@ -1,20 +1,5 @@
 {
-    "Player": {
-        "scale": 6,
-        "texture": {
-            "empty": {
-                "left": "player/empty",
-                "middle": "player/empty",
-                "right": "player/empty"
-            },
-            "full": {
-                "left": "player/full_left",
-                "middle": "player/full_middle",
-                "right": "player/full_right"
-            }
-        }
-    },
-    "Enemy": {
+    "player": {
         "scale": 6,
         "texture": {
             "empty": {

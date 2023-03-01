@@ -2,25 +2,34 @@ import { Game } from "../scenes/Game";
 import { Entity } from "./Entity";
 import { Healthbar } from "./Healthbar";
 
+interface stats {
+	health: number;
+	healthMax: number;
+	speed: number;
+	fireRate?: number;
+}
+
+interface details {
+	healthbarID?: string;
+	boss?: boolean;
+}
+
 export class LivingEntity extends Entity {
 	scene: Game;
 	label: string;
 	textureKey: string;
 
-	// stats
-	health: number;
-	healthMax: number;
-
 	// state
 	isDead: boolean;
 
 	// HUD
-	showHealthbar: boolean | undefined;
 	healthbar!: Healthbar;
 
 	// stats
-	speed: number;
-	fireRate: number | undefined;
+	stats: stats;
+
+	// details
+	details: details | undefined;
 
 	constructor(
 		scene: Game,
@@ -28,7 +37,8 @@ export class LivingEntity extends Entity {
 		y: number,
 		textureKey: string,
 		label: string,
-		stats: { health: number; healthMax?: number, speed: number, fireRate?: number }
+		stats: stats,
+		details?: details
 	) {
 		// pass values
 		super(scene, x, y, textureKey, label);
@@ -40,10 +50,12 @@ export class LivingEntity extends Entity {
 
 		// init stats
 		this.isDead = false;
-		this.health = stats.health;
-		this.healthMax = stats.healthMax ? stats.healthMax : stats.health;
-		this.speed = stats.speed;
-		this.fireRate = stats.fireRate ? stats.fireRate : undefined;
+		this.stats = stats;
+		if (this.stats.healthMax === undefined)
+			this.stats.healthMax = this.stats.health;
+
+		// init details
+		this.details = details;
 	}
 
 	// kill entity
@@ -57,22 +69,22 @@ export class LivingEntity extends Entity {
 
 	// get this entity's health percent
 	getHealthPercent() {
-		return this.health / this.healthMax;
+		return this.stats.health / this.stats.healthMax;
 	}
 
 	// set this entity's health
 	setHealth(health: number) {
 		// over max
-		if (health > this.healthMax) {
-			this.health = this.healthMax;
+		if (health > this.stats.healthMax) {
+			this.stats.health = this.stats.healthMax;
 		}
 		// under min
 		else if (health < 0) {
-			this.health = 0;
+			this.stats.health = 0;
 		}
 		// set health
 		else {
-			this.health = health;
+			this.stats.health = health;
 		}
 
 		// update healthbar
@@ -83,8 +95,8 @@ export class LivingEntity extends Entity {
 	changeHealth(change: number) {
 		// change is 0, healing when health is already maxed, or damaging when health is already 0
 		if (
-			(change > 0 && this.health === this.healthMax) ||
-			(change < 0 && this.health === 0) ||
+			(change > 0 && this.stats.health === this.stats.healthMax) ||
+			(change < 0 && this.stats.health === 0) ||
 			change === 0
 		)
 			return false;
@@ -93,20 +105,20 @@ export class LivingEntity extends Entity {
 		let difference = change;
 
 		// max out health
-		if (this.health + change > this.healthMax) {
+		if (this.stats.health + change > this.stats.healthMax) {
 			// get difference between max and current health
-			difference = this.healthMax - this.health;
+			difference = this.stats.healthMax - this.stats.health;
 
 			// set health to max
-			this.health = this.healthMax;
+			this.stats.health = this.stats.healthMax;
 		}
 		// death
-		else if (this.health + change < 0) {
+		else if (this.stats.health + change < 0) {
 			// get health left as the difference
-			difference = this.health;
+			difference = this.stats.health;
 
 			// set health to 0
-			this.health = 0;
+			this.stats.health = 0;
 
 			// kill
 			this.kill();
@@ -114,7 +126,7 @@ export class LivingEntity extends Entity {
 		// normal health change
 		else {
 			// change health
-			this.health += change;
+			this.stats.health += change;
 		}
 
 		// update healthbar
@@ -126,6 +138,9 @@ export class LivingEntity extends Entity {
 
 	// update the state of the healthbar
 	updateHealthbar() {
+		// no healthbar
+		if (this.details === undefined || this.details.healthbarID === undefined) return;
+
 		// init health bar if not already initialized
 		if (this.healthbar === undefined) {
 			// create healthbar
@@ -134,7 +149,7 @@ export class LivingEntity extends Entity {
 				this,
 				0,
 				0,
-				this.label,
+				this.details.healthbarID,
 				160,
 				this.getHealthPercent()
 			);
