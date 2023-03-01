@@ -79,7 +79,7 @@ export class Healthbar {
 		this.hide();
 
 		// update bar
-		scene.events.on("update", this.update, this);
+		scene.events.on("postupdate", this.update, this);
 	}
 
 	// creates a bar
@@ -171,11 +171,13 @@ export class Healthbar {
 	// show
 	show() {
 		this.bar.setVisible(true);
+		this.bar.setActive(true);
 	}
 
 	// hide
 	hide() {
 		this.bar.setVisible(false);
+		this.bar.setActive(false);
 	}
 
 	// update healthbar position and scale when in use

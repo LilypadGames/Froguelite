@@ -29,24 +29,15 @@ export class Player extends LivingEntity {
 	fireCooldown: number = 0;
 	projectiles: Projectiles;
 
-	// stats
-	speed: number;
-	fireRate: number;
-
 	constructor(scene: Game, x: number, y: number, textureKey: string) {
 		// get player data
 		let playerData = scene.cache.json.get("playerData");
 
 		// pass values
-		super(scene, x, y, textureKey, "Player", {
-			health: playerData["health"],
-			healthMax: playerData["health"],
-		});
+		super(scene, x, y, textureKey, "Player", playerData["stats"]);
 
 		// save values
 		this.scene = scene;
-		this.speed = playerData["speed"];
-		this.fireRate = playerData["fireRate"];
 
 		// populate key inputs
 		this.keyArrows = scene.input.keyboard.createCursorKeys();
@@ -138,7 +129,7 @@ export class Player extends LivingEntity {
 			this.scene.time.now > this.fireCooldown
 		) {
 			// reset cooldown
-			this.fireCooldown = this.scene.time.now + this.fireRate;
+			this.fireCooldown = this.scene.time.now + Number(this.fireRate);
 
 			// update mouse world position
 			this.scene.input.activePointer.updateWorldPoint(this.scene.camera);

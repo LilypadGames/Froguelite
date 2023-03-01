@@ -15,7 +15,12 @@ export class LivingEntity extends Entity {
 	isDead: boolean;
 
 	// HUD
+	showHealthbar: boolean | undefined;
 	healthbar!: Healthbar;
+
+	// stats
+	speed: number;
+	fireRate: number | undefined;
 
 	constructor(
 		scene: Game,
@@ -23,7 +28,7 @@ export class LivingEntity extends Entity {
 		y: number,
 		textureKey: string,
 		label: string,
-		stats: { health: number; healthMax: number }
+		stats: { health: number; healthMax?: number, speed: number, fireRate?: number }
 	) {
 		// pass values
 		super(scene, x, y, textureKey, label);
@@ -34,9 +39,11 @@ export class LivingEntity extends Entity {
 		this.textureKey = textureKey;
 
 		// init stats
-		this.health = stats.health;
-		this.healthMax = stats.healthMax;
 		this.isDead = false;
+		this.health = stats.health;
+		this.healthMax = stats.healthMax ? stats.healthMax : stats.health;
+		this.speed = stats.speed;
+		this.fireRate = stats.fireRate ? stats.fireRate : undefined;
 	}
 
 	// kill entity
@@ -100,6 +107,9 @@ export class LivingEntity extends Entity {
 
 			// set health to 0
 			this.health = 0;
+
+			// kill
+			this.kill();
 		}
 		// normal health change
 		else {
@@ -114,6 +124,7 @@ export class LivingEntity extends Entity {
 		return difference;
 	}
 
+	// update the state of the healthbar
 	updateHealthbar() {
 		// init health bar if not already initialized
 		if (this.healthbar === undefined) {

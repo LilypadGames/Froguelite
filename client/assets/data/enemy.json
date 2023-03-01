@@ -3,7 +3,9 @@
         "name": "LSF",
         "texture": "lsf",
         "scale": 0.25,
-        "health": 200,
-        "healthbar": "enemy"
+        "stats": {
+            "health": 200,
+            "speed": 0.00002
+        }
     }
 }

@@ -1,6 +1,8 @@
 {
-    "health": 25,
-    "speed": 0.00003,
-    "fireRate": 300,
+    "stats": {
+        "health": 25,
+        "speed": 0.00003,
+        "fireRate": 300
+    },
     "healthbar": "player"
 }

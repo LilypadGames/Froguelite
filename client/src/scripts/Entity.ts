@@ -74,8 +74,8 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 
 		// performance mode enabled
 		if (performanceMode) {
-			outlineSettings.quality = 0.02;
-			glowSettings.quality = 0.02;
+			outlineSettings.quality = 0;
+			glowSettings.quality = 0;
 		}
 
 		// remove old FX
@@ -83,8 +83,10 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		if (this.glowFxInstance !== undefined) this.glowFx.remove(this);
 
 		// set new FX
-		this.outlineFxInstance = this.outlineFx.add(this, outlineSettings);
-		this.glowFxInstance = this.glowFx.add(this, glowSettings);
+		if (outlineSettings.quality > 0)
+			this.outlineFxInstance = this.outlineFx.add(this, outlineSettings);
+		if (glowSettings.quality > 0)
+			this.glowFxInstance = this.glowFx.add(this, glowSettings);
 	}
 
 	getRelativePosition(camera: Phaser.Cameras.Scene2D.Camera) {

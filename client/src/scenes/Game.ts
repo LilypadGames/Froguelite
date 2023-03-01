@@ -262,7 +262,7 @@ export class Game extends Core {
 
 	onStop() {
 		// stop HUD
-		this.HUD.events.removeListener("update");
+		this.HUD.events.removeListener("postupdate");
 		this.HUD.scene.stop();
 
 		// stop Debug info
