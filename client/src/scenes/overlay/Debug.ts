@@ -55,6 +55,7 @@ export class Debug extends Core {
 
 		// update debug
 		this.debugText.setText([
+			"FPS: " + this.game.loop.actualFps,
 			"Camera World View: (" +
 				this.camera.worldView.x +
 				", " +
