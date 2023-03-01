@@ -7,6 +7,7 @@ import { Teleport } from "../scripts/Teleport";
 import { HUD } from "./overlay/HUD";
 import { GameObjects } from "phaser";
 import { Entity } from "../scripts/Entity";
+import { Healthbar } from "../scripts/Healthbar";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -29,6 +30,7 @@ export class Game extends Core {
 
 	// enemy
 	enemyGroup!: Phaser.GameObjects.Group;
+	bossGroup!: Phaser.GameObjects.Group;
 
 	// camera
 	camera!: Camera;
@@ -69,6 +71,7 @@ export class Game extends Core {
 		this.enemyGroup = this.add.group({
 			classType: Enemy,
 		});
+		this.bossGroup = this.add.group();
 
 		// create world and add objects/enemies within it
 		this.createWorld();
@@ -99,9 +102,40 @@ export class Game extends Core {
 	}
 
 	update() {
-		this.player.setHealth(10);
 		// handle player
 		this.player.update();
+
+		// handle bosses
+		if (this.bossGroup.getLength() > 0) this.handleBosses();
+	}
+
+	onPause() {
+		// pause HUD
+		this.HUD.scene.pause();
+	}
+
+	onResume() {
+		// resume HUD
+		this.HUD.scene.resume();
+
+		// reload shaders
+		[
+			this.player as Entity,
+			...(this.enemyGroup.getChildren() as Array<Entity>),
+		].forEach((object: Entity) => {
+			object.applyShaders(
+				store.get("settings.options.highPerformanceMode")
+			);
+		});
+	}
+
+	onStop() {
+		// stop HUD
+		this.HUD.events.removeListener("postupdate");
+		this.HUD.scene.stop();
+
+		// stop Debug info
+		this.scene.stop("Debug");
 	}
 
 	// create tilemap world
@@ -223,6 +257,9 @@ export class Game extends Core {
 
 		// add enemy to enemy group
 		this.enemyGroup.add(enemy);
+
+		// add enemy to boss group
+		if (enemy.details && enemy.details.boss) this.bossGroup.add(enemy);
 	}
 
 	// spawn teleport
@@ -240,32 +277,92 @@ export class Game extends Core {
 		this.fixedObjectsGroup.add(teleport);
 	}
 
-	onPause() {
-		// pause HUD
-		this.HUD.scene.pause();
-	}
+	// handle bosses
+	handleBosses() {
+		// init distance object
+		var distance: {
+			[key: number]: number;
+		} = {};
 
-	onResume() {
-		// resume HUD
-		this.HUD.scene.resume();
+		// get distance between boss and player
+		(this.bossGroup.getChildren() as Array<Enemy>).forEach(
+			(boss: Enemy, index: number) => {
+				// is ded
+				if (boss.isDead) return;
 
-		// reload shaders
-		[
-			this.player as Entity,
-			...(this.enemyGroup.getChildren() as Array<Entity>),
-		].forEach((object: Entity) => {
-			object.applyShaders(
-				store.get("settings.options.highPerformanceMode")
+				// doesn't have health bar
+				if (
+					boss.details === undefined ||
+					boss.details.healthbarID == undefined
+				)
+					return;
+
+				// get distance
+				distance[index] = Phaser.Math.Distance.Between(
+					boss.x,
+					boss.y,
+					this.player.x,
+					this.player.y
+				);
+			}
+		);
+
+		// bosses found
+		if (Object.keys(distance).length > 0) {
+			// find shortest distance
+			var min: number = Number(
+				Object.keys(distance).reduce((key, v) =>
+					distance[v as any] < distance[key as any] ? v : key
+				)
 			);
-		});
-	}
 
-	onStop() {
-		// stop HUD
-		this.HUD.events.removeListener("postupdate");
-		this.HUD.scene.stop();
+			// get closest boss
+			let closestBoss = (this.bossGroup.getChildren() as Array<Enemy>)[
+				min
+			];
 
-		// stop Debug info
-		this.scene.stop("Debug");
+			// distance is within threshold
+			if (distance[min] <= 300) {
+				// init health bar if not already initialized
+				if (closestBoss.healthbar === undefined) {
+					// create healthbar
+					closestBoss.healthbar = new Healthbar(
+						this.HUD,
+						closestBoss,
+						0,
+						0,
+						(closestBoss.details as any).healthbarID as string,
+						closestBoss.getHealthPercent()
+					);
+				}
+
+				// show boss bar
+				if (closestBoss.healthbar.bar.visible === false)
+					closestBoss.healthbar.show();
+			}
+			// hide boss bar
+			else {
+				if (closestBoss.healthbar.bar.visible === true)
+					closestBoss.healthbar.hide();
+			}
+
+			// hide boss bar of others
+			(this.bossGroup.getChildren() as Array<Enemy>).forEach(
+				(boss: Enemy, index: number) => {
+					// skip closest
+					if (index === min) return;
+
+					// is ded
+					if (boss.isDead) return;
+
+					// doesn't have health bar
+					if (boss.healthbar === undefined) return;
+
+					// hide boss bar
+					if (boss.healthbar.bar.visible === true)
+						boss.healthbar.hide();
+				}
+			);
+		}
 	}
 }

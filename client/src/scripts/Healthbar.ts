@@ -21,6 +21,7 @@ export class Healthbar {
 
 	// information
 	width: number;
+	type: string;
 	x: number;
 	y: number;
 	scale: number;
@@ -32,7 +33,6 @@ export class Healthbar {
 		x: number,
 		y: number,
 		id: string,
-		width: number,
 		percent: number
 	) {
 		// get healthbar data
@@ -42,10 +42,11 @@ export class Healthbar {
 		this.scene = scene;
 		this.owner = owner;
 		this.id = id;
-		this.width = width;
+		this.type = healthbarData[id].type as string;
+		this.width = healthbarData[id].width as number;
 		this.x = x;
 		this.y = y;
-		this.scale = healthbarData[id].scale;
+		this.scale = healthbarData[id].scale as number;
 		this.percent = percent;
 
 		// create bar empty
@@ -77,6 +78,13 @@ export class Healthbar {
 
 		// hide
 		this.hide();
+
+		// reposition boss health bars
+		if (this.type === "boss")
+			this.bar.setPosition(
+				window.innerWidth / 2,
+				(window.innerHeight / 12) * 1
+			);
 
 		// update bar
 		scene.events.on("postupdate", this.update, this);
@@ -185,33 +193,39 @@ export class Healthbar {
 		// get owner health percent from health
 		let percent = this.owner.getHealthPercent();
 
-		// get owner position
-		let relativePos = this.owner.getRelativePosition(
-			this.scene.sceneGame.camera
-		);
-
-		//show and update healthbar (less than max but not at 0)
-		if (percent < 1 && percent > 0) {
-			// set position
-			this.bar.setPosition(
-				relativePos.x,
-				relativePos.y +
-					(this.owner.height *
-						this.owner.scale *
-						this.scene.camera.zoom) /
-						1.4
+		// individual health bar
+		if (this.type === "individual") {
+			// get owner position
+			let relativePos = this.owner.getRelativePosition(
+				this.scene.sceneGame.camera
 			);
 
-			// set scale
-			this.bar.setScale(this.scene.camera.zoom / 20);
+			//show and update healthbar (less than max but not at 0)
+			if (percent < 1 && percent > 0) {
+				// set position
+				this.bar.setPosition(
+					relativePos.x,
+					relativePos.y +
+						(this.owner.height *
+							this.owner.scale *
+							this.scene.camera.zoom) /
+							1.4
+				);
 
-			// show
-			if (this.bar.visible === false) this.show();
-		}
-		// hide healthbar
-		else {
-			// hide
-			if (this.bar.visible === true) this.hide();
+				// set scale
+				this.bar.setScale(this.scene.camera.zoom / 20);
+
+				// show
+				if (this.bar.visible === false) this.show();
+			}
+			// hide healthbar
+			else {
+				// hide
+				if (this.bar.visible === true) this.hide();
+			}
+		} else {
+			// hide if at 0 health
+			if (percent <= 0 && this.bar.visible === true) this.hide();
 		}
 	}
 }

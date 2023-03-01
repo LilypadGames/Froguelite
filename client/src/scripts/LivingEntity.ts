@@ -62,8 +62,13 @@ export class LivingEntity extends Entity {
 	kill() {
 		// remove entity if not already dead
 		if (!this.isDead) {
+			// hide health bar
+			if (this.healthbar !== undefined) this.healthbar.hide();
+
+			// hide entity
 			this.isDead = true;
-			this.destroy();
+			this.hide();
+			// this.destroy();
 		}
 	}
 
@@ -119,9 +124,6 @@ export class LivingEntity extends Entity {
 
 			// set health to 0
 			this.stats.health = 0;
-
-			// kill
-			this.kill();
 		}
 		// normal health change
 		else {
@@ -132,6 +134,12 @@ export class LivingEntity extends Entity {
 		// update healthbar
 		this.updateHealthbar();
 
+		// dead
+		if (this.stats.health <= 0) {
+			// kill
+			this.kill();
+		}
+
 		// return how much health was changed
 		return difference;
 	}
@@ -139,7 +147,11 @@ export class LivingEntity extends Entity {
 	// update the state of the healthbar
 	updateHealthbar() {
 		// no healthbar
-		if (this.details === undefined || this.details.healthbarID === undefined) return;
+		if (
+			this.details === undefined ||
+			this.details.healthbarID === undefined
+		)
+			return;
 
 		// init health bar if not already initialized
 		if (this.healthbar === undefined) {
@@ -150,7 +162,6 @@ export class LivingEntity extends Entity {
 				0,
 				0,
 				this.details.healthbarID,
-				160,
 				this.getHealthPercent()
 			);
 		}

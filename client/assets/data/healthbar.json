@@ -1,6 +1,25 @@
 {
     "player": {
         "scale": 6,
+        "width": 160,
+        "type": "individual",
+        "texture": {
+            "empty": {
+                "left": "player/empty",
+                "middle": "player/empty",
+                "right": "player/empty"
+            },
+            "full": {
+                "left": "player/full_left",
+                "middle": "player/full_middle",
+                "right": "player/full_right"
+            }
+        }
+    },
+    "lsf": {
+        "scale": 6,
+        "width": 500,
+        "type": "boss",
         "texture": {
             "empty": {
                 "left": "player/empty",

@@ -67,6 +67,18 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		this.applyShaders(store.get("settings.options.highPerformanceMode"));
 	}
 
+	// show
+	show() {
+		this.setVisible(true);
+		this.setActive(true);
+	}
+
+	// hide
+	hide() {
+		this.setVisible(false);
+		this.setActive(false);
+	}
+
 	applyShaders(performanceMode = false) {
 		// get options
 		let outlineSettings = JSON.parse(JSON.stringify(this.outline));
