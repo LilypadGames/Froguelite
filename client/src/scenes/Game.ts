@@ -56,6 +56,9 @@ export class Game extends Core {
 		// disable gravity
 		this.matter.world.disableGravity();
 
+		// set hz
+		this.matter.set60Hz();
+
 		// set world bounds
 		this.matter.world.setBounds(
 			0,
