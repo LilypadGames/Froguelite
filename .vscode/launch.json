@@ -20,12 +20,21 @@
 			"type": "node-terminal"
 		},
 		{
+			"name": "[Electron] Dev Preview",
+			"command": "cd electron && yarn preview",
+			"request": "launch",
+			"type": "node-terminal",
+			"env": {
+				"NODE_ENV": "dev preview"
+			}
+		},
+		{
 			"name": "[Electron] Preview",
 			"command": "cd electron && yarn preview",
 			"request": "launch",
 			"type": "node-terminal",
 			"env": {
-				"NODE_ENV": "production"
+				"NODE_ENV": "preview"
 			}
 		}
 	]

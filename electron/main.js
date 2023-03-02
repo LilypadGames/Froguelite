@@ -7,8 +7,12 @@ require("@electron/remote/main").initialize();
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-const isDevelopment = process.env.NODE_ENV !== "production";
+// determine environment
+let environment;
+if (app.isPackaged) environment = "production";
+else environment = process.env.NODE_ENV;
 
+// open app
 const createWindow = () => {
 	// create renderer
 	const mainWindow = new BrowserWindow({
@@ -23,29 +27,32 @@ const createWindow = () => {
 	});
 
 	// show menu bar dependent on mode
-	mainWindow.setMenuBarVisibility(isDevelopment && !app.isPackaged);
+	mainWindow.setMenuBarVisibility(
+		environment === "development" || environment === "dev preview"
+	);
 
 	// determine file path dependent on mode
 	let filePath;
-	if (app.isPackaged)
+	if (environment === "production")
 		filePath = url.format({
 			pathname: path.join(__dirname, "./app/index.html"),
 			protocol: "file:",
 			slashes: true,
 		});
-	else if (!isDevelopment)
+	else if (environment === "preview" || environment === "dev preview")
 		filePath = url.format({
 			pathname: path.join(__dirname, "../electron/app/index.html"),
 			protocol: "file:",
 			slashes: true,
 		});
-	else if (isDevelopment) filePath = "http://localhost:3000";
+	else if (environment === "development") filePath = "http://localhost:3000";
 
 	// load the index.html of the app
 	mainWindow.loadURL(filePath);
 
 	// open devtools if in development mode
-	if (isDevelopment && !app.isPackaged) mainWindow.webContents.openDevTools();
+	if (environment === "development" || environment === "dev preview")
+		mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
