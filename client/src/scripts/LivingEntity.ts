@@ -67,8 +67,8 @@ export class LivingEntity extends Entity {
 
 			// hide entity
 			this.isDead = true;
-			this.hide();
-			// this.destroy();
+			// this.hide();
+			this.destroy();
 		}
 	}
 
