@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+const url = require("url");
 
 require("@electron/remote/main").initialize();
 
@@ -9,7 +10,7 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 const createWindow = () => {
-	// Create the browser window.
+	// create renderer
 	const mainWindow = new BrowserWindow({
 		width: 1920,
 		height: 1080,
@@ -21,18 +22,30 @@ const createWindow = () => {
 		},
 	});
 
-	mainWindow.setMenuBarVisibility(isDevelopment);
+	// show menu bar dependent on mode
+	mainWindow.setMenuBarVisibility(isDevelopment && !app.isPackaged);
 
-	// and load the index.html of the app.
-	//mainWindow.loadFile(__dirname, "./app/index.html")
-	if (!isDevelopment)
-		mainWindow.loadURL(
-			"file://" + path.join(__dirname, "..") + "/electron/app/index.html"
-		);
-	else mainWindow.loadURL("http://localhost:3000");
+	// determine file path dependent on mode
+	let filePath;
+	if (app.isPackaged)
+		filePath = url.format({
+			pathname: path.join(__dirname, "./app/index.html"),
+			protocol: "file:",
+			slashes: true,
+		});
+	else if (!isDevelopment)
+		filePath = url.format({
+			pathname: path.join(__dirname, "../electron/app/index.html"),
+			protocol: "file:",
+			slashes: true,
+		});
+	else if (isDevelopment) filePath = "http://localhost:3000";
 
-	// Open the DevTools.
-	if (isDevelopment) mainWindow.webContents.openDevTools();
+	// load the index.html of the app
+	mainWindow.loadURL(filePath);
+
+	// open devtools if in development mode
+	if (isDevelopment && !app.isPackaged) mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
