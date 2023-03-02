@@ -27,6 +27,11 @@
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			},
+			"options": {
+				"env": {
+					"NODE_ENV": "production"
+				}
 			}
 		}
 	]
