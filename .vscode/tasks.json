@@ -13,6 +13,7 @@
 		},
 		{
 			"label": "[Client] Build",
+			"type": "shell",
 			"command": "cd client && npm run build",
 			"group": {
 				"kind": "build",
@@ -21,6 +22,7 @@
 		},
 		{
 			"label": "[Electron] Build",
+			"type": "shell",
 			"command": "cd electron && yarn build",
 			"group": {
 				"kind": "build",
