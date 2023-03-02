@@ -15,7 +15,10 @@ export class Core extends Phaser.Scene {
 
 	core: any = {
 		init: () => {},
-		preload: () => {},
+		preload: () => {
+			// reset average fps
+			this.game.loop.resetDelta()
+		},
 		create: () => {
 			// disable right-click context menu
 			this.input.mouse.disableContextMenu();

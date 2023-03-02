@@ -109,7 +109,7 @@ export class Game extends Core {
 		if (this.bossGroup.getLength() > 0) this.handleBosses();
 
 		// detect low performance
-		if (this.game.loop.actualFps < 5) {
+		if (this.game.loop.actualFps < 10) {
 			// high performance mode is off
 			if (this.core.highPerformanceMode.get() === false) {
 				// turn on high performance mode
