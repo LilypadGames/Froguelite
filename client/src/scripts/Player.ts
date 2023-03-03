@@ -62,7 +62,7 @@ export class Player extends LivingEntity {
 		this.keyF.on(
 			"down",
 			() => {
-				this.handleInteract();
+				this.checkInteract();
 			},
 			this
 		);
@@ -130,8 +130,8 @@ export class Player extends LivingEntity {
 	}
 
 	// check if player is interacting
-	handleInteract() {
-		if (this.keyF.isDown && this.lastContact !== undefined) {
+	checkInteract() {
+		if (this.lastContact !== undefined) {
 			this.lastContact.interact();
 		}
 	}
