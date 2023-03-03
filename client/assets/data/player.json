@@ -1,7 +1,7 @@
 {
     "stats": {
         "health": 25,
-        "speed": 0.00003,
+        "speed": 0.00006,
         "fireRate": 300
     },
     "details": {

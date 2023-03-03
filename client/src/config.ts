@@ -20,7 +20,7 @@ export default {
 		pixelArt: true,
 	},
 	fps: {
-		target: 30,
+		target: 60,
 		forceSetTimeOut: true,
 	},
 	physics: {
