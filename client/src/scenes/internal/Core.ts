@@ -17,7 +17,7 @@ export class Core extends Phaser.Scene {
 		init: () => {},
 		preload: () => {
 			// reset average fps
-			this.game.loop.resetDelta()
+			this.game.loop.resetDelta();
 		},
 		create: () => {
 			// disable right-click context menu
@@ -27,7 +27,8 @@ export class Core extends Phaser.Scene {
 			if (
 				this.scene.key != "Pause" &&
 				this.scene.key != "Menu" &&
-				this.scene.key != "Options"
+				this.scene.key != "Options" &&
+				this.scene.key != "Inventory"
 			) {
 				// populate key input
 				this.keyESC = this.input.keyboard.addKey(
@@ -124,8 +125,8 @@ export class Core extends Phaser.Scene {
 				store.set("settings.options.highPerformanceMode", mode);
 			},
 			get: () => {
-				return store.get("settings.options.highPerformanceMode")
-			}
+				return store.get("settings.options.highPerformanceMode");
+			},
 		},
 	};
 

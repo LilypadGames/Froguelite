@@ -14,6 +14,7 @@ export class Player extends LivingEntity {
 		D: Phaser.Input.Keyboard.Key;
 	};
 	keyF: Phaser.Input.Keyboard.Key;
+	keyTAB: Phaser.Input.Keyboard.Key;
 
 	// interaction
 	lastContact!: undefined | Interactable | Teleport;
@@ -34,7 +35,15 @@ export class Player extends LivingEntity {
 		let playerData = scene.cache.json.get("playerData");
 
 		// pass values
-		super(scene, x, y, textureKey, "Player", playerData["stats"], playerData["details"]);
+		super(
+			scene,
+			x,
+			y,
+			textureKey,
+			"Player",
+			playerData["stats"],
+			playerData["details"]
+		);
 
 		// save values
 		this.scene = scene;
@@ -57,6 +66,12 @@ export class Player extends LivingEntity {
 			},
 			this
 		);
+		this.keyTAB = scene.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.TAB
+		);
+		this.keyTAB.on("down", () => {
+			this.toggleInventory();
+		});
 
 		// create anims
 		scene.anims.create({
@@ -129,7 +144,8 @@ export class Player extends LivingEntity {
 			this.scene.time.now > this.fireCooldown
 		) {
 			// reset cooldown
-			this.fireCooldown = this.scene.time.now + Number(this.stats.fireRate);
+			this.fireCooldown =
+				this.scene.time.now + Number(this.stats.fireRate);
 
 			// update mouse world position
 			this.scene.input.activePointer.updateWorldPoint(this.scene.camera);
@@ -306,5 +322,13 @@ export class Player extends LivingEntity {
 		) {
 			this.setVelocity(0, 0);
 		}
+	}
+
+	toggleInventory() {
+		// pause current scene
+		this.scene.scene.pause();
+
+		// launch inventory menu
+		this.scene.scene.launch("Inventory", this.scene);
 	}
 }
