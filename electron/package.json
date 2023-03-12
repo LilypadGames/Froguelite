@@ -15,7 +15,8 @@
   },
   "devDependencies": {
     "electron": "^21.0.0",
-    "electron-builder": "^23.3.3"
+    "electron-builder": "^23.3.3",
+    "electron-icon-maker": "^0.0.5"
   },
   "dependencies": {
     "@electron/remote": "^2.0.8",
@@ -23,9 +24,34 @@
     "fs-extra": "^10.1.0"
   },
   "build": {
+    "productName": "Froguelike",
     "appId": "dev.danmizu.froguelike",
+    "copyright": "Copyright © 2023 ${author}",
+    "directories": {
+      "buildResources": "assets"
+    },
     "mac": {
-      "category": "public.app-category.action-games"
+      "category": "public.app-category.action-games",
+      "target": "dmg",
+      "icon": "assets/icons/mac/icon.icns"
+    },
+    "files": [
+      "assets/**/*",
+      "dist/**/*",
+      "scripts/**/*",
+      "app/**/*",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icons/win/icon.ico"
+    },
+    "nsis": {
+      "installerIcon": "assets/icons/win/icon.ico",
+      "installerHeaderIcon": "assets/icons/win/icon.ico",
+      "deleteAppDataOnUninstall": true
     }
   },
   "nodeversion": "14.18.1",

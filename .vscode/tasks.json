@@ -33,6 +33,12 @@
 					"NODE_ENV": "production"
 				}
 			}
+		},
+		{
+
+			"label": "[Electron] Create Icon",
+			"type": "shell",
+			"command": "cd electron/node_modules/.bin/ && electron-icon-maker --input=../../../client/assets/site/icon/icon.png --output=../../assets"
 		}
 	]
 }
