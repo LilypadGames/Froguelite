@@ -126,6 +126,7 @@ export class Load extends Phaser.Scene {
 		WebFont.load({
 			custom: {
 				families: ["Pix"],
+				urls: ['./assets/site/style/main.css']
 			},
 		});
 	}
