@@ -5,9 +5,9 @@ import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
 import { Teleport } from "../scripts/Teleport";
 import { HUD } from "./overlay/HUD";
-import { GameObjects } from "phaser";
 import { Entity } from "../scripts/Entity";
 import { Healthbar } from "../scripts/Healthbar";
+import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -24,6 +24,7 @@ export class Game extends Core {
 		y: number;
 	};
 	level!: string;
+	music!: Phaser.Sound.WebAudioSound;
 
 	// player
 	player!: Player;
@@ -96,6 +97,26 @@ export class Game extends Core {
 		this.events.on("pause", this.onPause, this);
 		this.events.on("resume", this.onResume, this);
 		this.events.on("shutdown", this.onStop, this);
+
+		// play music
+		this.sound.pauseOnBlur = false;
+		this.music = this.sound.add(
+			this.cache.json.get("worldData").room[this.level].music,
+			{
+				delay: 2000,
+				loop: true,
+			}
+		) as Phaser.Sound.WebAudioSound;
+		SoundFade.fadeIn(this.music, 500);
+
+		// end scene
+		this.events.on(
+			"shutdown",
+			() => {
+				SoundFade.fadeOut(this.music, 500);
+			},
+			this
+		);
 	}
 
 	update() {

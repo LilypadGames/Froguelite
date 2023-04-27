@@ -41,6 +41,11 @@ export class Load extends Phaser.Scene {
 						key: "worldData",
 						url: "assets/data/world.json",
 					},
+					{
+						type: "json",
+						key: "audioData",
+						url: "assets/data/audio.json",
+					},
 				],
 			},
 		});
@@ -120,6 +125,12 @@ export class Load extends Phaser.Scene {
 					frameHeight: 13,
 				}
 			);
+		});
+
+		// load audio data
+		let audioData = this.cache.json.get("audioData");
+		Object.keys(audioData).forEach((key) => {
+			this.load.audio(key, "assets/audio/" + audioData[key]);
 		});
 
 		// load font

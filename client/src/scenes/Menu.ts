@@ -1,4 +1,5 @@
 import { Core } from "./internal/Core";
+import SoundFade from "phaser3-rex-plugins/plugins/soundfade.js";
 
 //
 // This is the Main Menu, what you first see when you open the game.
@@ -7,6 +8,7 @@ import { Core } from "./internal/Core";
 export class Menu extends Core {
 	logo!: Phaser.GameObjects.Text;
 	begin!: Phaser.GameObjects.Text;
+	music!: Phaser.Sound.WebAudioSound;
 
 	constructor() {
 		super({ key: "Menu" });
@@ -95,6 +97,23 @@ export class Menu extends Core {
 		this.cameras.main.setPosition(0, 0);
 		this.resizeCamera(this.scale.gameSize);
 		this.scale.on("resize", this.resizeCamera, this);
+
+		// play music
+		this.sound.pauseOnBlur = false;
+		this.music = this.sound.add("under_her_spell_8_bit_loop", {
+			loop: true,
+		}) as Phaser.Sound.WebAudioSound;
+		// this.music.play();
+		SoundFade.fadeIn(this.music, 500);
+
+		// end scene
+		this.events.on(
+			"shutdown",
+			() => {
+				SoundFade.fadeOut(this.music, 800);
+			},
+			this
+		);
 	}
 
 	resizeCamera(gameSize: Phaser.Structs.Size) {
