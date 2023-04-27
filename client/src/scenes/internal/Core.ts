@@ -21,7 +21,9 @@ export class Core extends Phaser.Scene {
 		},
 		create: () => {
 			// disable right-click context menu
-			this.input.mouse.disableContextMenu();
+			(
+				this.input.mouse as Phaser.Input.Mouse.MouseManager
+			).disableContextMenu();
 
 			// pause menu
 			if (
@@ -31,9 +33,9 @@ export class Core extends Phaser.Scene {
 				this.scene.key != "Inventory"
 			) {
 				// populate key input
-				this.keyESC = this.input.keyboard.addKey(
-					Phaser.Input.Keyboard.KeyCodes.ESC
-				);
+				this.keyESC = (
+					this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+				).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
 				// toggle pause menu
 				this.keyESC.on("down", () => {
@@ -48,9 +50,9 @@ export class Core extends Phaser.Scene {
 			// debug info
 			if (this.scene.key === "Game") {
 				// populate key input
-				this.keySHIFT = this.input.keyboard.addKey(
-					Phaser.Input.Keyboard.KeyCodes.SHIFT
-				);
+				this.keySHIFT = (
+					this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+				).addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
 				// toggle debug info
 				this.keySHIFT.on("down", () => {

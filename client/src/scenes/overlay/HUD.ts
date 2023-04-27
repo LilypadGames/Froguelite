@@ -30,7 +30,7 @@ export class HUD extends Core {
 	create() {
 		// init tip text
 		this.tip = this.add
-			.text(window.innerWidth / 2, (window.innerHeight / 5) * 2.2, "", {
+			.text(this.scale.gameSize.width / 2, (this.scale.gameSize.height / 5) * 2.2, "", {
 				fontSize: "28px",
 				fontFamily: "Pix",
 				color: "#ffffff",

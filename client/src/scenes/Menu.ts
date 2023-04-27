@@ -22,9 +22,9 @@ export class Menu extends Core {
 		this.core.create();
 
 		// populate key input
-		this.keyESC = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.ESC
-		);
+		this.keyESC = (
+			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
 		// options menu
 		this.keyESC.on("down", () => {
@@ -40,8 +40,8 @@ export class Menu extends Core {
 
 		// logo text
 		this.logo = this.make.text({
-			x: window.innerWidth / 2,
-			y: window.innerHeight / 3,
+			x: this.scale.gameSize.width / 2,
+			y: this.scale.gameSize.height / 3,
 			text: "Froguelike",
 			style: {
 				fontSize: "128px",
@@ -57,8 +57,8 @@ export class Menu extends Core {
 
 		// begin text
 		this.begin = this.make.text({
-			x: window.innerWidth / 2,
-			y: (window.innerHeight / 5) * 4,
+			x: this.scale.gameSize.width / 2,
+			y: (this.scale.gameSize.height / 5) * 4,
 			text: "Click Anywhere To Begin",
 			style: {
 				fontSize: "32px",
@@ -90,6 +90,16 @@ export class Menu extends Core {
 
 		// show menu when resumed
 		this.events.on("resume", this.show, this);
+
+		// set camera size and position
+		this.cameras.main.setPosition(0, 0);
+		this.resizeCamera(this.scale.gameSize);
+		this.scale.on("resize", this.resizeCamera, this);
+	}
+
+	resizeCamera(gameSize: Phaser.Structs.Size) {
+		// resize
+		this.cameras.main.setSize(gameSize.width, gameSize.height);
 	}
 
 	show() {

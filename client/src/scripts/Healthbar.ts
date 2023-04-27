@@ -82,8 +82,8 @@ export class Healthbar {
 		// reposition boss health bars
 		if (this.type === "boss")
 			this.bar.setPosition(
-				window.innerWidth / 2,
-				(window.innerHeight / 12) * 1
+				this.scene.scale.gameSize.width / 2,
+				(this.scene.scale.gameSize.height / 12) * 1
 			);
 
 		// update bar

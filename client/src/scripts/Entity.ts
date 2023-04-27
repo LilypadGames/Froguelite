@@ -12,12 +12,8 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	// shaders
 	outlineFxInstance!: OutlinePostFxPipeline;
 	glowFxInstance!: GlowFilterPostFxPipeline;
-	outlineFx = this.scene.plugins.get(
-		"rexOutlinePipeline"
-	) as OutlinePipelinePlugin;
-	glowFx = this.scene.plugins.get(
-		"rexGlowFilterPipeline"
-	) as GlowFilterPipelinePlugin;
+	outlineFx;
+	glowFx;
 
 	// config
 	outline = {
@@ -45,6 +41,14 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		// save values
 		this.scene = scene;
 		this.textureKey = textureKey;
+
+		// get effect plugins
+		this.glowFx = this.scene.plugins.get(
+			"rexGlowFilterPipeline"
+		) as GlowFilterPipelinePlugin;
+		this.outlineFx = this.scene.plugins.get(
+			"rexOutlinePipeline"
+		) as OutlinePipelinePlugin;
 
 		// add entity to scene
 		this.scene.add.existing(this);

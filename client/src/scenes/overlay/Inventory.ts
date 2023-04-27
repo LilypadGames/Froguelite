@@ -17,15 +17,15 @@ export class Inventory extends Core {
 
 	preload() {
 		// populate key input
-		this.keyTAB = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.TAB
-		);
+		this.keyTAB = (
+			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
 		this.keyTAB.on("down", () => {
 			this.resume();
 		});
-		this.keyESC = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.ESC
-		);
+		this.keyESC = (
+			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 		this.keyESC.on("down", () => {
 			this.resume();
 		});
@@ -37,10 +37,10 @@ export class Inventory extends Core {
 
 		// create transparent background overlay
 		this.background = this.add.rectangle(
-			window.innerWidth / 2,
-			window.innerHeight / 2,
-			window.innerWidth,
-			window.innerHeight,
+			this.scale.gameSize.width / 2,
+			this.scale.gameSize.height / 2,
+			this.scale.gameSize.width,
+			this.scale.gameSize.height,
 			0x000000,
 			0.5
 		);

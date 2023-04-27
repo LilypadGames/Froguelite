@@ -20,9 +20,9 @@ export class Options extends Core {
 
 	preload() {
 		// populate key input
-		this.keyESC = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.ESC
-		);
+		this.keyESC = (
+			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
 		// pause or resume
 		this.keyESC.on("down", () => {
@@ -36,10 +36,10 @@ export class Options extends Core {
 
 		// create transparent background overlay
 		const background = this.add.rectangle(
-			window.innerWidth / 2,
-			window.innerHeight / 2,
-			window.innerWidth,
-			window.innerHeight,
+			this.scale.gameSize.width / 2,
+			this.scale.gameSize.height / 2,
+			this.scale.gameSize.width,
+			this.scale.gameSize.height,
 			0x000000,
 			0.5
 		);
@@ -51,8 +51,8 @@ export class Options extends Core {
 
 		// create menu (title with buttons)
 		const menu = new Sizer(this, {
-			x: window.innerWidth / 2,
-			y: window.innerHeight / 2.2,
+			x: this.scale.gameSize.width / 2,
+			y: this.scale.gameSize.height / 2.2,
 			orientation: "y",
 		})
 			.add(
@@ -70,7 +70,7 @@ export class Options extends Core {
 			)
 			.add(
 				new Buttons(this, {
-					width: window.innerWidth / 3,
+					width: this.scale.gameSize.width / 3,
 					orientation: "y",
 					buttons: [
 						this.checkbox(
@@ -124,7 +124,7 @@ export class Options extends Core {
 			)
 			.add(
 				new Buttons(this, {
-					width: window.innerWidth / 3,
+					width: this.scale.gameSize.width / 3,
 					orientation: "y",
 					buttons: [this.button("Back", "back")],
 					click: {

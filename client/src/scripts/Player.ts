@@ -49,16 +49,26 @@ export class Player extends LivingEntity {
 		this.scene = scene;
 
 		// populate key inputs
-		this.keyArrows = scene.input.keyboard.createCursorKeys();
+		this.keyArrows = (
+			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).createCursorKeys();
 		this.keyWASD = {
-			W: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-			A: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-			S: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-			D: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+			W: (
+				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.W),
+			A: (
+				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.A),
+			S: (
+				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.S),
+			D: (
+				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.D),
 		};
-		this.keyF = scene.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.F
-		);
+		this.keyF = (
+			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).addKey(Phaser.Input.Keyboard.KeyCodes.F);
 		this.keyF.on(
 			"down",
 			() => {
@@ -66,9 +76,9 @@ export class Player extends LivingEntity {
 			},
 			this
 		);
-		this.keyTAB = scene.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.TAB
-		);
+		this.keyTAB = (
+			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
 		this.keyTAB.on("down", () => {
 			this.toggleInventory();
 		});

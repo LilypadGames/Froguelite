@@ -83,13 +83,7 @@ export class Game extends Core {
 		this.player = this.addPlayer(this.spawnpoint.x, this.spawnpoint.y);
 
 		// set up camera to follow player
-		this.camera = new Camera(
-			this,
-			0,
-			0,
-			window.innerWidth,
-			window.innerHeight
-		);
+		this.camera = new Camera(this, 0, 0);
 		this.camera.startFollow(this.player, false, 1, 1, 0, 0);
 
 		// start HUD
@@ -168,7 +162,12 @@ export class Game extends Core {
 		// init layers
 		map.layers.forEach((layer) => {
 			// add layer
-			map.createLayer(layer.name, tileset, 0, 0);
+			map.createLayer(
+				layer.name,
+				tileset as Phaser.Tilemaps.Tileset,
+				0,
+				0
+			);
 
 			// fix culling (fixes pop-in when player rotates camera)
 			layer.tilemapLayer.setCullPadding(4, 4);

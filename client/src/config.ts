@@ -6,16 +6,24 @@ import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pip
 // These are the settings for the game canvas and game itself.
 //
 
+// constants
+const gameScale = {
+	width: 1920,
+	height: 1080,
+};
+
 export default {
+	gameTitle: "Froguelike",
+	gameVersion: "InDev v0.0.1",
 	type: Phaser.WEBGL,
-	parent: "game",
-	backgroundColor: "#111",
 	scale: {
+		parent: "game",
 		mode: Phaser.Scale.FIT,
 		autoCenter: Phaser.Scale.CENTER_BOTH,
-		width: window.innerWidth,
-		height: window.innerHeight,
+		width: gameScale.width,
+		height: gameScale.height,
 	},
+	backgroundColor: "#111",
 	render: {
 		pixelArt: true,
 	},
@@ -32,6 +40,9 @@ export default {
 				showStaticBody: true,
 			},
 		},
+	},
+	dom: {
+		createContainer: true,
 	},
 	plugins: {
 		global: [

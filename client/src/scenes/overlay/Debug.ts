@@ -81,9 +81,9 @@ export class Debug extends Core {
 			"",
 			"Player Rotation: " + this.player.rotation,
 			"Player Velocity: (" +
-				this.player.body.velocity.x +
+				(this.player.body as MatterJS.BodyType).velocity.x +
 				", " +
-				this.player.body.velocity.y +
+				(this.player.body as MatterJS.BodyType).velocity.y +
 				")",
 			"Pressed Keys: " + pressedKeys.join(", "),
 		]);

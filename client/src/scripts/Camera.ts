@@ -17,11 +17,9 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		scene: Game,
 		x: number,
 		y: number,
-		width: number,
-		height: number
 	) {
 		// pass values
-		super(x, y, width, height);
+		super(x, y, scene.scale.gameSize.width, scene.scale.gameSize.height);
 
 		// save values
 		this.scene = scene;
@@ -39,8 +37,12 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 
 		// populate key inputs
 		this.keyQE = {
-			Q: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
-			E: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+			Q: (
+				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.Q),
+			E: (
+				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.E),
 		};
 		scene.input.on(
 			"wheel",
@@ -49,11 +51,19 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 			},
 			this
 		);
+
+		// resize
+		this.scene.scale.on("resize", this.resize, this);
 	}
 
 	update() {
 		// rotate camera
 		this.handleRotation();
+	}
+
+	resize(gameSize: Phaser.Structs.Size) {
+		// resize
+		this.setSize(gameSize.width, gameSize.height);
 	}
 
 	// handle zoom of camera
