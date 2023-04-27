@@ -19,13 +19,13 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	outline = {
 		thickness: 1,
 		outlineColor: 0x000000,
-		quality: 0.6,
+		quality: 0.3,
 	};
 	glow = {
 		distance: 15,
 		outerStrength: 1,
 		glowColor: 0x000000,
-		quality: 0.6,
+		quality: 0.3,
 	};
 
 	constructor(

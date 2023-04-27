@@ -18,6 +18,8 @@ const createWindow = () => {
 	const mainWindow = new BrowserWindow({
 		width: 1920,
 		height: 1080,
+		fullscreen: true,
+		show: false,
 		webPreferences: {
 			nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
 			contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
@@ -25,6 +27,9 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 		},
 	});
+
+	// maximize
+	mainWindow.maximize();
 
 	// show menu bar dependent on mode
 	mainWindow.setMenuBarVisibility(
@@ -53,6 +58,9 @@ const createWindow = () => {
 	// open devtools if in development mode
 	if (environment === "development" || environment === "dev preview")
 		mainWindow.webContents.openDevTools();
+
+	// show
+	mainWindow.show();
 };
 
 // This method will be called when Electron has finished
@@ -66,6 +74,10 @@ app.whenReady().then(() => {
 		// dock icon is clicked and there are no other windows open.
 		if (BrowserWindow.getAllWindows().length === 0) createWindow();
 	});
+
+	// DEBUG
+	// console.dir(app.getAppMetrics())
+	// console.dir(app.getGPUFeatureStatus())
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
