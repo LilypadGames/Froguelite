@@ -21,6 +21,4 @@ export class Enemy extends LivingEntity {
 		// set scale
 		this.setScale(enemyData[id]["scale"]);
 	}
-
-	update() {}
 }

@@ -138,11 +138,13 @@ export class Options extends CoreOverlay {
 			.layout();
 	}
 
-	resumePreviousScene() {
-		// remove events
-		this.events.removeListener("sliderChanged");
+	shutdown() {
+		// remove listeners
 		this.events.removeListener("toggleChanged");
+		this.events.removeListener("sliderChanged");
+	}
 
+	resumePreviousScene() {
 		// resume
 		super.resumePreviousScene();
 	}

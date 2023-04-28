@@ -90,6 +90,14 @@ export class Healthbar {
 		scene.events.on("postupdate", this.update, this);
 	}
 
+	destroy() {
+		// remove listeners
+		this.scene.events.removeListener("postupdate", this.update, this);
+
+		// destroy
+		this.bar.destroy();
+	}
+
 	// creates a bar
 	createBar(
 		x: number,

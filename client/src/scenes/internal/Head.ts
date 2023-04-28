@@ -43,14 +43,14 @@ export class Head extends Phaser.Scene {
 				this.input.setDefaultCursor(
 					"url(assets/input/cursors/cursor_small.cur) 16 16, pointer"
 				);
-			});
+			}, this);
 
 			// change cursor back when click released
 			this.input.on("pointerup", () => {
 				this.input.setDefaultCursor(
 					"url(assets/input/cursors/cursor_large.cur) 16 16, pointer"
 				);
-			});
+			}, this);
 		},
 	};
 

@@ -4,7 +4,6 @@ import { Healthbar } from "../../scripts/Healthbar";
 import { Player } from "../../scripts/Player";
 import Utility from "../../scripts/Utility";
 import { Game } from "../Game";
-import { Core } from "../internal/Core";
 
 export class HUD extends Phaser.Scene {
 	sceneGame!: Game;
@@ -26,8 +25,6 @@ export class HUD extends Phaser.Scene {
 		// save HUD scene to Game scene
 		this.sceneGame.HUD = this;
 	}
-
-	preload() {}
 
 	create() {
 		// init tip text

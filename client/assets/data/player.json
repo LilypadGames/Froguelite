@@ -6,5 +6,12 @@
     },
     "details": {
         "healthbarID": "player"
+    },
+    "texture": "pp",
+    "anim": {
+        "left": 0,
+        "right": 1,
+        "front": 2,
+        "back": 3
     }
 }

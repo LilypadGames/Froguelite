@@ -50,33 +50,25 @@ export class Core extends Phaser.Scene {
 
 		// reset average fps
 		this.game.loop.resetDelta();
-	}
 
-	create() {
 		// menu overlay toggle hotkey
 		this.keyESC = (
 			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
 		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
 		// toggle menu overlay
-		this.keyESC.on("down", () => {
-			// pause current scene
-			this.scene.pause();
+		this.keyESC.on("down", this.launchMenuOverlay, this);
 
-			// launch menu overlay
-			this.launchMenuOverlay();
-		});
+		// shutdown event
+		this.events.once("shutdown", this.shutdown, this);
 	}
 
-	quit() {
+	shutdown() {
+		// remove listeners
+		this.keyESC.removeListener("down", this.launchMenuOverlay, this);
+
 		// fade out music
 		if (this.music.audio) SoundFade.fadeOut(this.music.audio, 500);
-
-		// disable events
-		this.events.removeListener("musicOptionChanged");
-
-		// stop current scene
-		this.scene.stop();
 	}
 
 	playMusic(title: string) {
@@ -93,13 +85,16 @@ export class Core extends Phaser.Scene {
 	}
 
 	launchMenuOverlay() {
+		// pause current scene
+		this.scene.pause();
+
 		// launch pause menu
 		this.scene.launch("Pause", this);
 	}
 
 	changeScene(scene: string, data?: object) {
-		// quit scene
-		this.quit();
+		// stop scene
+		this.scene.stop();
 
 		// start next scene
 		this.scene.start(scene, data);

@@ -30,7 +30,7 @@ export class Player extends LivingEntity {
 	fireCooldown: number = 0;
 	projectiles: Projectiles;
 
-	constructor(scene: Game, x: number, y: number, textureKey: string) {
+	constructor(scene: Game, x: number, y: number) {
 		// get player data
 		let playerData = scene.cache.json.get("playerData");
 
@@ -39,7 +39,7 @@ export class Player extends LivingEntity {
 			scene,
 			x,
 			y,
-			textureKey,
+			playerData.texture,
 			"Player",
 			playerData["stats"],
 			playerData["details"]
@@ -48,7 +48,7 @@ export class Player extends LivingEntity {
 		// save values
 		this.scene = scene;
 
-		// populate key inputs
+		// movement keys
 		this.keyArrows = (
 			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
 		).createCursorKeys();
@@ -66,60 +66,18 @@ export class Player extends LivingEntity {
 				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
 			).addKey(Phaser.Input.Keyboard.KeyCodes.D),
 		};
+
+		// interact key
 		this.keyF = (
 			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
 		).addKey(Phaser.Input.Keyboard.KeyCodes.F);
-		this.keyF.on(
-			"down",
-			() => {
-				this.checkInteract();
-			},
-			this
-		);
+		this.keyF.on("down", this.checkInteract, this);
+
+		// inventory key
 		this.keyTAB = (
 			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
 		).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-		this.keyTAB.on("down", () => {
-			this.toggleInventory();
-		});
-
-		// create anims
-		scene.anims.create({
-			key: "left",
-			frames: this.anims.generateFrameNumbers(textureKey, {
-				start: 0,
-				end: 0,
-			}),
-			frameRate: 1,
-			repeat: -1,
-		});
-		scene.anims.create({
-			key: "right",
-			frames: this.anims.generateFrameNumbers(textureKey, {
-				start: 1,
-				end: 1,
-			}),
-			frameRate: 1,
-			repeat: -1,
-		});
-		scene.anims.create({
-			key: "front",
-			frames: this.anims.generateFrameNumbers(textureKey, {
-				start: 2,
-				end: 2,
-			}),
-			frameRate: 1,
-			repeat: -1,
-		});
-		scene.anims.create({
-			key: "back",
-			frames: this.anims.generateFrameNumbers(textureKey, {
-				start: 3,
-				end: 3,
-			}),
-			frameRate: 1,
-			repeat: -1,
-		});
+		this.keyTAB.on("down", this.toggleInventory, this);
 
 		// default frame
 		this.setFrame(2);
@@ -129,6 +87,17 @@ export class Player extends LivingEntity {
 
 		// initialize projectiles
 		this.projectiles = new Projectiles(scene, "snot_bubble");
+
+		// events
+		scene.events.on("update", this.update, this);
+		this.once("destroy", this.onDestroy, this);
+	}
+
+	onDestroy() {
+		// remove listeners
+		this.scene.events.removeListener("update", this.update, this);
+		this.keyF.removeListener("down", this.checkInteract, this);
+		this.keyTAB.removeListener("down", this.toggleInventory, this);
 	}
 
 	update() {

@@ -31,18 +31,23 @@ export class CoreOverlay extends Phaser.Scene {
 		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
 		// toggle menu overlay
-		this.keyESC.on("down", () => {
-			// resume previous scene
-			this.resumePreviousScene();
-		});
+		this.keyESC.on("down", this.resumePreviousScene, this);
+
+		// shutdown event
+		this.events.once("shutdown", this.shutdown, this);
+	}
+
+	shutdown() {
+		// remove listeners
+		this.keyESC.removeListener("down", this.resumePreviousScene, this);
 	}
 
 	resumePreviousScene() {
-		// resume previous scene
-		this.scene.resume(this.scenePaused);
-
 		// stop pause menu
 		this.scene.stop();
+
+		// resume previous scene
+		this.scene.resume(this.scenePaused);
 	}
 
 	// 	create: () => {

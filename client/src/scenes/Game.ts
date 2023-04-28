@@ -59,42 +59,43 @@ export class Game extends Core {
 		).addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
 		// toggle debug overlay
-		this.keySHIFT.on("down", () => {
-			// close debug overlay
-			if (
-				this.game.scene
-					.getScenes(true)
-					.some((scene) => scene.scene.key === "Debug")
-			) {
-				// disable debug value
-				store.set("debug.enabled", false);
+		this.keySHIFT.on(
+			"down",
+			() => {
+				// close debug overlay
+				if (
+					this.game.scene
+						.getScenes(true)
+						.some((scene) => scene.scene.key === "Debug")
+				) {
+					// disable debug value
+					store.set("debug.enabled", false);
 
-				// stop debug scene
-				this.scene.stop("Debug");
+					// stop debug scene
+					this.scene.stop("Debug");
 
-				// turn off and remove debug lines
-				this.matter.world.drawDebug = false;
-				this.matter.world.debugGraphic.clear();
-			}
+					// turn off and remove debug lines
+					this.matter.world.drawDebug = false;
+					this.matter.world.debugGraphic.clear();
+				}
 
-			// open debug overlay
-			else {
-				// enable debug value
-				store.set("debug.enabled", true);
+				// open debug overlay
+				else {
+					// enable debug value
+					store.set("debug.enabled", true);
 
-				// launch debug info overlay
-				this.scene.launch("Debug", this);
-			}
-		});
+					// launch debug info overlay
+					this.scene.launch("Debug", this);
+				}
+			},
+			this
+		);
 
 		// show debug
 		if (store.get("debug.enabled")) this.scene.launch("Debug", this);
 	}
 
 	create() {
-		// create core mechanics
-		super.create();
-
 		// disable gravity
 		this.matter.world.disableGravity();
 
@@ -137,16 +138,12 @@ export class Game extends Core {
 		// execute when game is paused/resumed
 		this.events.on("pause", this.onPause, this);
 		this.events.on("resume", this.onResume, this);
-		this.events.on("shutdown", this.onStop, this);
 
 		// play music
 		super.playMusic(this.cache.json.get("musicData").room[this.level]);
 	}
 
 	update() {
-		// handle player
-		this.player.update();
-
 		// handle bosses
 		if (this.bossGroup.getLength() > 0) this.handleBosses();
 
@@ -167,6 +164,21 @@ export class Game extends Core {
 				this.reloadGraphics();
 			}
 		}
+	}
+
+	shutdown() {
+		// remove listeners
+		this.events.removeListener("pause", this.onPause, this);
+		this.events.removeListener("resume", this.onResume, this);
+
+		// destroy player
+		this.player.destroy();
+
+		// stop HUD
+		this.HUD.scene.stop();
+
+		// stop Debug info
+		this.scene.stop("Debug");
 	}
 
 	onPause() {
@@ -191,15 +203,6 @@ export class Game extends Core {
 				store.get("settings.options.highPerformanceMode")
 			);
 		});
-	}
-
-	onStop() {
-		// stop HUD
-		this.HUD.events.removeListener("postupdate");
-		this.HUD.scene.stop();
-
-		// stop Debug info
-		this.scene.stop("Debug");
 	}
 
 	// create tilemap world
@@ -308,7 +311,7 @@ export class Game extends Core {
 	// add player to world
 	addPlayer(x: number, y: number) {
 		// create player
-		let player = new Player(this, x, y, "pp").setOrigin(0.5, 0.5);
+		let player = new Player(this, x, y).setOrigin(0.5, 0.5);
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(player);

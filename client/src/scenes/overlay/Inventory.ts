@@ -22,9 +22,7 @@ export class Inventory extends CoreOverlay {
 		this.keyTAB = (
 			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
 		).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-		this.keyTAB.on("down", () => {
-			super.resumePreviousScene();
-		});
+		this.keyTAB.once("down", super.resumePreviousScene, this);
 	}
 
 	create() {
@@ -40,6 +38,12 @@ export class Inventory extends CoreOverlay {
 
 		// show menu when resumed
 		this.events.on("resume", this.show, this);
+	}
+
+	shutdown() {
+		// remove listeners
+		this.events.removeListener("resume", this.show, this);
+		this.keyTAB.removeListener("down", super.resumePreviousScene, this);
 	}
 
 	hide() {

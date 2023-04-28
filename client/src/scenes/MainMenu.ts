@@ -1,6 +1,5 @@
 import { Head } from "./internal/Head";
 import { Core } from "./internal/Core";
-import SoundFade from "phaser3-rex-plugins/plugins/soundfade.js";
 import Utility from "../scripts/Utility";
 import ColorScheme from "../scripts/ColorScheme";
 
@@ -27,9 +26,6 @@ export class MainMenu extends Core {
 	}
 
 	create() {
-		// create core mechanics
-		super.create();
-
 		// logo text
 		this.logo = this.make.text({
 			x: this.scale.gameSize.width / 2,
@@ -78,7 +74,7 @@ export class MainMenu extends Core {
 			this.changeScene("Game", {
 				level: this.cache.json.get("worldData").start,
 			});
-		});
+		}, this);
 
 		// show menu when resumed
 		this.events.on("resume", this.show, this);
@@ -92,12 +88,10 @@ export class MainMenu extends Core {
 		super.playMusic(this.cache.json.get("musicData").mainmenu);
 	}
 
-	quit() {
+	shutdown() {
 		// remove listeners
-		this.scale.removeAllListeners();
-
-		// quit
-		super.quit();
+		this.events.removeListener("resume", this.show, this);
+		this.scale.removeListener("resize", this.resizeCamera, this);
 	}
 
 	launchMenuOverlay() {

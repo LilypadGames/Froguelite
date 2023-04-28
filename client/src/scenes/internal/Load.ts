@@ -148,6 +148,22 @@ export class Load extends Phaser.Scene {
 	}
 
 	create() {
+		// create player anims
+		for (const key in this.cache.json.get("playerData").anim) {
+			this.anims.create({
+				key: key,
+				frames: this.anims.generateFrameNumbers(
+					this.cache.json.get("playerData").texture,
+					{
+						start: this.cache.json.get("playerData").anim[key],
+						end: this.cache.json.get("playerData").anim[key],
+					}
+				),
+				frameRate: 1,
+				repeat: -1,
+			});
+		}
+
 		// start game
 		this.scene.start("Head");
 	}

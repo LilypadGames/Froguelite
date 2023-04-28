@@ -154,6 +154,11 @@ export class Pause extends CoreOverlay {
 		this.events.on("resume", this.show, this);
 	}
 
+	shutdown() {
+		//remove listeners
+		this.events.removeListener("resume", this.show, this);
+	}
+
 	button(text: string, id: string) {
 		return new Label(this, {
 			height: this.scale.gameSize.height / 20,

@@ -26,9 +26,6 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		this.speed = projectileData[id]["speed"];
 		this.damage = projectileData[id]["damage"];
 
-		// update projectile
-		scene.matter.world.on("afterupdate", this.update, this);
-
 		// trigger collisions, but don't actually collide
 		this.setSensor(true);
 
@@ -57,10 +54,14 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 
 		// hide
 		this.hide();
+
+		// events
+		scene.matter.world.on("afterupdate", this.afterupdate, this);
+		this.once("destroy", this.onDestroy, this);
 	}
 
 	// runs on projectiles after physics have been applied
-	update() {
+	afterupdate() {
 		let delta = this.scene.matter.world.getDelta();
 		if (this.state > 0) {
 			// lower lifespan
@@ -76,6 +77,15 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 				this.pop();
 			}
 		}
+	}
+
+	onDestroy() {
+		// remove listeners
+		this.scene.matter.world.removeListener(
+			"afterupdate",
+			this.afterupdate,
+			this
+		);
 	}
 
 	// fire projectile towards given coords

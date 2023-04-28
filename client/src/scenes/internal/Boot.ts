@@ -11,12 +11,16 @@ export class Boot extends Phaser.Scene {
 
 	preload() {
 		// file loading error
-		this.load.on("loaderror", () => {
-			alert(
-				`Sorry, the game failed to load a file... please try refreshing. 💀`
-			);
-			this.game.destroy(true);
-		});
+		this.load.on(
+			"loaderror",
+			() => {
+				alert(
+					`Sorry, the game failed to load a file... please try refreshing. 💀`
+				);
+				this.game.destroy(true);
+			},
+			this
+		);
 	}
 
 	create() {
