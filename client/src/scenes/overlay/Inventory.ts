@@ -44,6 +44,9 @@ export class Inventory extends CoreOverlay {
 		// remove listeners
 		this.events.removeListener("resume", this.show, this);
 		this.keyTAB.removeListener("down", super.resumePreviousScene, this);
+
+		// base class shutdown
+		super.shutdown();
 	}
 
 	hide() {

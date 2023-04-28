@@ -157,6 +157,9 @@ export class Pause extends CoreOverlay {
 	shutdown() {
 		//remove listeners
 		this.events.removeListener("resume", this.show, this);
+
+		// base class shutdown
+		super.shutdown();
 	}
 
 	button(text: string, id: string) {

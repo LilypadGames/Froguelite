@@ -179,6 +179,9 @@ export class Game extends Core {
 
 		// stop Debug info
 		this.scene.stop("Debug");
+
+		// base class shutdown
+		super.shutdown();
 	}
 
 	onPause() {

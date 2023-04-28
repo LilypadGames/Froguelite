@@ -92,6 +92,9 @@ export class MainMenu extends Core {
 		// remove listeners
 		this.events.removeListener("resume", this.show, this);
 		this.scale.removeListener("resize", this.resizeCamera, this);
+
+		// base class shutdown
+		super.shutdown();
 	}
 
 	launchMenuOverlay() {
