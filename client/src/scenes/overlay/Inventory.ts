@@ -1,7 +1,6 @@
-import { Core } from "../internal/Core";
+import { CoreOverlay } from "../internal/CoreOverlay";
 
-export class Inventory extends Core {
-	pausedScene!: Phaser.Scene;
+export class Inventory extends CoreOverlay {
 	worldView!: Phaser.Geom.Rectangle;
 	background!: Phaser.GameObjects.Rectangle;
 	keyTAB!: Phaser.Input.Keyboard.Key;
@@ -11,30 +10,24 @@ export class Inventory extends Core {
 	}
 
 	init(pausedScene: Phaser.Scene) {
-		// save values
-		this.pausedScene = pausedScene;
+		// save paused scene
+		super.init(pausedScene);
 	}
 
 	preload() {
-		// populate key input
+		// set up ESC key
+		super.preload();
+
+		// make TAB key close inventory (like ESC key)
 		this.keyTAB = (
 			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
 		).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
 		this.keyTAB.on("down", () => {
-			this.resume();
-		});
-		this.keyESC = (
-			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-		this.keyESC.on("down", () => {
-			this.resume();
+			super.resumePreviousScene();
 		});
 	}
 
 	create() {
-		// create core mechanics
-		this.core.create();
-
 		// create transparent background overlay
 		this.background = this.add.rectangle(
 			this.scale.gameSize.width / 2,
@@ -47,14 +40,6 @@ export class Inventory extends Core {
 
 		// show menu when resumed
 		this.events.on("resume", this.show, this);
-	}
-
-	resume() {
-		// resume previous scene
-		this.scene.resume(this.pausedScene);
-
-		// stop pause menu
-		this.scene.stop();
 	}
 
 	hide() {

@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin.js";
+import Utility from "./scripts/Utility";
+import ColorScheme from "./scripts/ColorScheme";
 
 //
 // These are the settings for the game canvas and game itself.
@@ -23,7 +25,7 @@ export default {
 		width: gameScale.width,
 		height: gameScale.height,
 	},
-	backgroundColor: "#111",
+	backgroundColor: Utility.hex.toString(ColorScheme.Black),
 	render: {
 		pixelArt: true,
 	},

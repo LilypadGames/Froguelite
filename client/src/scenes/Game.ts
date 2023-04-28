@@ -8,6 +8,7 @@ import { HUD } from "./overlay/HUD";
 import { Entity } from "../scripts/Entity";
 import { Healthbar } from "../scripts/Healthbar";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
+import { Head } from "./internal/Head";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -24,7 +25,6 @@ export class Game extends Core {
 		y: number;
 	};
 	level!: string;
-	music!: Phaser.Sound.WebAudioSound;
 
 	// player
 	player!: Player;
@@ -37,22 +37,63 @@ export class Game extends Core {
 	camera!: Camera;
 	fixedObjectsGroup!: Phaser.GameObjects.Group;
 
+	// keys
+	keySHIFT!: Phaser.Input.Keyboard.Key;
+
 	constructor() {
 		super({ key: "Game" });
 	}
 
 	init(data: { level: string }) {
+		// store current level
 		this.level = data.level;
 	}
 
 	preload() {
 		// preload core mechanics
-		this.core.preload();
+		super.preload();
+
+		// debug overlay toggle hotkey
+		this.keySHIFT = (
+			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+
+		// toggle debug overlay
+		this.keySHIFT.on("down", () => {
+			// close debug overlay
+			if (
+				this.game.scene
+					.getScenes(true)
+					.some((scene) => scene.scene.key === "Debug")
+			) {
+				// disable debug value
+				store.set("debug.enabled", false);
+
+				// stop debug scene
+				this.scene.stop("Debug");
+
+				// turn off and remove debug lines
+				this.matter.world.drawDebug = false;
+				this.matter.world.debugGraphic.clear();
+			}
+
+			// open debug overlay
+			else {
+				// enable debug value
+				store.set("debug.enabled", true);
+
+				// launch debug info overlay
+				this.scene.launch("Debug", this);
+			}
+		});
+
+		// show debug
+		if (store.get("debug.enabled")) this.scene.launch("Debug", this);
 	}
 
 	create() {
 		// create core mechanics
-		this.core.create();
+		super.create();
 
 		// disable gravity
 		this.matter.world.disableGravity();
@@ -99,24 +140,7 @@ export class Game extends Core {
 		this.events.on("shutdown", this.onStop, this);
 
 		// play music
-		this.sound.pauseOnBlur = false;
-		this.music = this.sound.add(
-			this.cache.json.get("worldData").room[this.level].music,
-			{
-				delay: 2000,
-				loop: true,
-			}
-		) as Phaser.Sound.WebAudioSound;
-		SoundFade.fadeIn(this.music, 500);
-
-		// end scene
-		this.events.on(
-			"shutdown",
-			() => {
-				SoundFade.fadeOut(this.music, 500);
-			},
-			this
-		);
+		super.playMusic(this.cache.json.get("musicData").room[this.level]);
 	}
 
 	update() {
@@ -129,9 +153,15 @@ export class Game extends Core {
 		// detect low performance
 		if (this.game.loop.actualFps < 10) {
 			// high performance mode is off
-			if (this.core.highPerformanceMode.get() === false) {
+			if (
+				(
+					this.game.scene.getScene("Head") as Head
+				).highPerformanceMode.get() === false
+			) {
 				// turn on high performance mode
-				this.core.highPerformanceMode.set(true);
+				(
+					this.game.scene.getScene("Head") as Head
+				).highPerformanceMode.set(true);
 
 				// reload graphics
 				this.reloadGraphics();

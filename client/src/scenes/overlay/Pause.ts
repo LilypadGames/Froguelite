@@ -1,10 +1,17 @@
-import { Core } from "../internal/Core";
+// imports
+import ColorScheme from "../../scripts/ColorScheme";
+import Utility from "../../scripts/Utility";
+import { CoreOverlay } from "../internal/CoreOverlay";
+import { Head } from "../internal/Head";
+
+// UI components
 import {
 	Sizer,
 	Label,
 	Buttons,
 } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 
+// types
 type Button = {
 	name: string;
 	getElement: (arg0: string) => {
@@ -14,8 +21,7 @@ type Button = {
 	};
 };
 
-export class Pause extends Core {
-	pausedScene!: Phaser.Scene;
+export class Pause extends CoreOverlay {
 	worldView!: Phaser.Geom.Rectangle;
 	background!: Phaser.GameObjects.Rectangle;
 	menu!: Sizer;
@@ -25,26 +31,16 @@ export class Pause extends Core {
 	}
 
 	init(pausedScene: Phaser.Scene) {
-		// save values
-		this.pausedScene = pausedScene;
+		// save paused scene
+		super.init(pausedScene);
 	}
 
 	preload() {
-		// populate key input
-		this.keyESC = (
-			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-
-		// pause or resume
-		this.keyESC.on("down", () => {
-			this.resume();
-		});
+		// set up ESC key
+		super.preload();
 	}
 
 	create() {
-		// create core mechanics
-		this.core.create();
-
 		// create transparent background overlay
 		this.background = this.add.rectangle(
 			this.scale.gameSize.width / 2,
@@ -61,19 +57,23 @@ export class Pause extends Core {
 			y: this.scale.gameSize.height / 2.2,
 			orientation: "y",
 		})
+			// title
 			.add(
 				this.make.text({
 					text: "Paused",
 					style: {
 						fontSize: "42px",
 						fontFamily: "Pix",
-						color: "#ffffff",
+						color: Utility.hex.toString(ColorScheme.White),
 						align: "center",
 					},
 					origin: { x: 0.5, y: 0.5 },
 					add: true,
-				})
+				}),
+				{ align: "center" }
 			)
+
+			// buttons
 			.add(
 				new Buttons(this, {
 					width: this.scale.gameSize.width / 4,
@@ -87,7 +87,6 @@ export class Pause extends Core {
 					align: "center",
 					space: {
 						item: 20,
-						top: 30,
 					},
 				})
 					.on(
@@ -124,7 +123,7 @@ export class Pause extends Core {
 							// resume button
 							if (button.name === "resume") {
 								// go back to previous scene
-								this.resume();
+								this.resumePreviousScene();
 							}
 							// options menu
 							else if (button.name === "options") {
@@ -140,11 +139,14 @@ export class Pause extends Core {
 							// restart button
 							else if (button.name === "restart") {
 								// reload the page to start from menu
-								this.core.restart();
+								(
+									this.game.scene.getScene("Head") as Head
+								).restart();
 							}
 						},
 						this
-					)
+					),
+				{ align: "center" }
 			)
 			.layout();
 
@@ -154,36 +156,25 @@ export class Pause extends Core {
 
 	button(text: string, id: string) {
 		return new Label(this, {
+			height: this.scale.gameSize.height / 20,
 			background: this.add.rectangle(0, 0, 400, 100, 0x000000, 0.2),
 			text: this.make.text({
 				text: text,
 				style: {
 					fontSize: "26px",
 					fontFamily: "Pix",
-					color: "#ffffff",
+					color: Utility.hex.toString(ColorScheme.White),
 				},
 				origin: { x: 0.5, y: 0.5 },
 				add: true,
 			}),
 			align: "center",
 			space: {
-				left: 10,
-				right: 10,
-				top: 10,
-				bottom: 10,
-				icon: 10,
-				text: 10,
+				top: 8,
+				bottom: 8,
 			},
 			name: id,
 		});
-	}
-
-	resume() {
-		// resume previous scene
-		this.scene.resume(this.pausedScene);
-
-		// stop pause menu
-		this.scene.stop();
 	}
 
 	hide() {

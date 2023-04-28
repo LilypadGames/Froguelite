@@ -13,11 +13,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	zoomMin: number = 5;
 	zoomDefault: number = 8;
 
-	constructor(
-		scene: Game,
-		x: number,
-		y: number,
-	) {
+	constructor(scene: Game, x: number, y: number) {
 		// pass values
 		super(x, y, scene.scale.gameSize.width, scene.scale.gameSize.height);
 

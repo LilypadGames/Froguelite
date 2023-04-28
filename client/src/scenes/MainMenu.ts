@@ -1,44 +1,34 @@
+import { Head } from "./internal/Head";
 import { Core } from "./internal/Core";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade.js";
+import Utility from "../scripts/Utility";
+import ColorScheme from "../scripts/ColorScheme";
 
 //
 // This is the Main Menu, what you first see when you open the game.
 //
 
-export class Menu extends Core {
+export class MainMenu extends Core {
 	logo!: Phaser.GameObjects.Text;
 	begin!: Phaser.GameObjects.Text;
-	music!: Phaser.Sound.WebAudioSound;
 
 	constructor() {
-		super({ key: "Menu" });
+		super({ key: "MainMenu" });
+	}
+
+	init() {
+		// save as current main scene
+		(this.game.scene.getScene("Head") as Head).sceneMain = this;
 	}
 
 	preload() {
 		// preload core mechanics
-		this.core.preload();
+		super.preload();
 	}
 
 	create() {
 		// create core mechanics
-		this.core.create();
-
-		// populate key input
-		this.keyESC = (
-			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-
-		// options menu
-		this.keyESC.on("down", () => {
-			// hide current scene
-			this.hide();
-
-			// pause current scene
-			this.scene.pause();
-
-			// launch pause menu
-			this.scene.launch("Options", this);
-		});
+		super.create();
 
 		// logo text
 		this.logo = this.make.text({
@@ -48,9 +38,9 @@ export class Menu extends Core {
 			style: {
 				fontSize: "128px",
 				fontFamily: "Pix",
-				color: "#05ad32",
+				color: Utility.hex.toString(ColorScheme.Green),
 				align: "center",
-				stroke: "#ffffff",
+				stroke: Utility.hex.toString(ColorScheme.White),
 				strokeThickness: 20,
 			},
 			origin: { x: 0.5, y: 0.5 },
@@ -65,7 +55,7 @@ export class Menu extends Core {
 			style: {
 				fontSize: "32px",
 				fontFamily: "Pix",
-				color: "#ffffff",
+				color: Utility.hex.toString(ColorScheme.White),
 				align: "center",
 			},
 			origin: { x: 0.5, y: 0.5 },
@@ -99,21 +89,23 @@ export class Menu extends Core {
 		this.scale.on("resize", this.resizeCamera, this);
 
 		// play music
-		this.sound.pauseOnBlur = false;
-		this.music = this.sound.add("under_her_spell_8_bit_loop", {
-			loop: true,
-		}) as Phaser.Sound.WebAudioSound;
-		// this.music.play();
-		SoundFade.fadeIn(this.music, 500);
+		super.playMusic(this.cache.json.get("musicData").mainmenu);
+	}
 
-		// end scene
-		this.events.on(
-			"shutdown",
-			() => {
-				SoundFade.fadeOut(this.music, 800);
-			},
-			this
-		);
+	quit() {
+		// remove listeners
+		this.scale.removeAllListeners();
+
+		// quit
+		super.quit();
+	}
+
+	launchMenuOverlay() {
+		// hide current scene
+		this.hide();
+
+		// launch options menu
+		this.scene.launch("Options", this);
 	}
 
 	resizeCamera(gameSize: Phaser.Structs.Size) {

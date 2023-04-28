@@ -1,10 +1,12 @@
 import { Camera } from "../../scripts/Camera";
+import ColorScheme from "../../scripts/ColorScheme";
 import { Healthbar } from "../../scripts/Healthbar";
 import { Player } from "../../scripts/Player";
+import Utility from "../../scripts/Utility";
 import { Game } from "../Game";
 import { Core } from "../internal/Core";
 
-export class HUD extends Core {
+export class HUD extends Phaser.Scene {
 	sceneGame!: Game;
 	player!: Player;
 	tip!: Phaser.GameObjects.Text;
@@ -30,14 +32,19 @@ export class HUD extends Core {
 	create() {
 		// init tip text
 		this.tip = this.add
-			.text(this.scale.gameSize.width / 2, (this.scale.gameSize.height / 5) * 2.2, "", {
-				fontSize: "28px",
-				fontFamily: "Pix",
-				color: "#ffffff",
-				strokeThickness: 10,
-				stroke: "#000000",
-				align: "center",
-			})
+			.text(
+				this.scale.gameSize.width / 2,
+				(this.scale.gameSize.height / 5) * 2.2,
+				"",
+				{
+					fontSize: "28px",
+					fontFamily: "Pix",
+					color: Utility.hex.toString(ColorScheme.White),
+					strokeThickness: 10,
+					stroke: Utility.hex.toString(ColorScheme.Black),
+					align: "center",
+				}
+			)
 			.setOrigin(0.5, 0.5)
 			.setScrollFactor(0);
 	}

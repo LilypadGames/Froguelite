@@ -46,6 +46,11 @@ export class Load extends Phaser.Scene {
 						key: "audioData",
 						url: "assets/data/audio.json",
 					},
+					{
+						type: "json",
+						key: "musicData",
+						url: "assets/data/music.json",
+					},
 				],
 			},
 		});
@@ -143,7 +148,7 @@ export class Load extends Phaser.Scene {
 	}
 
 	create() {
-		// Menu
-		this.scene.start("Menu");
+		// start game
+		this.scene.start("Head");
 	}
 }

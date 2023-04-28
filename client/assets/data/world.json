@@ -1,11 +1,3 @@
 {
-    "start": "riverside",
-    "room": {
-        "riverside": {
-            "music": "riverside"
-        },
-        "dungeon": {
-            "music": "the_bauws"
-        }
-    }
+    "start": "riverside"
 }

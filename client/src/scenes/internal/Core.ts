@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { Head } from "./Head";
+import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import store from "storejs";
 
 //
@@ -7,134 +9,97 @@ import store from "storejs";
 
 export class Core extends Phaser.Scene {
 	keyESC!: Phaser.Input.Keyboard.Key;
-	keySHIFT!: Phaser.Input.Keyboard.Key;
+	// music
+	music = {
+		audio: undefined as Phaser.Sound.WebAudioSound | undefined,
+
+		setVolume: (value: number) => {
+			// save option
+			store.set("settings.options.musicVolume", value);
+
+			// apply option
+			if (this.music.audio) this.music.audio.volume = value;
+		},
+		getVolume: () => {
+			// get option
+			return store.get("settings.options.musicVolume");
+		},
+		setState: (value: boolean) => {
+			// save option
+			store.set("settings.options.musicEnabled", value);
+
+			// apply option
+			if (this.music.audio) this.music.audio.mute = !value;
+		},
+		getState: () => {
+			// get option
+			return store.get("settings.options.musicEnabled");
+		},
+	};
 
 	constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
 		super(config);
 	}
 
-	core: any = {
-		init: () => {},
-		preload: () => {
-			// reset average fps
-			this.game.loop.resetDelta();
-		},
-		create: () => {
-			// disable right-click context menu
-			(
-				this.input.mouse as Phaser.Input.Mouse.MouseManager
-			).disableContextMenu();
+	preload() {
+		// save as current main scene
+		(this.game.scene.getScene("Head") as Head).sceneMain = this;
 
-			// pause menu
-			if (
-				this.scene.key != "Pause" &&
-				this.scene.key != "Menu" &&
-				this.scene.key != "Options" &&
-				this.scene.key != "Inventory"
-			) {
-				// populate key input
-				this.keyESC = (
-					this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-				).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+		// turn off default debug lines when game first launches
+		this.matter.world.drawDebug = false;
 
-				// toggle pause menu
-				this.keyESC.on("down", () => {
-					// pause current scene
-					this.scene.pause();
+		// reset average fps
+		this.game.loop.resetDelta();
+	}
 
-					// launch pause menu
-					this.scene.launch("Pause", this);
-				});
-			}
+	create() {
+		// menu overlay toggle hotkey
+		this.keyESC = (
+			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
-			// debug info
-			if (this.scene.key === "Game") {
-				// populate key input
-				this.keySHIFT = (
-					this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-				).addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+		// toggle menu overlay
+		this.keyESC.on("down", () => {
+			// pause current scene
+			this.scene.pause();
 
-				// toggle debug info
-				this.keySHIFT.on("down", () => {
-					// if debug scene is already open, close it
-					if (
-						this.game.scene
-							.getScenes(true)
-							.some((scene) => scene.scene.key === "Debug")
-					) {
-						// stop debug scene
-						this.scene.stop("Debug");
+			// launch menu overlay
+			this.launchMenuOverlay();
+		});
+	}
 
-						// turn off and remove debug lines
-						this.matter.world.drawDebug = false;
-						this.matter.world.debugGraphic.clear();
-					}
-					// open debug scene
-					else {
-						// launch debug info overlay
-						this.scene.launch("Debug", this);
-					}
-				});
-			}
+	quit() {
+		// fade out music
+		if (this.music.audio) SoundFade.fadeOut(this.music.audio, 500);
 
-			// turn off debug
-			if (this.scene.key !== "Debug") {
-				this.matter.world.drawDebug = false;
-			}
+		// disable events
+		this.events.removeListener("musicOptionChanged");
 
-			// init cursor
-			this.core.cursor.init();
-		},
-		// restart game
-		restart: () => {
-			// // stop all scenes
-			// this.game.scene.scenes.forEach((scene) => {
-			// 	scene.registry.destroy();
-			// 	scene.events.removeAllListeners();
-			// 	scene.scene.stop();
-			// });
-
-			// // start first scene over
-			// this.scene.start("Boot");
-			location.reload();
-		},
-		// cursor
-		cursor: {
-			init: () => {
-				// default cursor
-				this.input.setDefaultCursor(
-					"url(assets/input/cursors/cursor_large.cur) 16 16, pointer"
-				);
-
-				// change cursor on click
-				this.input.on("pointerdown", () => {
-					this.input.setDefaultCursor(
-						"url(assets/input/cursors/cursor_small.cur) 16 16, pointer"
-					);
-				});
-
-				// change cursor back when click released
-				this.input.on("pointerup", () => {
-					this.input.setDefaultCursor(
-						"url(assets/input/cursors/cursor_large.cur) 16 16, pointer"
-					);
-				});
-			},
-		},
-		highPerformanceMode: {
-			set: (mode: boolean) => {
-				// save option
-				store.set("settings.options.highPerformanceMode", mode);
-			},
-			get: () => {
-				return store.get("settings.options.highPerformanceMode");
-			},
-		},
-	};
-
-	changeScene(scene: string, data?: object) {
 		// stop current scene
 		this.scene.stop();
+	}
+
+	playMusic(title: string) {
+		// set up audio
+		this.sound.pauseOnBlur = false;
+		this.music.audio = this.sound.add(title, {
+			loop: true,
+			volume: this.music.getVolume(),
+			mute: !this.music.getState(),
+		}) as Phaser.Sound.WebAudioSound;
+
+		// fade music in
+		SoundFade.fadeIn(this.music.audio, 500, this.music.getVolume());
+	}
+
+	launchMenuOverlay() {
+		// launch pause menu
+		this.scene.launch("Pause", this);
+	}
+
+	changeScene(scene: string, data?: object) {
+		// quit scene
+		this.quit();
 
 		// start next scene
 		this.scene.start(scene, data);

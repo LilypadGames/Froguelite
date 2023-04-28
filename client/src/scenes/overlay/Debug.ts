@@ -1,8 +1,7 @@
 import { Player } from "../../scripts/Player";
 import { Game } from "../Game";
-import { Core } from "../internal/Core";
 
-export class Debug extends Core {
+export class Debug extends Phaser.Scene {
 	sceneGame!: Game;
 	player!: Player;
 	camera!: Phaser.Cameras.Scene2D.Camera;
