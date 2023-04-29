@@ -15,8 +15,8 @@ const gameScale = {
 };
 
 export default {
-	gameTitle: "Froguelike",
-	gameVersion: "InDev v0.0.1",
+	title: "Froguelike",
+	version: "InDev v0.0.1",
 	type: Phaser.WEBGL,
 	scale: {
 		parent: "game",
@@ -60,4 +60,5 @@ export default {
 			},
 		],
 	},
+	banner: false,
 };

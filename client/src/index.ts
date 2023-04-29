@@ -31,3 +31,6 @@ new Phaser.Game(
 		],
 	})
 );
+
+// console banner
+console.log("%c 🐸🪄 " + config.title + " [" + config.version + "] ", 'background-color:white; color:green; font-size:16px; font-weight: bold;')
