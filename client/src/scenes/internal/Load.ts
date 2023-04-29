@@ -6,6 +6,13 @@ import WebFont from "webfontloader";
 //
 
 export class Load extends Phaser.Scene {
+	animQueue: {
+		texture: string;
+		anim: {
+			[key: string]: number;
+		};
+	}[] = [];
+
 	constructor() {
 		super({
 			key: "Load",
@@ -13,156 +20,95 @@ export class Load extends Phaser.Scene {
 				files: [
 					{
 						type: "json",
-						key: "playerData",
-						url: "assets/data/player.json",
+						key: "textures",
+						url: "assets/data/textures.json",
 					},
 					{
 						type: "json",
-						key: "healthbarData",
-						url: "assets/data/healthbar.json",
-					},
-					{
-						type: "json",
-						key: "teleportData",
-						url: "assets/data/teleport.json",
-					},
-					{
-						type: "json",
-						key: "enemyData",
-						url: "assets/data/enemy.json",
-					},
-					{
-						type: "json",
-						key: "projectileData",
-						url: "assets/data/projectile.json",
-					},
-					{
-						type: "json",
-						key: "worldData",
-						url: "assets/data/world.json",
-					},
-					{
-						type: "json",
-						key: "audioData",
+						key: "audio",
 						url: "assets/data/audio.json",
 					},
 					{
 						type: "json",
-						key: "musicData",
-						url: "assets/data/music.json",
+						key: "tilemaps",
+						url: "assets/data/tilemaps.json",
 					},
+					{
+						type: "json",
+						key: "fonts",
+						url: "assets/data/fonts.json",
+					},
+					{
+						type: "json",
+						key: "game",
+						url: "assets/data/game.json",
+					}
 				],
 			},
 		});
 	}
 
 	preload() {
-		// load world texture
-		this.load.image("world_tiles", "assets/world/tiles.png");
+		// load textures/spritesheets
+		let textures = this.cache.json.get("textures");
+		for (const key in textures) {
+			// image
+			if (typeof textures[key] === "string")
+				this.load.image(key, textures[key]);
+			// spritesheet
+			else {
+				this.load.spritesheet(key, textures[key].spritesheet, {
+					frameWidth: textures[key].frameWidth
+						? textures[key].frameWidth
+						: undefined,
+					frameHeight: textures[key].frameHeight
+						? textures[key].frameHeight
+						: undefined,
+					spacing: textures[key].spacing
+						? textures[key].spacing
+						: undefined,
+				});
 
-		// load tilemap json
-		this.load.tilemapTiledJSON("riverside", "assets/world/riverside.json");
-		this.load.tilemapTiledJSON("dungeon", "assets/world/dungeon.json");
-
-		// load player texture
-		this.load.spritesheet("pp", "assets/character/pp.png", {
-			frameWidth: 9,
-			frameHeight: 7,
-			spacing: 1,
-		});
-
-		// load healthbar data
-		let healthbarData = this.cache.json.get("healthbarData");
-		Object.keys(healthbarData).forEach((key) => {
-			Object.keys(healthbarData[key]["texture"]).forEach(
-				(textureType) => {
-					Object.keys(
-						healthbarData[key]["texture"][textureType]
-					).forEach((texture) => {
-						// load health bar texture
-						this.load.image(
-							"healthbar_" +
-								key +
-								"_" +
-								textureType +
-								"_" +
-								texture,
-							"assets/gui/healthbar/" +
-								healthbarData[key]["texture"][textureType][
-									texture
-								] +
-								".png"
-						);
+				// queue anims for loading
+				if (textures[key])
+					this.animQueue.push({
+						texture: key,
+						anim: textures[key].anim,
 					});
-				}
-			);
-		});
+			}
+		}
 
-		// load teleport data
-		let teleportData = this.cache.json.get("teleportData");
-		Object.keys(teleportData).forEach((key) => {
-			// load teleport texture
-			this.load.image(
-				teleportData[key]["texture"],
-				"assets/teleport/" + teleportData[key]["texture"] + ".png"
-			);
-		});
+		// load audio
+		let audio = this.cache.json.get("audio");
+		for (const key in audio) {
+			this.load.audio(key, audio[key]);
+		}
 
-		// load enemy data
-		let enemyData = this.cache.json.get("enemyData");
-		Object.keys(enemyData).forEach((key) => {
-			// load enemy texture
-			this.load.image(
-				enemyData[key]["texture"],
-				"assets/enemy/" + enemyData[key]["texture"] + ".png"
-			);
-		});
+		// load tilemaps
+		let tilemaps = this.cache.json.get("tilemaps");
+		for (const key in tilemaps) {
+			this.load.tilemapTiledJSON(key, tilemaps[key]);
+		}
 
-		// load projectile data
-		let projectileData = this.cache.json.get("projectileData");
-		Object.keys(projectileData).forEach((key) => {
-			// load projectile texture
-			this.load.spritesheet(
-				projectileData[key]["texture"],
-				"assets/projectile/" + projectileData[key]["texture"] + ".png",
-				{
-					frameWidth: 13,
-					frameHeight: 13,
-				}
-			);
-		});
-
-		// load audio data
-		let audioData = this.cache.json.get("audioData");
-		Object.keys(audioData).forEach((key) => {
-			this.load.audio(key, "assets/audio/" + audioData[key]);
-		});
-
-		// load font
-		WebFont.load({
-			custom: {
-				families: ["Pix"],
-				urls: ["./assets/site/style/main.css"],
-			},
-		});
+		// load fonts
+		WebFont.load(this.cache.json.get("fonts"));
 	}
 
 	create() {
-		// create player anims
-		for (const key in this.cache.json.get("playerData").anim) {
-			this.anims.create({
-				key: key,
-				frames: this.anims.generateFrameNumbers(
-					this.cache.json.get("playerData").texture,
-					{
-						start: this.cache.json.get("playerData").anim[key],
-						end: this.cache.json.get("playerData").anim[key],
-					}
-				),
-				frameRate: 1,
-				repeat: -1,
-			});
-		}
+		// create anims
+		this.animQueue.forEach((element) => {
+			for (const key in element.anim) {
+				this.anims.create({
+					key: key,
+					frames: this.anims.generateFrameNumbers(element.texture, {
+						start: element.anim[key],
+						end: element.anim[key],
+					}),
+					frameRate: 1,
+					repeat: -1,
+				});
+			}
+		});
 
 		// start game
 		this.scene.start("Head");

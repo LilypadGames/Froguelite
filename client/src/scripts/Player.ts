@@ -1,4 +1,5 @@
 import { Game } from "../scenes/Game";
+import { Enemy } from "./Enemy";
 import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
 import { Projectiles } from "./Projectile";
@@ -32,7 +33,7 @@ export class Player extends LivingEntity {
 
 	constructor(scene: Game, x: number, y: number) {
 		// get player data
-		let playerData = scene.cache.json.get("playerData");
+		let playerData = scene.cache.json.get("game").player;
 
 		// pass values
 		super(
@@ -41,8 +42,9 @@ export class Player extends LivingEntity {
 			y,
 			playerData.texture,
 			"Player",
-			playerData["stats"],
-			playerData["details"]
+			playerData.type,
+			playerData.stats,
+			playerData.details
 		);
 
 		// save values

@@ -1,0 +1,32 @@
+{
+    "world_tiles": "assets/world/tiles.png",
+    "pp": {
+        "spritesheet": "assets/character/pp.png",
+        "frameWidth": 9,
+        "frameHeight": 7,
+        "spacing": 1,
+        "anim": {
+            "left": 0,
+            "right": 1,
+            "front": 2,
+            "back": 3
+        }
+    },
+    "lsf": "assets/enemy/lsf.png",
+    "cave": "assets/teleport/cave.png",
+    "snot_bubble": {
+        "spritesheet": "assets/projectile/snot_bubble.png",
+        "frameWidth": 13,
+        "frameHeight": 13,
+        "anim": {
+            "normal": 0,
+            "end": 1
+        }
+    },
+    "healthbar_full_left": "assets/gui/healthbar/full_left.png",
+    "healthbar_full_middle": "assets/gui/healthbar/full_middle.png",
+    "healthbar_full_right": "assets/gui/healthbar/full_right.png",
+    "healthbar_empty_left": "assets/gui/healthbar/empty.png",
+    "healthbar_empty_middle": "assets/gui/healthbar/empty.png",
+    "healthbar_empty_right": "assets/gui/healthbar/empty.png"
+}

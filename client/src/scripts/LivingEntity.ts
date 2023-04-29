@@ -10,7 +10,10 @@ interface stats {
 }
 
 interface details {
-	healthbarID?: string;
+	healthbar?: {
+		scale: number;
+		width: number;
+	};
 	boss?: boolean;
 }
 
@@ -37,11 +40,12 @@ export class LivingEntity extends Entity {
 		y: number,
 		textureKey: string,
 		label: string,
+		entityType: string,
 		stats: stats,
 		details?: details
 	) {
 		// pass values
-		super(scene, x, y, textureKey, label);
+		super(scene, x, y, textureKey, label, entityType);
 
 		// save values
 		this.scene = scene;
@@ -54,8 +58,8 @@ export class LivingEntity extends Entity {
 		if (this.stats.healthMax === undefined)
 			this.stats.healthMax = this.stats.health;
 
-		// init details
-		this.details = details;
+		// save details
+		if (details) this.details = details;
 	}
 
 	// kill entity
@@ -147,26 +151,32 @@ export class LivingEntity extends Entity {
 	// update the state of the healthbar
 	updateHealthbar() {
 		// no healthbar
-		if (
-			this.details === undefined ||
-			this.details.healthbarID === undefined
-		)
+		if (this.details === undefined || this.details.healthbar === undefined)
 			return;
 
 		// init health bar if not already initialized
 		if (this.healthbar === undefined) {
-			// create healthbar
-			this.healthbar = new Healthbar(
-				this.scene.HUD,
-				this,
-				0,
-				0,
-				this.details.healthbarID,
-				this.getHealthPercent()
-			);
+			this.createHealthbar();
 		}
 
 		// animate health bar
 		this.healthbar.setPercentAnimated(this.getHealthPercent());
+	}
+
+	createHealthbar() {
+		// no healthbar
+		if (this.details === undefined || this.details.healthbar === undefined)
+			return;
+
+		// create healthbar
+		this.healthbar = new Healthbar(
+			this.scene.HUD,
+			this,
+			0,
+			0,
+			this.details.healthbar.width,
+			this.details.healthbar.scale,
+			this.getHealthPercent()
+		);
 	}
 }

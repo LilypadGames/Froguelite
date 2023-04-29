@@ -72,7 +72,7 @@ export class MainMenu extends Core {
 		// on click, go to game
 		this.input.on("pointerdown", () => {
 			this.changeScene("Game", {
-				level: this.cache.json.get("worldData").start,
+				level: this.cache.json.get("game").start,
 			});
 		}, this);
 
@@ -85,7 +85,7 @@ export class MainMenu extends Core {
 		this.scale.on("resize", this.resizeCamera, this);
 
 		// play music
-		super.playMusic(this.cache.json.get("musicData").mainmenu);
+		super.playMusic(this.cache.json.get("game").music.mainmenu);
 	}
 
 	shutdown() {

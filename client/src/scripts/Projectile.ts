@@ -13,7 +13,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 
 	constructor(scene: Game, x: number, y: number, id: string) {
 		// get projectile data
-		let projectileData = scene.cache.json.get("projectileData");
+		let projectileData = scene.cache.json.get("game").projectiles;
 
 		// pass values
 		super(scene.matter.world, x, y, projectileData[id]["texture"]);
@@ -175,7 +175,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 export class Projectiles extends Phaser.GameObjects.Group {
 	constructor(scene: Game, id: string) {
 		// get projectile data
-		let projectileData = scene.cache.json.get("projectileData");
+		let projectileData = scene.cache.json.get("game").projectiles;
 
 		// pass values
 		super(scene);

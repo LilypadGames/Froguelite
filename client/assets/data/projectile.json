@@ -1,9 +1,0 @@
-{
-    "snot_bubble": {
-        "name": "Snot Bubble",
-        "texture": "snot_bubble",
-        "damage": 2,
-        "lifespan": 700,
-        "speed": 0.0003
-    }
-}

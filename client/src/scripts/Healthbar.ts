@@ -8,8 +8,8 @@ type Bar = {
 };
 
 export class Healthbar {
+	// HUD scene reference
 	scene: HUD;
-	id: string;
 
 	// owner reference
 	owner: LivingEntity;
@@ -21,7 +21,6 @@ export class Healthbar {
 
 	// information
 	width: number;
-	type: string;
 	x: number;
 	y: number;
 	scale: number;
@@ -32,35 +31,31 @@ export class Healthbar {
 		owner: LivingEntity,
 		x: number,
 		y: number,
-		id: string,
+		width: number,
+		scale: number,
 		percent: number
 	) {
-		// get healthbar data
-		let healthbarData = scene.cache.json.get("healthbarData");
-
 		// save values
 		this.scene = scene;
 		this.owner = owner;
-		this.id = id;
-		this.type = healthbarData[id].type as string;
-		this.width = healthbarData[id].width as number;
 		this.x = x;
 		this.y = y;
-		this.scale = healthbarData[id].scale as number;
+		this.width = width;
+		this.scale = scale;
 		this.percent = percent;
 
 		// create bar empty
 		this.emptyBar = this.createBar(0, 0, {
-			left: "healthbar_" + id + "_empty_left",
-			middle: "healthbar_" + id + "_empty_middle",
-			right: "healthbar_" + id + "_empty_right",
+			left: "healthbar_empty_left",
+			middle: "healthbar_empty_middle",
+			right: "healthbar_empty_right",
 		});
 
 		// create bar
 		this.fullBar = this.createBar(0, 0, {
-			left: "healthbar_" + id + "_full_left",
-			middle: "healthbar_" + id + "_full_middle",
-			right: "healthbar_" + id + "_full_right",
+			left: "healthbar_full_left",
+			middle: "healthbar_full_middle",
+			right: "healthbar_full_right",
 		});
 
 		// create healthbar container
@@ -73,18 +68,20 @@ export class Healthbar {
 			this.fullBar.right,
 		]);
 
-		// initialize bar to full
+		// initialize bar percent
 		this.setPercent(percent);
 
-		// hide
-		this.hide();
-
-		// reposition boss health bars
-		if (this.type === "boss")
+		// handle boss bars
+		if (this.owner.entityType === "boss") {
+			// reposition
 			this.bar.setPosition(
 				this.scene.scale.gameSize.width / 2,
 				(this.scene.scale.gameSize.height / 12) * 1
 			);
+		}
+
+		// hide
+		this.hide();
 
 		// update bar
 		scene.events.on("postupdate", this.update, this);
@@ -202,7 +199,7 @@ export class Healthbar {
 		let percent = this.owner.getHealthPercent();
 
 		// individual health bar
-		if (this.type === "individual") {
+		if (this.owner.type === "individual") {
 			// get owner position
 			let relativePos = this.owner.getRelativePosition(
 				this.scene.sceneGame.camera
@@ -231,7 +228,9 @@ export class Healthbar {
 				// hide
 				if (this.bar.visible === true) this.hide();
 			}
-		} else {
+		}
+		// non individual healthbar
+		else {
 			// hide if at 0 health
 			if (percent <= 0 && this.bar.visible === true) this.hide();
 		}

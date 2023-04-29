@@ -8,6 +8,7 @@ import store from "storejs";
 export class Entity extends Phaser.Physics.Matter.Sprite {
 	scene: Game;
 	textureKey: string;
+	entityType: string;
 
 	// shaders
 	outlineFxInstance!: OutlinePostFxPipeline;
@@ -33,7 +34,8 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		x: number,
 		y: number,
 		textureKey: string,
-		label: string
+		label: string,
+		entityType: string
 	) {
 		// pass values
 		super(scene.matter.world, x, y, textureKey, undefined);
@@ -41,6 +43,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		// save values
 		this.scene = scene;
 		this.textureKey = textureKey;
+		this.entityType = entityType;
 
 		// get effect plugins
 		this.glowFx = this.scene.plugins.get(

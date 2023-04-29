@@ -14,10 +14,10 @@ export class Teleport extends Interactable {
 		teleportTo: string
 	) {
 		// get teleport data
-		let teleportData = scene.cache.json.get("teleportData");
+		let teleportData = scene.cache.json.get("game").teleporters;
 
 		// pass values
-		super(scene, x, y, teleportData[id]["texture"], tip);
+		super(scene, x, y, teleportData[id].texture, "teleporter", tip);
 
 		// save values
 		this.scene = scene;

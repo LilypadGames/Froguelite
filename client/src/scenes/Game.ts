@@ -140,13 +140,10 @@ export class Game extends Core {
 		this.events.on("resume", this.onResume, this);
 
 		// play music
-		super.playMusic(this.cache.json.get("musicData").room[this.level]);
+		super.playMusic(this.cache.json.get("game").music.room[this.level]);
 	}
 
 	update() {
-		// handle bosses
-		if (this.bossGroup.getLength() > 0) this.handleBosses();
-
 		// detect low performance
 		if (this.game.loop.actualFps < 10) {
 			// high performance mode is off
@@ -334,7 +331,7 @@ export class Game extends Core {
 		this.enemyGroup.add(enemy);
 
 		// add enemy to boss group
-		if (enemy.details && enemy.details.boss) this.bossGroup.add(enemy);
+		if (enemy.entityType === "boss") this.bossGroup.add(enemy);
 	}
 
 	// spawn teleport
@@ -350,94 +347,5 @@ export class Game extends Core {
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(teleport);
-	}
-
-	// handle bosses
-	handleBosses() {
-		// init distance object
-		var distance: {
-			[key: number]: number;
-		} = {};
-
-		// get distance between boss and player
-		(this.bossGroup.getChildren() as Array<Enemy>).forEach(
-			(boss: Enemy, index: number) => {
-				// is ded
-				if (boss.isDead) return;
-
-				// doesn't have health bar
-				if (
-					boss.details === undefined ||
-					boss.details.healthbarID == undefined
-				)
-					return;
-
-				// get distance
-				distance[index] = Phaser.Math.Distance.Between(
-					boss.x,
-					boss.y,
-					this.player.x,
-					this.player.y
-				);
-			}
-		);
-
-		// bosses found
-		if (Object.keys(distance).length > 0) {
-			// find shortest distance
-			var min: number = Number(
-				Object.keys(distance).reduce((key, v) =>
-					distance[v as any] < distance[key as any] ? v : key
-				)
-			);
-
-			// get closest boss
-			let closestBoss = (this.bossGroup.getChildren() as Array<Enemy>)[
-				min
-			];
-
-			// distance is within threshold
-			if (distance[min] <= 300) {
-				// init health bar if not already initialized
-				if (closestBoss.healthbar === undefined) {
-					// create healthbar
-					closestBoss.healthbar = new Healthbar(
-						this.HUD,
-						closestBoss,
-						0,
-						0,
-						(closestBoss.details as any).healthbarID as string,
-						closestBoss.getHealthPercent()
-					);
-				}
-
-				// show boss bar
-				if (closestBoss.healthbar.bar.visible === false)
-					closestBoss.healthbar.show();
-			}
-			// hide boss bar
-			else {
-				if (closestBoss.healthbar.bar.visible === true)
-					closestBoss.healthbar.hide();
-			}
-
-			// hide boss bar of others
-			(this.bossGroup.getChildren() as Array<Enemy>).forEach(
-				(boss: Enemy, index: number) => {
-					// skip closest
-					if (index === min) return;
-
-					// is ded
-					if (boss.isDead) return;
-
-					// doesn't have health bar
-					if (boss.healthbar === undefined) return;
-
-					// hide boss bar
-					if (boss.healthbar.bar.visible === true)
-						boss.healthbar.hide();
-				}
-			);
-		}
 	}
 }

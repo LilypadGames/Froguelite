@@ -1,0 +1,59 @@
+{
+    "start": "riverside",
+    "music": {
+        "mainmenu": "under_her_spell_8_bit_loop",
+        "room": {
+            "riverside": "riverside",
+            "dungeon": "the_bauws"
+        }
+    },
+    "player": {
+        "name": "Pp",
+        "texture": "pp",
+        "type": "player",
+        "scale": 1,
+        "stats": {
+            "health": 25,
+            "speed": 0.00006,
+            "fireRate": 300
+        },
+        "details": {
+            "healthbar": {
+                "scale": 6,
+                "width": 160
+            }
+        }
+    },
+    "enemies": {
+        "lsf": {
+            "name": "LSF",
+            "texture": "lsf",
+            "type": "boss",
+            "scale": 0.25,
+            "stats": {
+                "health": 100,
+                "speed": 0.00002
+            },
+            "details": {
+                "healthbar": {
+                    "scale": 6,
+                    "width": 500
+                }
+            }
+        }
+    },
+    "projectiles": {
+        "snot_bubble": {
+            "name": "Snot Bubble",
+            "texture": "snot_bubble",
+            "damage": 2,
+            "lifespan": 700,
+            "speed": 0.0003
+        }
+    },
+    "teleporters": {
+        "cave": {
+            "texture": "cave"
+        }
+    }
+}

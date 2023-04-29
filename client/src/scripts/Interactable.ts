@@ -11,10 +11,11 @@ export class Interactable extends Entity {
 		x: number,
 		y: number,
 		textureKey: string,
+		entityType: string,
 		tip: string
 	) {
 		// pass values
-		super(scene, x, y, textureKey, "Interactable");
+		super(scene, x, y, textureKey, "Interactable", entityType);
 
 		// save values
 		this.scene = scene;

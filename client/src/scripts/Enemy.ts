@@ -6,19 +6,28 @@ export class Enemy extends LivingEntity {
 
 	constructor(scene: Game, x: number, y: number, id: string) {
 		// get enemy data
-		let enemyData = scene.cache.json.get("enemyData");
+		let enemyData = scene.cache.json.get("game").enemies;
 
 		// pass values
-		super(scene, x, y, enemyData[id]["texture"], "Enemy", enemyData[id]["stats"], enemyData[id]["details"]);
+		super(
+			scene,
+			x,
+			y,
+			enemyData[id].texture,
+			"Enemy",
+			enemyData[id].type,
+			enemyData[id].stats,
+			enemyData[id].details
+		);
 
 		// save values
-		this.textureKey = enemyData[id]["texture"];
+		this.textureKey = enemyData[id].texture;
 		this.id = id;
 
 		// set name
-		this.setName(enemyData[id]["name"]);
+		this.setName(enemyData[id].name);
 
 		// set scale
-		this.setScale(enemyData[id]["scale"]);
+		this.setScale(enemyData[id].scale);
 	}
 }
