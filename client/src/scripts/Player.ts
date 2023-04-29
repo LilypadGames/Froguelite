@@ -1,8 +1,7 @@
 import { Game } from "../scenes/Game";
-import { Enemy } from "./Enemy";
 import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
-import { Projectiles } from "./Projectile";
+import { Spells } from "./Spell";
 import { Teleport } from "./Teleport";
 
 export class Player extends LivingEntity {
@@ -25,11 +24,15 @@ export class Player extends LivingEntity {
 
 	// movement
 	turnThreshold: number = 20;
-	speedDampening: number = 1.8;
+	speedDampening: number = 2;
 
 	// attacking
 	fireCooldown: number = 0;
-	projectiles: Projectiles;
+	spells: Spells;
+
+	// inventory
+	equipped!: { spell: string; armor: string };
+	inventory!: { spells: string[]; armors: string[] };
 
 	constructor(scene: Game, x: number, y: number) {
 		// get player data
@@ -49,6 +52,8 @@ export class Player extends LivingEntity {
 
 		// save values
 		this.scene = scene;
+		this.equipped = playerData.equipped;
+		this.inventory = playerData.inventory;
 
 		// movement keys
 		this.keyArrows = (
@@ -87,8 +92,8 @@ export class Player extends LivingEntity {
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);
 
-		// initialize projectiles
-		this.projectiles = new Projectiles(scene, "snot_bubble");
+		// initialize spells
+		this.spells = new Spells(scene, this.equipped.spell);
 
 		// events
 		scene.events.on("update", this.update, this);
@@ -119,20 +124,25 @@ export class Player extends LivingEntity {
 
 	// check if player is attacking
 	handleAttack() {
-		// shoot projectiles
+		// shoot spells
 		if (
 			this.scene.input.activePointer.isDown &&
 			this.scene.time.now > this.fireCooldown
 		) {
 			// reset cooldown
 			this.fireCooldown =
-				this.scene.time.now + Number(this.stats.fireRate);
+				this.scene.time.now +
+				Number(
+					this.scene.cache.json.get("game").spells[
+						this.equipped.spell
+					].firerate
+				);
 
 			// update mouse world position
 			this.scene.input.activePointer.updateWorldPoint(this.scene.camera);
 
-			// fire projectile from the current actual world player position to the current actual world mouse position
-			this.projectiles.fire(
+			// fire spell from the current actual world player position to the current actual world mouse position
+			this.spells.fire(
 				this.x,
 				this.y,
 				this.scene.input.activePointer.worldX,
@@ -254,7 +264,7 @@ export class Player extends LivingEntity {
 		// moving left
 		if (key.left.isDown) {
 			// determine direction
-			if (directionX == "") directionX = "left";
+			if (directionX === "") directionX = "left";
 
 			// determine velocity
 			if (directionX !== "left")
@@ -284,6 +294,10 @@ export class Player extends LivingEntity {
 			if (!this.scene.input.activePointer.isDown)
 				this.anims.play("right", true);
 		}
+
+		// half speed if traveling diagonally
+		if (vector.x && vector.y)
+			[vector.x, vector.y] = [vector.x / 1.5, vector.y / 1.5];
 
 		// rotate vector dependant on current camera rotation
 		rotatedVector = this.scene.matter.vector.rotate(

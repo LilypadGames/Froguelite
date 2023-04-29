@@ -1,7 +1,7 @@
 import { Game } from "../scenes/Game";
 import { Enemy } from "./Enemy";
 
-export class Projectile extends Phaser.Physics.Matter.Sprite {
+export class Spell extends Phaser.Physics.Matter.Sprite {
 	// visual
 	depth: number = 11;
 
@@ -12,19 +12,19 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 	damage: number;
 
 	constructor(scene: Game, x: number, y: number, id: string) {
-		// get projectile data
-		let projectileData = scene.cache.json.get("game").projectiles;
+		// get spell data
+		let spellData = scene.cache.json.get("game").spells;
 
 		// pass values
-		super(scene.matter.world, x, y, projectileData[id]["texture"]);
+		super(scene.matter.world, x, y, spellData[id].texture);
 
 		// save values
 		this.scene = scene;
 		this.x = x;
 		this.y = y;
-		this.lifespan = projectileData[id]["lifespan"];
-		this.speed = projectileData[id]["speed"];
-		this.damage = projectileData[id]["damage"];
+		this.lifespan = spellData[id].lifespan;
+		this.speed = spellData[id].speed;
+		this.damage = spellData[id].damage;
 
 		// trigger collisions, but don't actually collide
 		this.setSensor(true);
@@ -32,6 +32,9 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		// detect specific collisions
 		this.setOnCollide(
 			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// if not active, ignore
+				if (!this.active || !this.visible) return;
+
 				// collided with enemy
 				if (entities.bodyA.gameObject instanceof Enemy) {
 					this.collideEnemy(entities.bodyA);
@@ -60,14 +63,14 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		this.once("destroy", this.onDestroy, this);
 	}
 
-	// runs on projectiles after physics have been applied
+	// runs on spells after physics have been applied
 	afterupdate() {
 		let delta = this.scene.matter.world.getDelta();
 		if (this.state > 0) {
 			// lower lifespan
 			this.state -= delta;
 
-			// hide projectile when its reached the end of its lifespan
+			// hide spell when its reached the end of its lifespan
 			if (this.state <= 0) {
 				// reset velocity
 				this.setPosition(this.x, this.y);
@@ -88,7 +91,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		);
 	}
 
-	// fire projectile towards given coords
+	// fire spell towards given coords
 	fire(
 		originX: number,
 		originY: number,
@@ -122,7 +125,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		// reset to normal look
 		this.setFrame(0);
 
-		// show projectile
+		// show spell
 		this.show();
 	}
 
@@ -135,7 +138,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 
 		console.log("Collided with Enemy: " + enemy.name);
 
-		// hide projectile
+		// hide spell
 		this.pop();
 	}
 
@@ -145,7 +148,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		this.pop();
 	}
 
-	// projectile has collided/ended
+	// spell has collided/ended
 	pop() {
 		// change to popped look
 		this.setFrame(1);
@@ -158,53 +161,56 @@ export class Projectile extends Phaser.Physics.Matter.Sprite {
 		}, 80);
 	}
 
-	// show and activate projectile
+	// show and activate spell
 	show() {
 		this.setActive(true);
 		this.setVisible(true);
 	}
 
-	// hide and de-activate projectile
+	// hide and de-activate spell
 	hide() {
 		this.setActive(false);
 		this.setVisible(false);
 	}
 }
 
-// group of projectiles. its better to spawn a ton of projectiles, hide them all, then show them one at a time as needed and hide them again when done.
-export class Projectiles extends Phaser.GameObjects.Group {
+// group of spells. its better to spawn a ton of spells, hide them all, then show them one at a time as needed and hide them again when done.
+export class Spells extends Phaser.GameObjects.Group {
 	constructor(scene: Game, id: string) {
-		// get projectile data
-		let projectileData = scene.cache.json.get("game").projectiles;
+		// get spell data
+		let spellData = scene.cache.json.get("game").spells;
 
 		// pass values
 		super(scene);
 
-		// create projectiles and hide them
+		// create spells and hide them
 		this.createMultiple({
 			quantity: 10,
-			key: projectileData[id]["texture"],
+			key: spellData[id].texture,
 			setOrigin: { x: 0.5, y: 0.5 },
-			setScale: { x: 0.75, y: 0.75 },
+			setScale: {
+				x: spellData[id].scale,
+				y: spellData[id].scale,
+			},
 			active: false,
 			visible: false,
-			classType: Projectile,
+			classType: Spell,
 		});
 	}
 
-	// fire projectile. this finds a hidden projectile and fires it.
+	// fire spell. this finds a hidden spell and fires it.
 	fire(
 		originX: number,
 		originY: number,
 		destinationX: number,
 		destinationY: number
 	) {
-		// find a projectile that is hidden
-		let projectile: Projectile = this.getFirstDead(false);
+		// find a spell that is hidden
+		let spell: Spell = this.getFirstDead(false);
 
-		// if a projectile was found, then fire it
-		if (projectile) {
-			projectile.fire(originX, originY, destinationX, destinationY);
+		// if a spell was found, then fire it
+		if (spell) {
+			spell.fire(originX, originY, destinationX, destinationY);
 		}
 	}
 }

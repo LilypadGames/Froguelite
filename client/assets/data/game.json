@@ -14,14 +14,25 @@
         "scale": 1,
         "stats": {
             "health": 25,
-            "speed": 0.00006,
-            "fireRate": 300
+            "speed": 0.00006
         },
         "details": {
             "healthbar": {
                 "scale": 6,
                 "width": 160
             }
+        },
+        "equipped": {
+            "spell": "snot_bubble",
+            "armor": "garbs"
+        },
+        "inventory": {
+            "spells": [
+                "snot_bubble"
+            ],
+            "armors": [
+                "garbs"
+            ]
         }
     },
     "enemies": {
@@ -42,15 +53,18 @@
             }
         }
     },
-    "projectiles": {
+    "spells": {
         "snot_bubble": {
             "name": "Snot Bubble",
             "texture": "snot_bubble",
+            "scale": 0.5,
             "damage": 2,
-            "lifespan": 700,
-            "speed": 0.0003
+            "lifespan": 350,
+            "firerate": 600,
+            "speed": 0.00025
         }
     },
+    "armors": {},
     "teleporters": {
         "cave": {
             "texture": "cave"

@@ -15,7 +15,7 @@
     "lsf": "assets/enemy/lsf.png",
     "cave": "assets/teleport/cave.png",
     "snot_bubble": {
-        "spritesheet": "assets/projectile/snot_bubble.png",
+        "spritesheet": "assets/spell/snot_bubble.png",
         "frameWidth": 13,
         "frameHeight": 13,
         "anim": {
