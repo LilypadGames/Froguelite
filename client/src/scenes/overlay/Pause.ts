@@ -1,15 +1,17 @@
-// imports
-import ColorScheme from "../../scripts/ColorScheme";
-import Utility from "../../scripts/Utility";
-import { CoreOverlay } from "../internal/CoreOverlay";
+// internal
 import { Head } from "../internal/Head";
+import { CoreOverlay } from "../internal/CoreOverlay";
 
-// UI components
+// plugins
 import {
 	Sizer,
 	Label,
 	Buttons,
 } from "phaser3-rex-plugins/templates/ui/ui-components.js";
+
+// utility
+import ColorScheme from "../../scripts/ColorScheme";
+import Utility from "../../scripts/Utility";
 
 // types
 type Button = {

@@ -1,4 +1,7 @@
+// scenes
 import { HUD } from "../scenes/overlay/HUD";
+
+// components
 import { LivingEntity } from "./LivingEntity";
 
 type Bar = {

@@ -1,4 +1,7 @@
+// scenes
 import { Game } from "../scenes/Game";
+
+// components
 import { Entity } from "./Entity";
 import { Healthbar } from "./Healthbar";
 

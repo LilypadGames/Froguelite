@@ -1,14 +1,19 @@
-import { Core } from "./internal/Core";
+// imports
 import store from "storejs";
+
+// internal
+import { Head } from "./internal/Head";
+import { Core } from "./internal/Core";
+
+// scenes
+import { HUD } from "./overlay/HUD";
+
+// components
 import { Enemy } from "../scripts/Enemy";
 import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
 import { Teleport } from "../scripts/Teleport";
-import { HUD } from "./overlay/HUD";
 import { Entity } from "../scripts/Entity";
-import { Healthbar } from "../scripts/Healthbar";
-import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { Head } from "./internal/Head";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -288,7 +293,7 @@ export class Game extends Core {
 				// enemy
 				if (properties.type === "enemy") {
 					this.spawnEnemy(
-						(properties as gameObjectProperties)["id"],
+						(properties as gameObjectProperties).id,
 						object.x,
 						object.y
 					);

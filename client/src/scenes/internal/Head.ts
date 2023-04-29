@@ -1,8 +1,13 @@
+// imports
 import Phaser from "phaser";
+import store from "storejs";
+
+// internal
 import { Core } from "./Core";
 import { CoreOverlay } from "./CoreOverlay";
+
+// scenes
 import { HUD } from "../overlay/HUD";
-import store from "storejs";
 
 //
 // This scene runs in the background and acts as a manager for all the current scenes and stores useful information that persists between scenes
@@ -39,18 +44,26 @@ export class Head extends Phaser.Scene {
 			);
 
 			// change cursor on click
-			this.input.on("pointerdown", () => {
-				this.input.setDefaultCursor(
-					"url(assets/input/cursors/cursor_small.cur) 16 16, pointer"
-				);
-			}, this);
+			this.input.on(
+				"pointerdown",
+				() => {
+					this.input.setDefaultCursor(
+						"url(assets/input/cursors/cursor_small.cur) 16 16, pointer"
+					);
+				},
+				this
+			);
 
 			// change cursor back when click released
-			this.input.on("pointerup", () => {
-				this.input.setDefaultCursor(
-					"url(assets/input/cursors/cursor_large.cur) 16 16, pointer"
-				);
-			}, this);
+			this.input.on(
+				"pointerup",
+				() => {
+					this.input.setDefaultCursor(
+						"url(assets/input/cursors/cursor_large.cur) 16 16, pointer"
+					);
+				},
+				this
+			);
 		},
 	};
 

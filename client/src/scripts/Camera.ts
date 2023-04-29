@@ -1,6 +1,9 @@
-import { Game } from "../scenes/Game";
+// imports
 import { GameObjects } from "phaser";
 import store from "storejs";
+
+// scenes
+import { Game } from "../scenes/Game";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };

@@ -1,5 +1,8 @@
-import { Player } from "../../scripts/Player";
+// scenes
 import { Game } from "../Game";
+
+// components
+import { Player } from "../../scripts/Player";
 
 export class Debug extends Phaser.Scene {
 	sceneGame!: Game;

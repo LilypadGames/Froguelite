@@ -1,7 +1,10 @@
+// internal
 import { Head } from "./internal/Head";
 import { Core } from "./internal/Core";
-import Utility from "../scripts/Utility";
+
+// utility
 import ColorScheme from "../scripts/ColorScheme";
+import Utility from "../scripts/Utility";
 
 //
 // This is the Main Menu, what you first see when you open the game.

@@ -1,4 +1,7 @@
+// scenes
 import { Game } from "../scenes/Game";
+
+// components
 import { Enemy } from "./Enemy";
 
 export class Spell extends Phaser.Physics.Matter.Sprite {

@@ -1,3 +1,4 @@
+// internal
 import { CoreOverlay } from "../internal/CoreOverlay";
 
 export class Inventory extends CoreOverlay {

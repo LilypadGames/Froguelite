@@ -1,4 +1,7 @@
+// scenes
 import { Game } from "../scenes/Game";
+
+// components
 import { LivingEntity } from "./LivingEntity";
 
 export class Enemy extends LivingEntity {

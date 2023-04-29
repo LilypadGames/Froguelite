@@ -1,5 +1,10 @@
+// imports
 import Phaser from "phaser";
+
+// config
 import config from "./config";
+
+// scenes
 import { Game } from "./scenes/Game";
 import { Boot } from "./scenes/internal/Boot";
 import { Load } from "./scenes/internal/Load";

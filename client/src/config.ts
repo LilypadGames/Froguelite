@@ -1,6 +1,11 @@
+// imports
 import Phaser from "phaser";
+
+// plugins
 import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin.js";
+
+// utility
 import Utility from "./scripts/Utility";
 import ColorScheme from "./scripts/ColorScheme";
 

@@ -1,4 +1,7 @@
+// scenes
 import { Game } from "../scenes/Game";
+
+// components
 import { Interactable } from "./Interactable";
 
 export class Teleport extends Interactable {

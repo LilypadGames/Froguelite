@@ -1,10 +1,15 @@
+// scenes
+import { Game } from "../Game";
+
+// components
 import { Camera } from "../../scripts/Camera";
-import ColorScheme from "../../scripts/ColorScheme";
 import { Enemy } from "../../scripts/Enemy";
 import { Healthbar } from "../../scripts/Healthbar";
 import { Player } from "../../scripts/Player";
+
+// utility
+import ColorScheme from "../../scripts/ColorScheme";
 import Utility from "../../scripts/Utility";
-import { Game } from "../Game";
 
 export class HUD extends Phaser.Scene {
 	sceneGame!: Game;

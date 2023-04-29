@@ -1,4 +1,7 @@
+// imports
 import Phaser from "phaser";
+
+// internal
 import { Head } from "./Head";
 
 //

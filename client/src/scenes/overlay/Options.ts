@@ -1,6 +1,10 @@
 // imports
-import { CoreOverlay } from "../internal/CoreOverlay";
 import store from "storejs";
+
+// internal
+import { CoreOverlay } from "../internal/CoreOverlay";
+
+// utility
 import Utility from "../../scripts/Utility";
 
 // UI components

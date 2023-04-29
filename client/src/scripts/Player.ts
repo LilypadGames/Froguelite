@@ -1,4 +1,7 @@
+// scenes
 import { Game } from "../scenes/Game";
+
+// components
 import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
 import { Spells } from "./Spell";

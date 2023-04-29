@@ -1,7 +1,12 @@
+// imports
 import Phaser from "phaser";
-import { Head } from "./Head";
-import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import store from "storejs";
+
+// plugins
+import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
+
+// internal
+import { Head } from "./Head";
 
 //
 // These are overall mechanics that are common to several different scenes, such as a custom cursor or other UI.
