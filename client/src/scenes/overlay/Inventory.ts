@@ -37,6 +37,16 @@ export class Inventory extends CoreOverlay {
 			0.5
 		);
 
+		// show player
+
+		// tabs
+
+		// populate inventory
+
+		// selection marker
+
+		// selection description
+
 		// show menu when resumed
 		this.events.on("resume", this.show, this);
 	}
