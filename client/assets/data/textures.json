@@ -28,5 +28,13 @@
     "healthbar_full_right": "assets/gui/healthbar/full_right.png",
     "healthbar_empty_left": "assets/gui/healthbar/empty.png",
     "healthbar_empty_middle": "assets/gui/healthbar/empty.png",
-    "healthbar_empty_right": "assets/gui/healthbar/empty.png"
+    "healthbar_empty_right": "assets/gui/healthbar/empty.png",
+    "slime_electric_small": "assets/enemy/slime_electric_small.png",
+    "slime_electric": "assets/enemy/slime_electric.png",
+    "slime_fire_small": "assets/enemy/slime_fire_small.png",
+    "slime_fire": "assets/enemy/slime_fire.png",
+    "slime_ice_small": "assets/enemy/slime_ice_small.png",
+    "slime_ice": "assets/enemy/slime_ice.png",
+    "slime_wind_small": "assets/enemy/slime_wind_small.png",
+    "slime_wind": "assets/enemy/slime_wind.png"
 }
