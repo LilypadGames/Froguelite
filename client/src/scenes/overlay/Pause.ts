@@ -106,6 +106,9 @@ export class Pause extends CoreOverlay {
 									.getElement("background")
 									.setFillStyle(0x000000, 0.5);
 							}
+
+							// sfx
+							this.sound.play("ui_hover", { volume: 0.75 });
 						},
 						this
 					)
@@ -124,11 +127,17 @@ export class Pause extends CoreOverlay {
 						(button: Button) => {
 							// resume button
 							if (button.name === "resume") {
+								// sfx
+								this.sound.play("ui_back", { volume: 0.75 });
+
 								// go back to previous scene
 								this.resumePreviousScene();
 							}
 							// options menu
 							else if (button.name === "options") {
+								// sfx
+								this.sound.play("ui_select", { volume: 0.75 });
+
 								// hide pause menu
 								this.hide();
 

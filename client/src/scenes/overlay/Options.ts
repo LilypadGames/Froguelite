@@ -133,6 +133,9 @@ export class Options extends CoreOverlay {
 			// go back
 			.add(
 				this.button("Back", "back", () => {
+					// sfx
+					this.sound.play("ui_back", { volume: 0.75 });
+
 					this.resumePreviousScene();
 				}),
 				{
@@ -194,6 +197,9 @@ export class Options extends CoreOverlay {
 			.on(
 				"button.over",
 				(button: any) => {
+					// sfx
+					this.sound.play("ui_hover", { volume: 0.75 });
+
 					button
 						.getElement("background")
 						.setFillStyle(ColorScheme.Black, 0.5);
@@ -294,6 +300,9 @@ export class Options extends CoreOverlay {
 			.on(
 				"button.over",
 				() => {
+					// sfx
+					this.sound.play("ui_hover", { volume: 0.75 });
+
 					// hover style
 					background.setFillStyle(ColorScheme.Black, 0.5);
 				},
@@ -359,6 +368,9 @@ export class Options extends CoreOverlay {
 			.on(
 				"pointerover",
 				() => {
+					// sfx
+					this.sound.play("ui_hover", { volume: 0.75 });
+
 					// hover style
 					background.setFillStyle(ColorScheme.Black, 0.5);
 				},
@@ -478,6 +490,9 @@ export class Options extends CoreOverlay {
 			.on(
 				"button.over",
 				(button: any) => {
+					// sfx
+					this.sound.play("ui_hover", { volume: 0.75 });
+
 					button
 						.getElement("background")
 						.setFillStyle(ColorScheme.Black, 0.5);

@@ -1,5 +1,8 @@
 {
-    "under_her_spell_8_bit_loop": "assets/audio/under_her_spell_8_bit_loop.ogg",
-    "riverside": "assets/audio/riverside.ogg",
-    "the_bauws": "assets/audio/the_bauws.ogg"
+    "under_her_spell_8_bit_loop": "assets/audio/music/under_her_spell_8_bit_loop.ogg",
+    "riverside": "assets/audio/music/riverside.ogg",
+    "the_bauws": "assets/audio/music/the_bauws.ogg",
+    "ui_select": "assets/audio/ui/select.ogg",
+    "ui_back": "assets/audio/ui/back.ogg",
+    "ui_hover": "assets/audio/ui/hover.ogg"
 }
