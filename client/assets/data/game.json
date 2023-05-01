@@ -8,7 +8,6 @@
         }
     },
     "player": {
-        "name": "Pp",
         "texture": "pp",
         "type": "player",
         "scale": 1,
@@ -24,20 +23,19 @@
         },
         "equipped": {
             "spell": "snot_bubble",
-            "armor": "garbs"
+            "armor": "blue_garbs"
         },
         "inventory": {
             "spells": [
                 "snot_bubble"
             ],
             "armors": [
-                "garbs"
+                "blue_garbs"
             ]
         }
     },
     "enemies": {
         "lsf": {
-            "name": "LSF",
             "texture": "lsf",
             "type": "boss",
             "scale": 0.25,
@@ -55,16 +53,29 @@
     },
     "spells": {
         "snot_bubble": {
-            "name": "Snot Bubble",
             "texture": "snot_bubble",
             "scale": 0.5,
             "damage": 2,
             "lifespan": 350,
             "firerate": 600,
-            "speed": 0.00025
+            "speed": 0.00025,
+            "inventory": {
+                "texture": "gui_snot_bubble",
+                "scale": 1
+            }
         }
     },
-    "armors": {},
+    "armors": {
+        "blue_garbs": {
+            "texture": "blue_garbs",
+            "scale": 0.5,
+            "defense": 0,
+            "inventory": {
+                "texture": "gui_blue_garbs",
+                "scale": 1
+            }
+        }
+    },
     "teleporters": {
         "cave": {
             "texture": "cave"

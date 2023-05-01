@@ -1,10 +1,24 @@
 // internal
 import { CoreOverlay } from "../internal/CoreOverlay";
 
+// plugin
+import {
+	Sizer,
+	Label,
+	Buttons,
+	Slider,
+	RoundRectangle,
+} from "phaser3-rex-plugins/templates/ui/ui-components.js";
+
+// utility
+import ColorScheme from "../../scripts/ColorScheme";
+
 export class Inventory extends CoreOverlay {
 	worldView!: Phaser.Geom.Rectangle;
 	background!: Phaser.GameObjects.Rectangle;
 	keyTAB!: Phaser.Input.Keyboard.Key;
+	playerRepresentation!: Phaser.GameObjects.Image;
+	tabs!: Buttons;
 
 	constructor() {
 		super({ key: "Inventory" });
@@ -37,9 +51,54 @@ export class Inventory extends CoreOverlay {
 			0.5
 		);
 
-		// show player
+		// top banner
+		this.add
+			.rectangle(
+				0,
+				0,
+				this.scale.gameSize.width,
+				this.scale.gameSize.height / 8,
+				ColorScheme.Black,
+				0.25
+			)
+			.setOrigin(0, 0);
+
+		// bottom banner
+		this.add
+			.rectangle(
+				0,
+				this.scale.gameSize.height,
+				this.scale.gameSize.width,
+				this.scale.gameSize.height / 10,
+				ColorScheme.Black,
+				0.25
+			)
+			.setOrigin(0, 1);
+
+		// player representation
+		this.playerRepresentation = this.add
+			.image(
+				this.scale.gameSize.width - this.scale.gameSize.width / 6,
+				this.scale.gameSize.height / 2,
+				this.cache.json.get("game").player.texture
+			)
+			.setScale(50);
 
 		// tabs
+		this.tabs = this.createTabs({
+			spell: {
+				icon: "gui_tab_spell",
+				clickCallback: () => {
+					console.log("Spell Tab Clicked");
+				},
+			},
+			armor: {
+				icon: "gui_tab_armor",
+				clickCallback: () => {
+					console.log("Armor Tab Clicked");
+				},
+			},
+		});
 
 		// populate inventory
 
@@ -66,5 +125,82 @@ export class Inventory extends CoreOverlay {
 
 	show() {
 		this.background.setVisible(true);
+	}
+
+	createTabs(tabs: {
+		[key: string]: { icon: string; clickCallback: () => void };
+	}) {
+		// create tabs
+		let createdTabs: Label[] = [];
+		for (const tabID in tabs) {
+			createdTabs.push(
+				new Label(this, {
+					background: new RoundRectangle(
+						this,
+						0,
+						0,
+						0,
+						0,
+						10,
+						ColorScheme.Black,
+						0.2
+					).addToDisplayList(),
+					icon: this.add
+						.image(0, 0, tabs[tabID].icon)
+						.setScale(5)
+						.setOrigin(0.5, 0.5),
+					align: "center",
+					name: tabID,
+					space: {
+						left: 20,
+						right: 20,
+						top: 20,
+						bottom: 20,
+					},
+				})
+			);
+		}
+
+		// create button
+		return new Buttons(this, {
+			x: this.scale.gameSize.width / 16,
+			y: this.scale.gameSize.height / 2,
+			buttons: createdTabs,
+			orientation: "y",
+			click: {
+				mode: "pointerup",
+				clickInterval: 100,
+			},
+			align: "center",
+			space: {
+				item: 20,
+			},
+		})
+			.on("button.click", (button: any) => {
+				tabs[button.name].clickCallback();
+			})
+			.on(
+				"button.over",
+				(button: any) => {
+					// sfx
+					this.sound.play("ui_hover", { volume: 0.75 });
+
+					button
+						.getElement("background")
+						.setFillStyle(ColorScheme.Black, 0.5);
+				},
+				this
+			)
+			.on(
+				"button.out",
+				(button: any) => {
+					// revert to default style
+					button
+						.getElement("background")
+						.setFillStyle(ColorScheme.Black, 0.2);
+				},
+				this
+			)
+			.layout();
 	}
 }

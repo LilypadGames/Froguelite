@@ -36,5 +36,21 @@
     "slime_ice_small": "assets/enemy/slime_ice_small.png",
     "slime_ice": "assets/enemy/slime_ice.png",
     "slime_wind_small": "assets/enemy/slime_wind_small.png",
-    "slime_wind": "assets/enemy/slime_wind.png"
+    "slime_wind": "assets/enemy/slime_wind.png",
+    "blue_garbs": {
+        "spritesheet": "assets/armor/blue_garbs.png",
+        "frameWidth": 9,
+        "frameHeight": 7,
+        "spacing": 1,
+        "anim": {
+            "left": 0,
+            "right": 1,
+            "front": 2,
+            "back": 3
+        }
+    },
+    "gui_blue_garbs": "assets/gui/inventory/armor/blue_garbs.png",
+    "gui_snot_bubble": "assets/gui/inventory/spell/snot_bubble.png",
+    "gui_tab_spell": "assets/gui/inventory/tab/spell.png",
+    "gui_tab_armor": "assets/gui/inventory/tab/armor.png"
 }
