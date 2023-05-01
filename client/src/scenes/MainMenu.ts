@@ -33,7 +33,7 @@ export class MainMenu extends Core {
 		this.logo = this.make.text({
 			x: this.scale.gameSize.width / 2,
 			y: this.scale.gameSize.height / 3,
-			text: "Froguelike",
+			text: this.cache.json.get("lang.en_us").game_title,
 			style: {
 				fontSize: "128px",
 				fontFamily: "Pix",
@@ -50,7 +50,7 @@ export class MainMenu extends Core {
 		this.begin = this.make.text({
 			x: this.scale.gameSize.width / 2,
 			y: (this.scale.gameSize.height / 5) * 4,
-			text: "Click Anywhere To Begin",
+			text: this.cache.json.get("lang.en_us").opening_hint,
 			style: {
 				fontSize: "32px",
 				fontFamily: "Pix",
@@ -73,11 +73,15 @@ export class MainMenu extends Core {
 		});
 
 		// on click, go to game
-		this.input.on("pointerdown", () => {
-			this.changeScene("Game", {
-				level: this.cache.json.get("game").start,
-			});
-		}, this);
+		this.input.on(
+			"pointerdown",
+			() => {
+				this.changeScene("Game", {
+					level: this.cache.json.get("game").start,
+				});
+			},
+			this
+		);
 
 		// show menu when resumed
 		this.events.on("resume", this.show, this);

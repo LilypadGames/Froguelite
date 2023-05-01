@@ -1,10 +1,20 @@
 {
+    "game_title": "Froguelite",
+    "opening_hint": "Click Anywhere To Begin",
+    "player": "Pp",
+    "enemy": {
+        "lsf": "LSF"
+    },
     "armor": {
-        "name": {
-            "blue_garbs": "Blue Garbs"
-        },
-        "desc": {
-            "blue_garbs": "Has a hot sauce stain on it, with an aroma of Popcorn."
+        "blue_garbs": {
+            "name": "Blue Garbs",
+            "desc": "Has a hot sauce stain on it, with an aroma of Popcorn."
+        }
+    },
+    "spell": {
+        "snot_bubble": {
+            "name": "Snot Bubble",
+            "desc": "Nothing very magical about it. Its a floating boogie."
         }
     }
 }

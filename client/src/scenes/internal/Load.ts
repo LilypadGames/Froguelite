@@ -43,6 +43,11 @@ export class Load extends Phaser.Scene {
 						type: "json",
 						key: "game",
 						url: "assets/data/game.json",
+					},
+					{
+						type: "json",
+						key: "lang.en_us",
+						url: "assets/lang/en_us.json",
 					}
 				],
 			},
