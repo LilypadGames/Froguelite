@@ -28,7 +28,7 @@ export class Enemy extends LivingEntity {
 		this.id = id;
 
 		// set name
-		this.setName(enemyData[id].name);
+		this.setName(this.scene.cache.json.get("lang.en_us").enemy[id]);
 
 		// set scale
 		this.setScale(enemyData[id].scale);
