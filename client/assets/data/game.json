@@ -80,5 +80,10 @@
         "cave": {
             "texture": "cave"
         }
+    },
+    "loot": {
+        "lootable": {
+            "riverside_chest": "blue_garbs"
+        }
     }
 }

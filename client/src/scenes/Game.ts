@@ -12,8 +12,9 @@ import { HUD } from "./overlay/HUD";
 import { Enemy } from "../scripts/Enemy";
 import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
-import { Teleport } from "../scripts/Teleport";
+import { Teleporter } from "../scripts/Teleporter";
 import { Entity } from "../scripts/Entity";
+import { Lootable } from "../scripts/Lootable";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -249,8 +250,9 @@ export class Game extends Core {
 		map.objects.forEach((objectLayer) => {
 			// each object
 			objectLayer.objects.forEach((object) => {
-				// has x/y
+				// cancel if no position provided
 				if (object.x === undefined || object.y === undefined) return;
+
 				// general properties
 				type properties = {
 					type: string;
@@ -259,10 +261,14 @@ export class Game extends Core {
 				interface gameObjectProperties extends properties {
 					id: string;
 				}
-				// teleport properties
-				interface teleportProperties extends gameObjectProperties {
+				// teleporter properties
+				interface teleporterProperties extends gameObjectProperties {
 					tip: string;
 					teleportTo: string;
+				}
+				// lootable properties
+				interface lootableProperties extends gameObjectProperties {
+					lootableType: string;
 				}
 
 				// init properties
@@ -299,14 +305,24 @@ export class Game extends Core {
 					);
 				}
 
-				// teleport
-				if (properties.type === "teleport") {
-					this.spawnTeleport(
-						(properties as teleportProperties).id,
+				// teleporter
+				if (properties.type === "teleporter") {
+					this.spawnTeleporter(
+						(properties as teleporterProperties).id,
 						(object as any).x,
 						(object as any).y,
-						(properties as teleportProperties).tip,
-						(properties as teleportProperties).teleportTo
+						(properties as teleporterProperties).tip,
+						(properties as teleporterProperties).teleportTo
+					);
+				}
+
+				// lootable
+				if (properties.type === "lootable") {
+					this.spawnLootable(
+						(properties as lootableProperties).id,
+						(object as any).x,
+						(object as any).y,
+						(properties as lootableProperties).lootableType
 					);
 				}
 			}, this);
@@ -340,7 +356,7 @@ export class Game extends Core {
 	}
 
 	// spawn teleport
-	spawnTeleport(
+	spawnTeleporter(
 		id: string,
 		x: number,
 		y: number,
@@ -348,9 +364,18 @@ export class Game extends Core {
 		teleportTo: string
 	) {
 		// create teleport
-		let teleport = new Teleport(this, x, y, id, tip, teleportTo);
+		let teleporter = new Teleporter(this, x, y, id, tip, teleportTo);
 
 		// rotate with camera rotation
-		this.fixedObjectsGroup.add(teleport);
+		this.fixedObjectsGroup.add(teleporter);
+	}
+
+	// spawn lootable
+	spawnLootable(id: string, x: number, y: number, type: string) {
+		// create lootable
+		let lootable = new Lootable(this, x, y, id, type);
+
+		// rotate with camera rotation
+		this.fixedObjectsGroup.add(lootable);
 	}
 }

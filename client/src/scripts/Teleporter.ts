@@ -4,7 +4,7 @@ import { Game } from "../scenes/Game";
 // components
 import { Interactable } from "./Interactable";
 
-export class Teleport extends Interactable {
+export class Teleporter extends Interactable {
 	id: string;
 	teleportTo: string;
 
@@ -17,10 +17,10 @@ export class Teleport extends Interactable {
 		teleportTo: string
 	) {
 		// get teleport data
-		let teleportData = scene.cache.json.get("game").teleporters;
+		let teleporterData = scene.cache.json.get("game").teleporters;
 
 		// pass values
-		super(scene, x, y, teleportData[id].texture, "teleporter", tip);
+		super(scene, x, y, teleporterData[id].texture, "teleporter", tip);
 
 		// save values
 		this.scene = scene;

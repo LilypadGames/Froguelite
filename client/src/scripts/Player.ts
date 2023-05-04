@@ -5,7 +5,7 @@ import { Game } from "../scenes/Game";
 import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
 import { Spells } from "./Spell";
-import { Teleport } from "./Teleport";
+import { Teleporter } from "./Teleporter";
 
 export class Player extends LivingEntity {
 	// typings
@@ -20,7 +20,7 @@ export class Player extends LivingEntity {
 	keyTAB: Phaser.Input.Keyboard.Key;
 
 	// interaction
-	lastContact!: undefined | Interactable | Teleport;
+	lastContact!: undefined | Interactable | Teleporter;
 
 	// visuals
 	depth: number = 10;

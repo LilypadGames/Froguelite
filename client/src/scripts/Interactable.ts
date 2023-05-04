@@ -8,6 +8,7 @@ import { Player } from "./Player";
 export class Interactable extends Entity {
 	scene: Game;
 	tip: string;
+	enabled: boolean = true;
 
 	constructor(
 		scene: Game,
@@ -24,12 +25,15 @@ export class Interactable extends Entity {
 		this.scene = scene;
 		this.tip = tip;
 
-		// set as sensor
+		// set as sensor (not physically collidable, but still triggers collision event)
 		this.setSensor(true);
 
 		// detect player collisions
 		this.setOnCollide(
 			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// not enabled
+				if (!this.enabled) return;
+
 				// player colliding
 				if (entities.bodyB.gameObject instanceof Player) {
 					this.collidePlayer(entities.bodyB.gameObject);
@@ -40,6 +44,9 @@ export class Interactable extends Entity {
 		// detect end of player collision
 		this.setOnCollideEnd(
 			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// not enabled
+				if (!this.enabled) return;
+
 				// player no longer colliding
 				if (entities.bodyB.gameObject instanceof Player) {
 					this.collideEndPlayer(entities.bodyB.gameObject);
@@ -67,5 +74,8 @@ export class Interactable extends Entity {
 	}
 
 	// player interacted
-	interact() {}
+	interact() {
+		// end collision
+		this.collideEndPlayer(this.scene.player);
+	}
 }

@@ -140,13 +140,41 @@
                         {
                          "name":"type",
                          "type":"string",
-                         "value":"teleport"
+                         "value":"teleporter"
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":109.696022727273,
-                 "y":36.1335227272727
+                 "x":110,
+                 "y":36
+                }, 
+                {
+                 "class":"",
+                 "height":0,
+                 "id":6,
+                 "name":"Riverside Wooden Chest",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"string",
+                         "value":"riverside_chest"
+                        }, 
+                        {
+                         "name":"lootableType",
+                         "type":"string",
+                         "value":"chest_wood"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"lootable"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":110,
+                 "y":99
                 }],
          "offsetx":0.303977272727252,
          "offsety":-1.13352272727273,
@@ -157,7 +185,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":6,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
