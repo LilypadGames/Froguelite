@@ -187,9 +187,9 @@ export class Game extends Core {
 		super.shutdown();
 	}
 
-	onPause() {
+	onPause(data: { pauseHUD: boolean } = { pauseHUD: true }) {
 		// pause HUD
-		this.HUD.scene.pause();
+		if (data.pauseHUD) this.HUD.scene.pause();
 	}
 
 	onResume() {

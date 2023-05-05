@@ -4,5 +4,7 @@
     "the_bauws": "assets/audio/music/the_bauws.ogg",
     "ui_select": "assets/audio/ui/select.ogg",
     "ui_back": "assets/audio/ui/back.ogg",
-    "ui_hover": "assets/audio/ui/hover.ogg"
+    "ui_hover": "assets/audio/ui/hover.ogg",
+    "sfx_chest_open": "assets/audio/sfx/chest_open.ogg",
+    "sfx_acquired": "assets/audio/sfx/acquired.ogg"
 }

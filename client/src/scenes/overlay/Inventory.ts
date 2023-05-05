@@ -47,7 +47,7 @@ export class Inventory extends CoreOverlay {
 			this.scale.gameSize.height / 2,
 			this.scale.gameSize.width,
 			this.scale.gameSize.height,
-			0x000000,
+			ColorScheme.Black,
 			0.5
 		);
 
@@ -143,7 +143,7 @@ export class Inventory extends CoreOverlay {
 						0,
 						10,
 						ColorScheme.Black,
-						0.2
+						0.3
 					).addToDisplayList(),
 					icon: this.add
 						.image(0, 0, tabs[tabID].icon)
@@ -177,6 +177,9 @@ export class Inventory extends CoreOverlay {
 			},
 		})
 			.on("button.click", (button: any) => {
+				// select
+				this.sound.play("ui_select", { volume: 0.75 });
+
 				tabs[button.name].clickCallback();
 			})
 			.on(
@@ -185,19 +188,22 @@ export class Inventory extends CoreOverlay {
 					// sfx
 					this.sound.play("ui_hover", { volume: 0.75 });
 
+					// darker background opacity and stroke
 					button
 						.getElement("background")
-						.setFillStyle(ColorScheme.Black, 0.5);
+						.setStrokeStyle(2, ColorScheme.White)
+						.setFillStyle(ColorScheme.Black, 0.8);
 				},
 				this
 			)
 			.on(
 				"button.out",
 				(button: any) => {
-					// revert to default style
+					// normal background opacity
 					button
 						.getElement("background")
-						.setFillStyle(ColorScheme.Black, 0.2);
+						.setStrokeStyle(0)
+						.setFillStyle(ColorScheme.Black, 0.3);
 				},
 				this
 			)

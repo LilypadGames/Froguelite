@@ -8,13 +8,13 @@
     "armor": {
         "blue_garbs": {
             "name": "Blue Garbs",
-            "desc": "Has a hot sauce stain on it, with an aroma of Popcorn."
+            "description": "Has a hot sauce stain on it, with an aroma of Popcorn."
         }
     },
     "spell": {
         "snot_bubble": {
             "name": "Snot Bubble",
-            "desc": "Nothing very magical about it. Its a floating boogie."
+            "description": "Nothing very magical about it. Its a floating boogie."
         }
     }
 }
