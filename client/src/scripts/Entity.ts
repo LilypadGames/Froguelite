@@ -10,6 +10,9 @@ import GlowFilterPostFxPipeline from "phaser3-rex-plugins/plugins/glowfilter2pip
 // scenes
 import { Game } from "../scenes/Game";
 
+// utility
+import ColorScheme from "./ColorScheme";
+
 export class Entity extends Phaser.Physics.Matter.Sprite {
 	scene: Game;
 	textureKey: string;
@@ -24,13 +27,13 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	// config
 	outline = {
 		thickness: 1,
-		outlineColor: 0x000000,
+		outlineColor: ColorScheme.Black,
 		quality: 0.3,
 	};
 	glow = {
 		distance: 15,
 		outerStrength: 1,
-		glowColor: 0x000000,
+		glowColor: ColorScheme.Black,
 		quality: 0.3,
 	};
 

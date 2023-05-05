@@ -49,7 +49,7 @@ export class Pause extends CoreOverlay {
 			this.scale.gameSize.height / 2,
 			this.scale.gameSize.width,
 			this.scale.gameSize.height,
-			0x000000,
+			ColorScheme.Black,
 			0.5
 		);
 
@@ -98,13 +98,13 @@ export class Pause extends CoreOverlay {
 							if (button.name === "restart") {
 								button
 									.getElement("background")
-									.setFillStyle(0xff0000, 0.5);
+									.setFillStyle(ColorScheme.White, 0.5);
 							}
 							// other buttons
 							else {
 								button
 									.getElement("background")
-									.setFillStyle(0x000000, 0.5);
+									.setFillStyle(ColorScheme.Black, 0.5);
 							}
 
 							// sfx
@@ -118,7 +118,7 @@ export class Pause extends CoreOverlay {
 							// revert to default style
 							button
 								.getElement("background")
-								.setFillStyle(0x000000, 0.2);
+								.setFillStyle(ColorScheme.Black, 0.2);
 						},
 						this
 					)
@@ -176,7 +176,14 @@ export class Pause extends CoreOverlay {
 	button(text: string, id: string) {
 		return new Label(this, {
 			height: this.scale.gameSize.height / 20,
-			background: this.add.rectangle(0, 0, 400, 100, 0x000000, 0.2),
+			background: this.add.rectangle(
+				0,
+				0,
+				400,
+				100,
+				ColorScheme.Black,
+				0.2
+			),
 			text: this.make.text({
 				text: text,
 				style: {
