@@ -55,32 +55,4 @@ export class CoreOverlay extends Phaser.Scene {
 		// resume previous scene
 		this.scene.resume(this.scenePaused);
 	}
-
-	// 	create: () => {
-	// 		// disable right-click context menu
-	// 		(
-	// 			this.input.mouse as Phaser.Input.Mouse.MouseManager
-	// 		).disableContextMenu();
-
-	// 		// pause menu
-	// 		if (
-	// 			this.scene.key != "Pause" &&
-	// 			this.scene.key != "Menu" &&
-	// 			this.scene.key != "Options" &&
-	// 			this.scene.key != "Inventory"
-	// 		) {
-	// 			// populate key input
-	// 			this.keyESC = (
-	// 				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-	// 			).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-
-	// 			// toggle pause menu
-	// 			this.keyESC.on("down", () => {
-	// 				// pause current scene
-	// 				this.scene.pause();
-
-	// 				// launch pause menu
-	// 				this.scene.launch("Pause", this);
-	// 			});
-	// 		}
 }

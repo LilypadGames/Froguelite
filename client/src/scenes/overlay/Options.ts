@@ -136,6 +136,7 @@ export class Options extends CoreOverlay {
 					// sfx
 					this.sound.play("ui_back", { volume: 0.75 });
 
+					// resume
 					this.resumePreviousScene();
 				}),
 				{

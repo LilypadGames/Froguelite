@@ -83,8 +83,9 @@ export class MainMenu extends Core {
 			this
 		);
 
-		// show menu when resumed
-		this.events.on("resume", this.show, this);
+		// execute when game is paused/resumed
+		this.events.on("pause", this.onPause, this);
+		this.events.on("resume", this.onResume, this);
 
 		// set camera size and position
 		this.cameras.main.setPosition(0, 0);
@@ -95,18 +96,30 @@ export class MainMenu extends Core {
 		super.playMusic(this.cache.json.get("game").music.mainmenu);
 	}
 
+	onPause() {
+		// hide
+		this.hide();
+	}
+
+	onResume() {
+		// show
+		this.show();
+	}
+
 	shutdown() {
 		// remove listeners
-		this.events.removeListener("resume", this.show, this);
+		this.events.removeListener("pause", this.onPause, this);
+		this.events.removeListener("resume", this.onResume, this);
 		this.scale.removeListener("resize", this.resizeCamera, this);
+		this.input.removeListener("pointerdown");
 
 		// base class shutdown
 		super.shutdown();
 	}
 
 	launchMenuOverlay() {
-		// hide current scene
-		this.hide();
+		// pause main menu
+		this.scene.pause();
 
 		// launch options menu
 		this.scene.launch("Options", this);
