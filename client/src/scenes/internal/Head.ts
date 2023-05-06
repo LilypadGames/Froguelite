@@ -8,6 +8,7 @@ import { CoreOverlay } from "./CoreOverlay";
 
 // scenes
 import { HUD } from "../overlay/HUD";
+import { Game } from "../Game";
 
 //
 // This scene runs in the background and acts as a manager for all the current scenes and stores useful information that persists between scenes
@@ -73,11 +74,14 @@ export class Head extends Phaser.Scene {
 	// performance mode
 	highPerformanceMode = {
 		set: (mode: boolean) => {
-			// save option
+			// save
 			store.set("settings.options.highPerformanceMode", mode);
+
+			// reload graphics
+			if (this.sceneMain.scene.key === "Game")
+				(this.sceneMain as Game).reloadGraphics();
 		},
 		get: () => {
-			// get option
 			return store.get("settings.options.highPerformanceMode");
 		},
 	};

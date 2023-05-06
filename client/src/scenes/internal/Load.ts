@@ -57,6 +57,14 @@ export class Load extends Phaser.Scene {
 
 	preload() {
 		// default options
+		if (store.get("settings.options.highPerformanceMode") == null)
+			store.set("settings.options.highPerformanceMode", false);
+		if (store.get("settings.options.audio.master.enabled") == null)
+			store.set("settings.options.audio.master.enabled", true);
+		if (store.get("settings.options.audio.music.enabled") == null)
+			store.set("settings.options.audio.music.enabled", true);
+		if (store.get("settings.options.audio.sfx.enabled") == null)
+			store.set("settings.options.audio.sfx.enabled", true);
 		if (store.get("settings.options.audio.master.volume") == null)
 			store.set("settings.options.audio.master.volume", 1);
 		if (store.get("settings.options.audio.music.volume") == null)

@@ -79,7 +79,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		this.setBounce(0);
 
 		// apply shader
-		this.applyShaders(store.get("settings.options.highPerformanceMode"));
+		this.applyShaders(this.scene.sceneHead.highPerformanceMode.get());
 	}
 
 	// show

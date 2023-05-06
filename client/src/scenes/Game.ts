@@ -158,9 +158,6 @@ export class Game extends Core {
 			if (this.sceneHead.highPerformanceMode.get() === false) {
 				// turn on high performance mode
 				this.sceneHead.highPerformanceMode.set(true);
-
-				// reload graphics
-				this.reloadGraphics();
 			}
 		}
 	}
@@ -201,9 +198,7 @@ export class Game extends Core {
 			this.player as Entity,
 			...(this.enemyGroup.getChildren() as Array<Entity>),
 		].forEach((object: Entity) => {
-			object.applyShaders(
-				store.get("settings.options.highPerformanceMode")
-			);
+			object.applyShaders(this.sceneHead.highPerformanceMode.get());
 		});
 	}
 
