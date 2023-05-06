@@ -33,13 +33,36 @@ const createWindow = () => {
 		},
 	});
 
-	// maximize
-	mainWindow.maximize();
+	// development mode
+	if (environment === "development" || environment === "dev preview") {
+		// open dev tools
+		mainWindow.webContents.openDevTools();
 
-	// show menu bar dependent on mode
-	mainWindow.setMenuBarVisibility(
-		environment === "development" || environment === "dev preview"
-	);
+		// show menu bar
+		mainWindow.setMenuBarVisibility(true);
+
+		// clear cache
+		mainWindow.webContents.session.clearStorageData();
+	}
+	// preview mode
+	else if (environment === "preview") {
+		// maximize
+		mainWindow.maximize();
+
+		// hide menu bar
+		mainWindow.setMenuBarVisibility(false);
+
+		// clear cache
+		mainWindow.webContents.session.clearStorageData();
+	}
+	// production mode
+	else if (environment === "production") {
+		// maximize
+		mainWindow.maximize();
+
+		// hide menu bar
+		mainWindow.setMenuBarVisibility(false);
+	}
 
 	// determine file path dependent on mode
 	let filePath;
@@ -59,10 +82,6 @@ const createWindow = () => {
 
 	// load the index.html of the app
 	mainWindow.loadURL(filePath);
-
-	// open devtools if in development mode
-	if (environment === "development" || environment === "dev preview")
-		mainWindow.webContents.openDevTools();
 
 	// show
 	mainWindow.show();
