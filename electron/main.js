@@ -3,8 +3,10 @@ const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const url = require("url");
 
+// init
 require("@electron/remote/main").initialize();
 
+// disable security warnings
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 // determine environment
