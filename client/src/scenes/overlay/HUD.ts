@@ -278,7 +278,7 @@ export class HUD extends Phaser.Scene {
 						// remove input listener
 						this.input.removeListener("pointerdown");
 
-						// sound
+						// sfx
 						this.sound.play("ui_select", { volume: 0.75 });
 
 						// fade out background

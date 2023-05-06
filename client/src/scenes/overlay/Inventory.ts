@@ -177,7 +177,7 @@ export class Inventory extends CoreOverlay {
 			},
 		})
 			.on("button.click", (button: any) => {
-				// select
+				// sfx
 				this.sound.play("ui_select", { volume: 0.75 });
 
 				tabs[button.name].clickCallback();

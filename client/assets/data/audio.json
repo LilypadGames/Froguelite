@@ -9,5 +9,6 @@
     "sfx_acquired": "assets/audio/sfx/acquired.ogg",
     "sfx_shoot": "assets/audio/sfx/shoot.ogg",
     "sfx_pop_success": "assets/audio/sfx/pop_success.ogg",
-    "sfx_pop_fail": "assets/audio/sfx/pop_fail.ogg"
+    "sfx_pop_fail": "assets/audio/sfx/pop_fail.ogg",
+    "ui_open": "assets/audio/ui/open.ogg"
 }
