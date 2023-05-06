@@ -6,5 +6,8 @@
     "ui_back": "assets/audio/ui/back.ogg",
     "ui_hover": "assets/audio/ui/hover.ogg",
     "sfx_chest_open": "assets/audio/sfx/chest_open.ogg",
-    "sfx_acquired": "assets/audio/sfx/acquired.ogg"
+    "sfx_acquired": "assets/audio/sfx/acquired.ogg",
+    "sfx_shoot": "assets/audio/sfx/shoot.ogg",
+    "sfx_pop_success": "assets/audio/sfx/pop_success.ogg",
+    "sfx_pop_fail": "assets/audio/sfx/pop_fail.ogg"
 }

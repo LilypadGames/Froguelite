@@ -3,8 +3,12 @@ import { Game } from "../scenes/Game";
 
 // components
 import { Enemy } from "./Enemy";
+import Utility from "./Utility";
 
 export class Spell extends Phaser.Physics.Matter.Sprite {
+	// id
+	spellID: string;
+
 	// visual
 	depth: number = 11;
 
@@ -14,20 +18,21 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 	state: number = 0;
 	damage: number;
 
-	constructor(scene: Game, x: number, y: number, id: string) {
+	constructor(scene: Game, x: number, y: number, spellID: string) {
 		// get spell data
 		let spellData = scene.cache.json.get("game").spells;
 
 		// pass values
-		super(scene.matter.world, x, y, spellData[id].texture);
+		super(scene.matter.world, x, y, spellData[spellID].texture);
 
 		// save values
 		this.scene = scene;
 		this.x = x;
 		this.y = y;
-		this.lifespan = spellData[id].lifespan;
-		this.speed = spellData[id].speed;
-		this.damage = spellData[id].damage;
+		this.spellID = spellID;
+		this.lifespan = spellData[spellID].lifespan;
+		this.speed = spellData[spellID].speed;
+		this.damage = spellData[spellID].damage;
 
 		// trigger collisions, but don't actually collide
 		this.setSensor(true);
@@ -134,11 +139,20 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 
 	// collided with enemy
 	collideEnemy(enemyBody: MatterJS.BodyType) {
+		// sfx
+		this.scene.sound.play(
+			this.scene.cache.json.get("game").spells[this.spellID].sounds
+				.success,
+			{ detune: Utility.random.int(-300, 300) }
+		);
+
 		// get enemy
 		let enemy: Enemy = enemyBody.gameObject;
 
+		// damage enemy
 		enemy.changeHealth(-this.damage);
 
+		// DEBUG
 		console.log("Collided with Enemy: " + enemy.name);
 
 		// hide spell
@@ -147,7 +161,16 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 
 	// collided with wall
 	collideWall() {
+		// sfx
+		this.scene.sound.play(
+			this.scene.cache.json.get("game").spells[this.spellID].sounds.fail,
+			{ detune: Utility.random.int(-300, 300) }
+		);
+
+		// DEBUG
 		console.log("Collided with Wall");
+
+		// hide spell
 		this.pop();
 	}
 
@@ -179,21 +202,27 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 
 // group of spells. its better to spawn a ton of spells, hide them all, then show them one at a time as needed and hide them again when done.
 export class Spells extends Phaser.GameObjects.Group {
-	constructor(scene: Game, id: string) {
+	spellID: string;
+
+	constructor(scene: Game, spellID: string) {
 		// get spell data
 		let spellData = scene.cache.json.get("game").spells;
 
 		// pass values
 		super(scene);
 
+		// save values
+		this.scene = scene;
+		this.spellID = spellID;
+
 		// create spells and hide them
 		this.createMultiple({
 			quantity: 10,
-			key: spellData[id].texture,
+			key: spellData[spellID].texture,
 			setOrigin: { x: 0.5, y: 0.5 },
 			setScale: {
-				x: spellData[id].scale,
-				y: spellData[id].scale,
+				x: spellData[spellID].scale,
+				y: spellData[spellID].scale,
 			},
 			active: false,
 			visible: false,
@@ -208,11 +237,19 @@ export class Spells extends Phaser.GameObjects.Group {
 		destinationX: number,
 		destinationY: number
 	) {
-		// find a spell that is hidden
-		let spell: Spell = this.getFirstDead(false);
+		// find hidden spell
+		let spell: Spell = this.getFirstDead();
 
-		// if a spell was found, then fire it
+		// found spell
 		if (spell) {
+			// sfx
+			this.scene.sound.play(
+				this.scene.cache.json.get("game").spells[this.spellID].sounds
+					.start,
+				{ detune: Utility.random.int(-300, 300) }
+			);
+
+			// fire
 			spell.fire(originX, originY, destinationX, destinationY);
 		}
 	}
