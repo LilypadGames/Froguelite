@@ -43,7 +43,9 @@ export class Lootable extends Interactable {
 		}
 
 		// lootable open sound
-		this.sceneGame.sound.play("sfx_chest_open", { volume: this.scene.sceneHead.audio.sfx.volume.value });
+		this.sceneGame.sound.play("sfx_chest_open", {
+			volume: this.scene.sceneHead.audio.sfx.volume.value,
+		});
 
 		// display item
 		this.sceneGame.HUD.displayItem(
@@ -54,7 +56,9 @@ export class Lootable extends Interactable {
 				.description,
 			() => {
 				// acquired sound
-				this.sceneGame.sound.play("sfx_acquired", { volume: this.scene.sceneHead.audio.sfx.volume.value });
+				this.sceneGame.sound.play("sfx_acquired", {
+					volume: this.scene.sceneHead.audio.sfx.volume.value,
+				});
 			}
 		);
 

@@ -52,7 +52,9 @@ export class CoreOverlay extends Phaser.Scene {
 
 	resumePreviousScene() {
 		// sfx
-		this.sound.play("ui_back", { volume: this.sceneHead.audio.sfx.volume.value });
+		this.sound.play("ui_back", {
+			volume: this.sceneHead.audio.sfx.volume.value,
+		});
 
 		// stop pause menu
 		this.scene.stop();

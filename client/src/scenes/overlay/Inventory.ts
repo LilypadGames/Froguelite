@@ -173,7 +173,9 @@ export class Inventory extends CoreOverlay {
 		})
 			.on("button.click", (button: any) => {
 				// sfx
-				this.sound.play("ui_select", { volume: this.sceneHead.audio.sfx.volume.value });
+				this.sound.play("ui_select", {
+					volume: this.sceneHead.audio.sfx.volume.value,
+				});
 
 				tabs[button.name].clickCallback();
 			})
@@ -181,7 +183,9 @@ export class Inventory extends CoreOverlay {
 				"button.over",
 				(button: any) => {
 					// sfx
-					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
+					this.sound.play("ui_hover", {
+						volume: this.sceneHead.audio.sfx.volume.value,
+					});
 
 					// darker background opacity and stroke
 					button

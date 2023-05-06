@@ -129,24 +129,6 @@ export class HUD extends Phaser.Scene {
 				if (closestBoss.healthbar.bar.visible === true)
 					closestBoss.healthbar.hide();
 			}
-
-			// // hide boss bar of others
-			// (this.sceneGame.bossGroup.getChildren() as Array<Enemy>).forEach(
-			// 	(boss: Enemy, index: number) => {
-			// 		// skip closest
-			// 		if (index === min) return;
-
-			// 		// is ded
-			// 		if (boss.isDead) return;
-
-			// 		// doesn't have health bar
-			// 		if (boss.healthbar === undefined) return;
-
-			// 		// hide boss bar
-			// 		if (boss.healthbar.bar.visible === true)
-			// 			boss.healthbar.hide();
-			// 	}
-			// );
 		}
 	}
 
@@ -279,7 +261,10 @@ export class HUD extends Phaser.Scene {
 						this.input.removeListener("pointerdown");
 
 						// sfx
-						this.sound.play("ui_select", { volume: this.sceneGame.sceneHead.audio.sfx.volume.value });
+						this.sound.play("ui_select", {
+							volume: this.sceneGame.sceneHead.audio.sfx.volume
+								.value,
+						});
 
 						// fade out background
 						this.tweens.add({

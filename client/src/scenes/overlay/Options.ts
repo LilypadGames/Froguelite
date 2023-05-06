@@ -177,7 +177,9 @@ export class Options extends CoreOverlay {
 			.add(
 				this.button("Back", "back", () => {
 					// sfx
-					this.sound.play("ui_back", { volume: this.sceneHead.audio.sfx.volume.value });
+					this.sound.play("ui_back", {
+						volume: this.sceneHead.audio.sfx.volume.value,
+					});
 
 					// resume
 					this.resumePreviousScene();
@@ -242,7 +244,9 @@ export class Options extends CoreOverlay {
 				"button.over",
 				(button: any) => {
 					// sfx
-					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
+					this.sound.play("ui_hover", {
+						volume: this.sceneHead.audio.sfx.volume.value,
+					});
 
 					button
 						.getElement("background")
@@ -345,7 +349,9 @@ export class Options extends CoreOverlay {
 				"button.over",
 				() => {
 					// sfx
-					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
+					this.sound.play("ui_hover", {
+						volume: this.sceneHead.audio.sfx.volume.value,
+					});
 
 					// hover style
 					background.setFillStyle(ColorScheme.Black, 0.5);
@@ -413,7 +419,9 @@ export class Options extends CoreOverlay {
 				"pointerover",
 				() => {
 					// sfx
-					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
+					this.sound.play("ui_hover", {
+						volume: this.sceneHead.audio.sfx.volume.value,
+					});
 
 					// hover style
 					background.setFillStyle(ColorScheme.Black, 0.5);
@@ -547,7 +555,9 @@ export class Options extends CoreOverlay {
 				"button.over",
 				(button: any) => {
 					// sfx
-					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
+					this.sound.play("ui_hover", {
+						volume: this.sceneHead.audio.sfx.volume.value,
+					});
 
 					button
 						.getElement("background")
