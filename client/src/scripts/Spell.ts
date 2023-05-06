@@ -6,6 +6,9 @@ import { Enemy } from "./Enemy";
 import Utility from "./Utility";
 
 export class Spell extends Phaser.Physics.Matter.Sprite {
+	// scene
+	scene: Game;
+
 	// id
 	spellID: string;
 
@@ -143,7 +146,10 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		this.scene.sound.play(
 			this.scene.cache.json.get("game").spells[this.spellID].sounds
 				.success,
-			{ detune: Utility.random.int(-300, 300) }
+			{
+				volume: this.scene.sceneHead.audio.sfx.volume.value,
+				detune: Utility.random.int(-300, 300),
+			}
 		);
 
 		// get enemy
@@ -164,7 +170,10 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		// sfx
 		this.scene.sound.play(
 			this.scene.cache.json.get("game").spells[this.spellID].sounds.fail,
-			{ detune: Utility.random.int(-300, 300) }
+			{
+				volume: this.scene.sceneHead.audio.sfx.volume.value,
+				detune: Utility.random.int(-300, 300),
+			}
 		);
 
 		// DEBUG
@@ -202,6 +211,10 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 
 // group of spells. its better to spawn a ton of spells, hide them all, then show them one at a time as needed and hide them again when done.
 export class Spells extends Phaser.GameObjects.Group {
+	// scene
+	scene: Game;
+
+	// id
 	spellID: string;
 
 	constructor(scene: Game, spellID: string) {
@@ -246,7 +259,10 @@ export class Spells extends Phaser.GameObjects.Group {
 			this.scene.sound.play(
 				this.scene.cache.json.get("game").spells[this.spellID].sounds
 					.start,
-				{ detune: Utility.random.int(-300, 300) }
+				{
+					volume: this.scene.sceneHead.audio.sfx.volume.value,
+					detune: Utility.random.int(-300, 300),
+				}
 			);
 
 			// fire
