@@ -12,6 +12,9 @@ let environment;
 if (app.isPackaged) environment = "production";
 else environment = process.env.NODE_ENV;
 
+// force gpu usage
+app.commandLine.appendSwitch("force_high_performance_gpu");
+
 // open app
 const createWindow = () => {
 	// create renderer
