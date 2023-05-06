@@ -65,6 +65,37 @@ export class Options extends CoreOverlay {
 				{ align: "center" }
 			)
 
+			// master controls
+			.add(
+				this.sliderToggler(
+					"Master Volume",
+					"masterVolume",
+					this.sceneHead.audio.master.state.get(),
+					this.sceneHead.audio.master.volume.get,
+
+					// toggle callback
+					(value: boolean, currentSliderValue: number) => {
+						// update state
+						this.sceneHead.audio.master.state.set(value);
+
+						// save current value if toggled off
+						if (!value)
+							this.sceneHead.audio.master.volume.set(
+								currentSliderValue
+							);
+					},
+
+					// slider callback
+					(value: number) => {
+						// update volume
+						this.sceneHead.audio.master.volume.set(value);
+					}
+				),
+				{
+					align: "center",
+				}
+			)
+
 			// music controls
 			.add(
 				this.sliderToggler(
@@ -96,6 +127,37 @@ export class Options extends CoreOverlay {
 				}
 			)
 
+			// sfx controls
+			.add(
+				this.sliderToggler(
+					"SFX Volume",
+					"sfxVolume",
+					this.sceneHead.audio.sfx.state.get(),
+					this.sceneHead.audio.sfx.volume.get,
+
+					// toggle callback
+					(value: boolean, currentSliderValue: number) => {
+						// update state
+						this.sceneHead.audio.sfx.state.set(value);
+
+						// save current value if toggled off
+						if (!value)
+							this.sceneHead.audio.sfx.volume.set(
+								currentSliderValue
+							);
+					},
+
+					// slider callback
+					(value: number) => {
+						// update volume
+						this.sceneHead.audio.sfx.volume.set(value);
+					}
+				),
+				{
+					align: "center",
+				}
+			)
+
 			// performance mode
 			.add(
 				this.checkbox(
@@ -115,7 +177,7 @@ export class Options extends CoreOverlay {
 			.add(
 				this.button("Back", "back", () => {
 					// sfx
-					this.sound.play("ui_back", { volume: 0.75 });
+					this.sound.play("ui_back", { volume: this.sceneHead.audio.sfx.volume.value });
 
 					// resume
 					this.resumePreviousScene();
@@ -180,7 +242,7 @@ export class Options extends CoreOverlay {
 				"button.over",
 				(button: any) => {
 					// sfx
-					this.sound.play("ui_hover", { volume: 0.75 });
+					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
 
 					button
 						.getElement("background")
@@ -274,7 +336,7 @@ export class Options extends CoreOverlay {
 					.setFillStyle(value ? ColorScheme.White : undefined);
 
 				// toggle changed
-				this.events.emit("toggleChanged", value);
+				this.events.emit("toggleChanged", { id: id, value: value });
 			},
 		})
 			// set initial state
@@ -283,7 +345,7 @@ export class Options extends CoreOverlay {
 				"button.over",
 				() => {
 					// sfx
-					this.sound.play("ui_hover", { volume: 0.75 });
+					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
 
 					// hover style
 					background.setFillStyle(ColorScheme.Black, 0.5);
@@ -341,7 +403,7 @@ export class Options extends CoreOverlay {
 				if (value === oldValue || oldValue === undefined) return;
 
 				// slider changed
-				this.events.emit("sliderChanged", value);
+				this.events.emit("sliderChanged", { id: id, value: value });
 			},
 
 			// initial state
@@ -351,7 +413,7 @@ export class Options extends CoreOverlay {
 				"pointerover",
 				() => {
 					// sfx
-					this.sound.play("ui_hover", { volume: 0.75 });
+					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
 
 					// hover style
 					background.setFillStyle(ColorScheme.Black, 0.5);
@@ -370,33 +432,45 @@ export class Options extends CoreOverlay {
 		// set up value change functionality and callbacks
 		this.events.on(
 			"toggleChanged",
-			(value: boolean) => {
+			(data: { id: string; value: boolean }) => {
+				// matching toggle
+				if (data.id !== id) return;
+
 				// get the current slider value
 				const currentSliderValue = slider.getValue();
 
 				// show current slider value
-				if (value) slider.setValue(getValue());
+				if (data.value) slider.setValue(getValue());
 				// hide current slider value
 				else slider.setValue(0);
 
 				// callback
-				toggleCallback(value, currentSliderValue);
+				toggleCallback(data.value, currentSliderValue);
 			},
 			this
 		);
 		this.events.on(
 			"sliderChanged",
-			(value: number) => {
+			(data: { id: string; value: number }) => {
+				// matching slider
+				if (data.id !== id) return;
+
 				// re-enabled the disabled toggle button when the slider is changed to any value above 0
-				if (!toggleButton.getButtonState(id + "_button") && value > 0)
+				if (
+					!toggleButton.getButtonState(id + "_button") &&
+					data.value > 0
+				)
 					toggleButton.setButtonState(id + "_button", true);
 
 				// disable toggle button if set to 0
-				if (toggleButton.getButtonState(id + "_button") && value === 0)
+				if (
+					toggleButton.getButtonState(id + "_button") &&
+					data.value === 0
+				)
 					toggleButton.setButtonState(id + "_button", false);
 
 				// callback
-				sliderCallback(value);
+				sliderCallback(data.value);
 			},
 			this
 		);
@@ -473,7 +547,7 @@ export class Options extends CoreOverlay {
 				"button.over",
 				(button: any) => {
 					// sfx
-					this.sound.play("ui_hover", { volume: 0.75 });
+					this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
 
 					button
 						.getElement("background")

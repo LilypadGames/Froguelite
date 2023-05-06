@@ -103,7 +103,7 @@ export class Pause extends CoreOverlay {
 							}
 
 							// sfx
-							this.sound.play("ui_hover", { volume: 0.75 });
+							this.sound.play("ui_hover", { volume: this.sceneHead.audio.sfx.volume.value });
 						},
 						this
 					)
@@ -123,7 +123,7 @@ export class Pause extends CoreOverlay {
 							// resume button
 							if (button.name === "resume") {
 								// sfx
-								this.sound.play("ui_back", { volume: 0.75 });
+								this.sound.play("ui_back", { volume: this.sceneHead.audio.sfx.volume.value });
 
 								// go back to previous scene
 								this.resumePreviousScene();
@@ -131,7 +131,7 @@ export class Pause extends CoreOverlay {
 							// options menu
 							else if (button.name === "options") {
 								// sfx
-								this.sound.play("ui_select", { volume: 0.75 });
+								this.sound.play("ui_select", { volume: this.sceneHead.audio.sfx.volume.value });
 
 								// hide pause menu
 								this.hide();

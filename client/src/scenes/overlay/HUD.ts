@@ -279,7 +279,7 @@ export class HUD extends Phaser.Scene {
 						this.input.removeListener("pointerdown");
 
 						// sfx
-						this.sound.play("ui_select", { volume: 0.75 });
+						this.sound.play("ui_select", { volume: this.sceneGame.sceneHead.audio.sfx.volume.value });
 
 						// fade out background
 						this.tweens.add({

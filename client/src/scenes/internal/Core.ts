@@ -80,7 +80,7 @@ export class Core extends Phaser.Scene {
 		this.scene.pause();
 
 		// sfx
-		this.sound.play("ui_open", { volume: 0.75 });
+		this.sound.play("ui_open", { volume: this.sceneHead.audio.sfx.volume.value });
 
 		// launch pause menu
 		this.scene.launch("Pause", {

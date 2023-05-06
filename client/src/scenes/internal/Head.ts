@@ -92,7 +92,10 @@ export class Head extends Phaser.Scene {
 				changed == null
 			) {
 				// music enabled
-				if (this.audio.music.state.get()) {
+				if (
+					this.audio.music.state.get() &&
+					this.audio.master.state.get()
+				) {
 					// update music value
 					this.audio.music.volume.value =
 						this.audio.music.volume.get() *
@@ -118,7 +121,10 @@ export class Head extends Phaser.Scene {
 			// sfx audio changed
 			if (changed === "sfx" || changed === "master" || changed == null) {
 				// sfx enabled
-				if (this.audio.sfx.state.get()) {
+				if (
+					this.audio.sfx.state.get() &&
+					this.audio.master.state.get()
+				) {
 					// update sfx value
 					this.audio.sfx.volume.value =
 						this.audio.sfx.volume.get() *
@@ -157,7 +163,7 @@ export class Head extends Phaser.Scene {
 					store.set("settings.options.audio.master.enabled", value);
 
 					// update
-					this.audio.update("master");
+					this.audio.update();
 				},
 			},
 		},
