@@ -24,7 +24,7 @@
     "fs-extra": "^10.1.0"
   },
   "build": {
-    "productName": "Froguelike",
+    "productName": "Froguelite",
     "appId": "dev.danmizu.froguelike",
     "copyright": "Copyright © 2023 ${author}",
     "directories": {
