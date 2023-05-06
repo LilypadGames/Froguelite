@@ -5,4 +5,5 @@ export default {
 	LighterGray: 0xe0e0e0,
 	Black: 0x000000,
 	Green: 0x05ad32,
+	Red: 0xff0000,
 };

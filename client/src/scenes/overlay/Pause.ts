@@ -93,7 +93,7 @@ export class Pause extends CoreOverlay {
 							if (button.name === "restart") {
 								button
 									.getElement("background")
-									.setFillStyle(ColorScheme.White, 0.5);
+									.setFillStyle(ColorScheme.Red, 0.5);
 							}
 							// other buttons
 							else {
