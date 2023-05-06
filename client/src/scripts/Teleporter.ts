@@ -29,6 +29,9 @@ export class Teleporter extends Interactable {
 	}
 
 	interact() {
-		this.scene.changeScene("Game", { level: this.teleportTo });
+		this.scene.changeScene("Game", {
+			sceneHead: this.scene.sceneHead,
+			level: this.teleportTo,
+		});
 	}
 }
