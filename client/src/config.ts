@@ -66,4 +66,7 @@ export default {
 		],
 	},
 	banner: false,
+	depth: {
+		overlay: 100000,
+	},
 };

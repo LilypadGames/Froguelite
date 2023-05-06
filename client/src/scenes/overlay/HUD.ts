@@ -17,6 +17,9 @@ import { Player } from "../../scripts/Player";
 import ColorScheme from "../../scripts/ColorScheme";
 import Utility from "../../scripts/Utility";
 
+// data
+import config from "../../config";
+
 export class HUD extends Phaser.Scene {
 	sceneGame!: Game;
 	player!: Player;
@@ -39,6 +42,17 @@ export class HUD extends Phaser.Scene {
 	}
 
 	create() {
+		// create loading overlay
+		let loadingCover = this.add
+			.rectangle(
+				this.scale.gameSize.width / 2,
+				this.scale.gameSize.height / 2,
+				this.scale.gameSize.width,
+				this.scale.gameSize.height,
+				ColorScheme.Black
+			)
+			.setDepth(config.depth.overlay);
+
 		// init tip text
 		this.tip = this.add
 			.text(
@@ -56,6 +70,19 @@ export class HUD extends Phaser.Scene {
 			)
 			.setOrigin(0.5, 0.5)
 			.setScrollFactor(0);
+
+		// fade in (remove loading cover)
+		setTimeout(() => {
+			this.tweens.add({
+				targets: loadingCover,
+				duration: 800,
+				ease: "Sine.easeOut",
+				alpha: 0,
+				onComplete: () => {
+					loadingCover.destroy();
+				},
+			});
+		}, 200);
 	}
 
 	update() {
@@ -163,8 +190,8 @@ export class HUD extends Phaser.Scene {
 
 		// create display
 		let display = new Sizer(this, {
-			x: this.sys.game.canvas.width / 2,
-			y: this.sys.game.canvas.height / 2,
+			x: this.scale.gameSize.width / 2,
+			y: this.scale.gameSize.height / 2,
 			orientation: "x",
 			space: {
 				top: 20,
@@ -193,7 +220,7 @@ export class HUD extends Phaser.Scene {
 			)
 			.add(
 				new Sizer(this, {
-					width: this.sys.game.canvas.width / 20,
+					width: this.scale.gameSize.width / 20,
 					orientation: "y",
 					space: {
 						item: 10,
@@ -210,11 +237,11 @@ export class HUD extends Phaser.Scene {
 					.add(
 						new Phaser.GameObjects.Line(
 							this,
-							this.sys.game.canvas.width / 6,
+							this.scale.gameSize.width / 6,
 							0,
 							0,
 							0,
-							this.sys.game.canvas.width / 6,
+							this.scale.gameSize.width / 6,
 							0,
 							ColorScheme.Gray
 						).addToDisplayList()
@@ -228,7 +255,7 @@ export class HUD extends Phaser.Scene {
 							),
 							align: "center",
 							wordWrap: {
-								width: this.sys.game.canvas.width / 6,
+								width: this.scale.gameSize.width / 6,
 							},
 						}).addToDisplayList()
 					)

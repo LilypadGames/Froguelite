@@ -1,6 +1,9 @@
 // imports
 import store from "storejs";
 
+// types
+import { gameSceneData } from "../types/global";
+
 // internal
 import { Core } from "./internal/Core";
 
@@ -14,7 +17,6 @@ import { Camera } from "../scripts/Camera";
 import { Teleporter } from "../scripts/Teleporter";
 import { Entity } from "../scripts/Entity";
 import { Lootable } from "../scripts/Lootable";
-import { gameSceneData } from "../types/global";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -140,9 +142,6 @@ export class Game extends Core {
 
 		// start HUD
 		this.scene.launch("HUD", this);
-
-		// fade in to begin
-		// this.camera.fadeIn();
 
 		// execute when game is paused/resumed
 		this.events.on("pause", this.onPause, this);
