@@ -1,6 +1,7 @@
 // imports
 import Phaser from "phaser";
 import WebFont from "webfontloader";
+import store from "storejs";
 
 //
 // This is meant for loading in any data, such as a save game state, prior to entering the main menu.
@@ -55,6 +56,14 @@ export class Load extends Phaser.Scene {
 	}
 
 	preload() {
+		// default options
+		if (store.get("settings.options.audio.master.volume") == null)
+			store.set("settings.options.audio.master.volume", 1);
+		if (store.get("settings.options.audio.music.volume") == null)
+			store.set("settings.options.audio.music.volume", 0.5);
+		if (store.get("settings.options.audio.sfx.volume") == null)
+			store.set("settings.options.audio.sfx.volume", 1);
+
 		// load textures/spritesheets
 		let textures = this.cache.json.get("textures");
 		for (const key in textures) {

@@ -24,11 +24,6 @@ export class Inventory extends CoreOverlay {
 		super({ key: "Inventory" });
 	}
 
-	init(pausedScene: Phaser.Scene) {
-		// save paused scene
-		super.init(pausedScene);
-	}
-
 	preload() {
 		// set up ESC key
 		super.preload();

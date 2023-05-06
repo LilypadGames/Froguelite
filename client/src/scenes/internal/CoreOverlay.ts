@@ -3,12 +3,14 @@ import Phaser from "phaser";
 
 // internal
 import { Head } from "./Head";
+import { overlaySceneData } from "../../types/global";
 
 //
 // These are overall mechanics that are common to several different scenes, such as a custom cursor or other UI.
 //
 
 export class CoreOverlay extends Phaser.Scene {
+	sceneHead!: Head;
 	scenePaused!: Phaser.Scene;
 	keyESC!: Phaser.Input.Keyboard.Key;
 
@@ -16,15 +18,18 @@ export class CoreOverlay extends Phaser.Scene {
 		super(config);
 	}
 
-	init(scenePaused: Phaser.Scene) {
-		// save previous scene
-		this.scenePaused = scenePaused;
+	init(data: overlaySceneData) {
+		// save head scene
+		this.sceneHead = data.sceneHead;
+
+		// save as current overlay scene
+		data.sceneHead.sceneOverlayMenu = this;
+
+		// save previous, paused scene
+		this.scenePaused = data.scenePaused;
 	}
 
 	preload() {
-		// save as current main scene
-		(this.game.scene.getScene("Head") as Head).sceneOverlayMenu = this;
-
 		// turn off default debug lines when game first launches
 		this.matter.world.drawDebug = false;
 

@@ -370,6 +370,9 @@ export class Player extends LivingEntity {
 		this.scene.sound.play("ui_open", { volume: 0.75 });
 
 		// launch inventory menu
-		this.scene.scene.launch("Inventory", this.scene);
+		this.scene.scene.launch("Inventory", {
+			sceneHead: this.scene.sceneHead,
+			scenePaused: this.scene,
+		});
 	}
 }

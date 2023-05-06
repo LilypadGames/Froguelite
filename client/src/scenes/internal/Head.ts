@@ -31,8 +31,11 @@ export class Head extends Phaser.Scene {
 		// init cursor
 		this.cursor.init();
 
+		// init volume
+		this.audio.update();
+
 		// start menu scene
-		this.scene.launch("MainMenu");
+		this.scene.launch("MainMenu", { sceneHead: this });
 	}
 
 	// cursor
@@ -76,6 +79,147 @@ export class Head extends Phaser.Scene {
 		get: () => {
 			// get option
 			return store.get("settings.options.highPerformanceMode");
+		},
+	};
+
+	// updates current volume controls
+	audio = {
+		update: (changed?: string) => {
+			// music audio changed
+			if (
+				changed === "music" ||
+				changed === "master" ||
+				changed == null
+			) {
+				// music enabled
+				if (this.audio.music.state.get()) {
+					// update music value
+					this.audio.music.volume.value =
+						this.audio.music.volume.get() *
+						this.audio.master.volume.get();
+				}
+
+				// music disabled
+				else {
+					// set volume to 0
+					this.audio.music.volume.value = 0;
+				}
+
+				// update current music
+				if (this.sceneMain && this.sceneMain.music) {
+					// mute
+					this.sceneMain.music.mute = !this.audio.music.state.get();
+
+					// volume
+					this.sceneMain.music.volume = this.audio.music.volume.value;
+				}
+			}
+
+			// sfx audio changed
+			if (changed === "sfx" || changed === "master" || changed == null) {
+				// sfx enabled
+				if (this.audio.sfx.state.get()) {
+					// update sfx value
+					this.audio.sfx.volume.value =
+						this.audio.sfx.volume.get() *
+						this.audio.master.volume.get();
+				}
+
+				// sfx disabled
+				else {
+					// set volume to 0
+					this.audio.sfx.volume.value = 0;
+				}
+			}
+		},
+		master: {
+			// master audio volume
+			volume: {
+				get: (): number => {
+					return store.get("settings.options.audio.master.volume");
+				},
+				set: (value: number) => {
+					// save
+					store.set("settings.options.audio.master.volume", value);
+
+					// update
+					this.audio.update();
+				},
+			},
+
+			// master audio state
+			state: {
+				get: (): boolean => {
+					return store.get("settings.options.audio.master.enabled");
+				},
+				set: (value: boolean) => {
+					// save
+					store.set("settings.options.audio.master.enabled", value);
+
+					// update
+					this.audio.update("master");
+				},
+			},
+		},
+		music: {
+			// music audio volume
+			volume: {
+				value: undefined as undefined | number,
+				get: () => {
+					return store.get("settings.options.audio.music.volume");
+				},
+				set: (value: number) => {
+					// save
+					store.set("settings.options.audio.music.volume", value);
+
+					// update
+					this.audio.update("music");
+				},
+			},
+
+			// music audio state
+			state: {
+				get: (): boolean => {
+					return store.get("settings.options.audio.music.enabled");
+				},
+				set: (value: boolean) => {
+					// save
+					store.set("settings.options.audio.music.enabled", value);
+
+					// update
+					this.audio.update("music");
+				},
+			},
+		},
+		sfx: {
+			// sfx audio volume
+			volume: {
+				value: undefined as undefined | number,
+				get: () => {
+					return store.get("settings.options.audio.sfx.volume");
+				},
+				set: (value: number) => {
+					// save
+					store.set("settings.options.audio.sfx.volume", value);
+
+					// update
+					this.audio.update("sfx");
+				},
+			},
+
+			// sfx audio state
+			state: {
+				get: (): boolean => {
+					return store.get("settings.options.audio.sfx.enabled");
+				},
+				set: (value: boolean) => {
+					// save
+					store.set("settings.options.audio.sfx.enabled", value);
+
+					// update
+					this.audio.update("sfx");
+				},
+			},
 		},
 	};
 

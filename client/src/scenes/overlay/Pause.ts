@@ -32,11 +32,6 @@ export class Pause extends CoreOverlay {
 		super({ key: "Pause" });
 	}
 
-	init(pausedScene: Phaser.Scene) {
-		// save paused scene
-		super.init(pausedScene);
-	}
-
 	preload() {
 		// set up ESC key
 		super.preload();
@@ -145,14 +140,15 @@ export class Pause extends CoreOverlay {
 								this.scene.pause();
 
 								// launch the options menu
-								this.scene.launch("Options", this);
+								this.scene.launch("Options", {
+									sceneHead: this.sceneHead,
+									scenePaused: this,
+								});
 							}
 							// restart button
 							else if (button.name === "restart") {
 								// reload the page to start from menu
-								(
-									this.game.scene.getScene("Head") as Head
-								).restart();
+								this.sceneHead.restart();
 							}
 						},
 						this

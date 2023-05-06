@@ -1,6 +1,8 @@
 // imports
 import Phaser from "phaser";
-import store from "storejs";
+
+// types
+import { gameSceneData, overlaySceneData, sceneData } from "../../types/global";
 
 // plugins
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -13,43 +15,23 @@ import { Head } from "./Head";
 //
 
 export class Core extends Phaser.Scene {
+	sceneHead!: Head;
 	keyESC!: Phaser.Input.Keyboard.Key;
-	// music
-	music = {
-		audio: undefined as Phaser.Sound.WebAudioSound | undefined,
-
-		setVolume: (value: number) => {
-			// save option
-			store.set("settings.options.musicVolume", value);
-
-			// apply option
-			if (this.music.audio) this.music.audio.volume = value;
-		},
-		getVolume: () => {
-			// get option
-			return store.get("settings.options.musicVolume");
-		},
-		setState: (value: boolean) => {
-			// save option
-			store.set("settings.options.musicEnabled", value);
-
-			// apply option
-			if (this.music.audio) this.music.audio.mute = !value;
-		},
-		getState: () => {
-			// get option
-			return store.get("settings.options.musicEnabled");
-		},
-	};
+	music: Phaser.Sound.WebAudioSound | undefined = undefined;
 
 	constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
 		super(config);
 	}
 
-	preload() {
-		// save as current main scene
-		(this.game.scene.getScene("Head") as Head).sceneMain = this;
+	init(data: sceneData | gameSceneData) {
+		// save head scene
+		this.sceneHead = data.sceneHead;
 
+		// save as current main scene
+		data.sceneHead.sceneMain = this;
+	}
+
+	preload() {
 		// turn off default debug lines when game first launches
 		this.matter.world.drawDebug = false;
 
@@ -73,20 +55,24 @@ export class Core extends Phaser.Scene {
 		this.keyESC.removeListener("down", this.launchMenuOverlay, this);
 
 		// fade out music
-		if (this.music.audio) SoundFade.fadeOut(this.music.audio, 500);
+		if (this.music) SoundFade.fadeOut(this.music, 500);
 	}
 
 	playMusic(title: string) {
 		// set up audio
 		this.sound.pauseOnBlur = false;
-		this.music.audio = this.sound.add(title, {
+		this.music = this.sound.add(title, {
 			loop: true,
-			volume: this.music.getVolume(),
-			mute: !this.music.getState(),
+			volume: this.sceneHead.audio.music.volume.value,
+			mute: !this.sceneHead.audio.music.volume.value,
 		}) as Phaser.Sound.WebAudioSound;
 
 		// fade music in
-		SoundFade.fadeIn(this.music.audio, 500, this.music.getVolume());
+		SoundFade.fadeIn(
+			this.music,
+			500,
+			this.sceneHead.audio.music.volume.value
+		);
 	}
 
 	launchMenuOverlay() {
@@ -97,10 +83,16 @@ export class Core extends Phaser.Scene {
 		this.sound.play("ui_open", { volume: 0.75 });
 
 		// launch pause menu
-		this.scene.launch("Pause", this);
+		this.scene.launch("Pause", {
+			sceneHead: this.sceneHead,
+			scenePaused: this,
+		});
 	}
 
-	changeScene(scene: string, data?: object) {
+	changeScene(
+		scene: string,
+		data?: sceneData | gameSceneData | overlaySceneData
+	) {
 		// stop scene
 		this.scene.stop();
 

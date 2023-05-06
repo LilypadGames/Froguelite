@@ -1,10 +1,10 @@
 // internal
-import { Head } from "./internal/Head";
 import { Core } from "./internal/Core";
 
 // utility
 import ColorScheme from "../scripts/ColorScheme";
 import Utility from "../scripts/Utility";
+import { sceneData } from "../types/global";
 
 //
 // This is the Main Menu, what you first see when you open the game.
@@ -18,9 +18,8 @@ export class MainMenu extends Core {
 		super({ key: "MainMenu" });
 	}
 
-	init() {
-		// save as current main scene
-		(this.game.scene.getScene("Head") as Head).sceneMain = this;
+	init(data: sceneData) {
+		super.init(data);
 	}
 
 	preload() {
@@ -77,6 +76,7 @@ export class MainMenu extends Core {
 			"pointerdown",
 			() => {
 				this.changeScene("Game", {
+					sceneHead: this.sceneHead,
 					level: this.cache.json.get("game").start,
 				});
 			},
@@ -125,7 +125,10 @@ export class MainMenu extends Core {
 		this.sound.play("ui_open", { volume: 0.75 });
 
 		// launch options menu
-		this.scene.launch("Options", this);
+		this.scene.launch("Options", {
+			sceneHead: this.sceneHead,
+			scenePaused: this,
+		});
 	}
 
 	resizeCamera(gameSize: Phaser.Structs.Size) {

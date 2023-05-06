@@ -2,7 +2,6 @@
 import store from "storejs";
 
 // internal
-import { Head } from "./internal/Head";
 import { Core } from "./internal/Core";
 
 // scenes
@@ -15,6 +14,7 @@ import { Camera } from "../scripts/Camera";
 import { Teleporter } from "../scripts/Teleporter";
 import { Entity } from "../scripts/Entity";
 import { Lootable } from "../scripts/Lootable";
+import { gameSceneData } from "../types/global";
 
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
@@ -50,7 +50,10 @@ export class Game extends Core {
 		super({ key: "Game" });
 	}
 
-	init(data: { level: string }) {
+	init(data: gameSceneData) {
+		// save scene references
+		super.init(data);
+
 		// store current level
 		this.level = data.level;
 	}
@@ -153,15 +156,9 @@ export class Game extends Core {
 		// detect low performance
 		if (this.game.loop.actualFps < 10) {
 			// high performance mode is off
-			if (
-				(
-					this.game.scene.getScene("Head") as Head
-				).highPerformanceMode.get() === false
-			) {
+			if (this.sceneHead.highPerformanceMode.get() === false) {
 				// turn on high performance mode
-				(
-					this.game.scene.getScene("Head") as Head
-				).highPerformanceMode.set(true);
+				this.sceneHead.highPerformanceMode.set(true);
 
 				// reload graphics
 				this.reloadGraphics();

@@ -17,7 +17,6 @@ import {
 } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 import ColorScheme from "../../scripts/ColorScheme";
 import { Head } from "../internal/Head";
-import Button from "phaser3-rex-plugins/plugins/button";
 
 export class Options extends CoreOverlay {
 	background!: Phaser.GameObjects.Rectangle;
@@ -25,11 +24,6 @@ export class Options extends CoreOverlay {
 
 	constructor() {
 		super({ key: "Options" });
-	}
-
-	init(pausedScene: Phaser.Scene) {
-		// save paused scene
-		super.init(pausedScene);
 	}
 
 	preload() {
@@ -76,36 +70,25 @@ export class Options extends CoreOverlay {
 				this.sliderToggler(
 					"Music Volume",
 					"musicVolume",
-					(
-						this.game.scene.getScene("Head") as Head
-					).sceneMain.music.getState(),
-					(this.game.scene.getScene("Head") as Head).sceneMain.music
-						.getVolume,
+					this.sceneHead.audio.music.state.get(),
+					this.sceneHead.audio.music.volume.get,
 
 					// toggle callback
 					(value: boolean, currentSliderValue: number) => {
 						// update state
-						(
-							this.game.scene.getScene("Head") as Head
-						).sceneMain.music.setState(value);
+						this.sceneHead.audio.music.state.set(value);
 
 						// save current value if toggled off
 						if (!value)
-							(
-								this.game.scene.getScene("Head") as Head
-							).sceneMain.music.setVolume(currentSliderValue);
+							this.sceneHead.audio.music.volume.set(
+								currentSliderValue
+							);
 					},
 
 					// slider callback
 					(value: number) => {
 						// update volume
-						(
-							this.game.scene.getScene("Head") as Head
-						).sceneMain.music.getState()
-							? (
-									this.game.scene.getScene("Head") as Head
-							  ).sceneMain.music.setVolume(value)
-							: 0;
+						this.sceneHead.audio.music.volume.set(value);
 					}
 				),
 				{
@@ -120,9 +103,7 @@ export class Options extends CoreOverlay {
 					"highPerformanceMode",
 					store.get("settings.options.highPerformanceMode"),
 					(value: boolean) => {
-						(
-							this.game.scene.getScene("Head") as Head
-						).highPerformanceMode.set(value);
+						this.sceneHead.highPerformanceMode.set(value);
 					}
 				),
 				{
