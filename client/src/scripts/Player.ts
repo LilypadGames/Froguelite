@@ -186,22 +186,22 @@ export class Player extends LivingEntity {
 
 			// player looking left
 			if (difference.x > this.turnThreshold) {
-				this.anims.play("left", true);
+				this.anims.play(this.scene.cache.json.get("game").player.texture + "_" + "left", true);
 				directionX = "left";
 			}
 			// player looking right
 			else if (difference.x < -this.turnThreshold) {
-				this.anims.play("right", true);
+				this.anims.play(this.scene.cache.json.get("game").player.texture + "_" + "right", true);
 				directionX = "right";
 			}
 			// player looking away from the player
 			else if (difference.y > 0) {
-				this.anims.play("back", true);
+				this.anims.play(this.scene.cache.json.get("game").player.texture + "_" + "back", true);
 				directionY = "up";
 			}
 			// player looking towards the player
 			else if (difference.y <= 0) {
-				this.anims.play("front", true);
+				this.anims.play(this.scene.cache.json.get("game").player.texture + "_" + "front", true);
 				directionY = "down";
 			}
 		}
@@ -244,7 +244,7 @@ export class Player extends LivingEntity {
 
 			// play moving up animation
 			if (!this.scene.input.activePointer.isDown)
-				this.anims.play("back", true);
+				this.anims.play(this.scene.cache.json.get("game").player.texture + "_" + "back", true);
 		}
 
 		// moving down
@@ -261,7 +261,7 @@ export class Player extends LivingEntity {
 
 			// play moving down animation
 			if (!this.scene.input.activePointer.isDown)
-				this.anims.play("front", true);
+				this.anims.play(this.scene.cache.json.get("game").player.texture + "_" + "front", true);
 		}
 
 		// moving left
@@ -278,7 +278,7 @@ export class Player extends LivingEntity {
 
 			// play moving left animation
 			if (!this.scene.input.activePointer.isDown)
-				this.anims.play("left", true);
+				this.anims.play(this.scene.cache.json.get("game").player.texture + "_" + "left", true);
 		}
 
 		// moving right
@@ -295,7 +295,7 @@ export class Player extends LivingEntity {
 
 			// play moving right animation
 			if (!this.scene.input.activePointer.isDown)
-				this.anims.play("right", true);
+				this.anims.play(this.scene.cache.json.get("game").player.texture + "_" + "right", true);
 		}
 
 		// half speed if traveling diagonally

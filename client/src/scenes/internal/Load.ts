@@ -48,7 +48,7 @@ export class Load extends Phaser.Scene {
 						type: "json",
 						key: "lang.en_us",
 						url: "assets/lang/en_us.json",
-					}
+					},
 				],
 			},
 		});
@@ -105,7 +105,7 @@ export class Load extends Phaser.Scene {
 		this.animQueue.forEach((element) => {
 			for (const key in element.anim) {
 				this.anims.create({
-					key: key,
+					key: element.texture + "_" + key,
 					frames: this.anims.generateFrameNumbers(element.texture, {
 						start: element.anim[key],
 						end: element.anim[key],
