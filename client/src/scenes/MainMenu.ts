@@ -76,6 +76,11 @@ export class MainMenu extends Core {
 		this.input.on(
 			"pointerdown",
 			() => {
+				// sfx
+				this.sound.play("ui_select", {
+					volume: this.sceneHead.audio.sfx.volume.value,
+				});
+
 				// tween logo out
 				this.tweens.add({
 					targets: this.logo,
