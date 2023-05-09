@@ -58,7 +58,7 @@
             },
             "scale": 0.5,
             "damage": 2,
-            "lifespan": 350,
+            "lifespan": 450,
             "firerate": 600,
             "speed": 0.00025,
             "inventory": {
