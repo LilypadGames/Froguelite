@@ -34,8 +34,13 @@ export class Player extends LivingEntity {
 	spells: Spells;
 
 	// inventory
-	equipped!: { spell: string; armor: string };
+	equipped!: { spell: string; armor?: string };
 	inventory!: { spells: string[]; armors: string[] };
+
+	// armor
+	armor: {
+		torso?: Phaser.GameObjects.Image;
+	} = {};
 
 	constructor(scene: Game, x: number, y: number) {
 		// get player data
@@ -100,12 +105,14 @@ export class Player extends LivingEntity {
 
 		// events
 		scene.events.on("update", this.update, this);
+		scene.events.on("postupdate", this.postupdate, this);
 		this.once("destroy", this.onDestroy, this);
 	}
 
 	onDestroy() {
 		// remove listeners
 		this.scene.events.removeListener("update", this.update, this);
+		this.scene.events.removeListener("postupdate", this.postupdate, this);
 		this.keyF.removeListener("down", this.checkInteract, this);
 		this.keyTAB.removeListener("down", this.toggleInventory, this);
 	}
@@ -116,6 +123,32 @@ export class Player extends LivingEntity {
 
 		// handle movement
 		this.handleMovement();
+	}
+
+	// update visuals
+	postupdate() {
+		this.updateArmor();
+	}
+
+	// update armor layers to match position and frame of player
+	updateArmor() {
+		// no armor
+		if (!this.armor) return;
+
+		// loop through layers
+		for (const armorLayer in this.armor) {
+			// get layer
+			let layer = this.armor[armorLayer as "torso"];
+
+			// check if set
+			if (!layer) return;
+			// update position
+			layer.setPosition(this.x, this.y);
+
+			// update frame
+			if (this.frame.name !== layer.frame.name)
+				layer.setFrame(this.frame.name);
+		}
 	}
 
 	// check if player is interacting
@@ -369,6 +402,31 @@ export class Player extends LivingEntity {
 		// update spell
 
 		// update armor
+		if (inventoryType === "armor") {
+			// set armor layer
+			this.armor.torso = new Phaser.GameObjects.Image(
+				this.scene,
+				0,
+				0,
+				item
+			)
+				.setOrigin(0.5, 0.5)
+				.addToDisplayList();
+
+			// update visuals
+			this.updateArmor();
+		}
+	}
+
+	unequip(inventoryType: "armor") {
+		// remove equipped item
+		this.equipped[inventoryType] = undefined;
+
+		// update armor
+		if (inventoryType === "armor") {
+			// set armor layer
+			this.armor.torso?.destroy();
+		}
 	}
 
 	toggleInventory() {

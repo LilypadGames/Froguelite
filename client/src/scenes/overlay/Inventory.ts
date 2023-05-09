@@ -22,7 +22,7 @@ export class Inventory extends CoreOverlay {
 	worldView!: Phaser.Geom.Rectangle;
 	background!: Phaser.GameObjects.Rectangle;
 	keyTAB!: Phaser.Input.Keyboard.Key;
-	playerRepresentation!: Phaser.GameObjects.Image;
+	characterRepresentation!: Phaser.GameObjects.Group;
 	currentInventory!: "spells" | "armors";
 	tabs!: Buttons;
 	slots!: FixWidthSizer;
@@ -88,13 +88,7 @@ export class Inventory extends CoreOverlay {
 			.setOrigin(0, 1);
 
 		// player representation
-		this.playerRepresentation = this.add
-			.image(
-				this.scale.gameSize.width - this.scale.gameSize.width / 6,
-				this.scale.gameSize.height / 2,
-				this.cache.json.get("game").player.texture
-			)
-			.setScale(50);
+		this.characterRepresentation = this.createCharacterRepresentation();
 
 		// tabs
 		this.tabs = this.createTabs({
@@ -174,6 +168,65 @@ export class Inventory extends CoreOverlay {
 		this.events.on("resume", this.show, this);
 	}
 
+	createCharacterRepresentation() {
+		// base
+		let characterRepresentation = this.add.group().add(
+			this.add
+				.image(
+					this.scale.gameSize.width - this.scale.gameSize.width / 6,
+					this.scale.gameSize.height / 2,
+					this.cache.json.get("game").player.texture
+				)
+				.setOrigin(0.5, 0.5)
+				.setScale(50)
+		);
+
+		// armor torso
+		if (
+			(this.scenePaused as Game).player.armor.torso &&
+			(this.scenePaused as Game).player.equipped.armor
+		)
+			characterRepresentation.add(
+				this.add
+					.image(
+						this.scale.gameSize.width -
+							this.scale.gameSize.width / 6,
+						this.scale.gameSize.height / 2,
+						(this.scenePaused as Game).player.equipped
+							.armor as string
+					)
+					.setDepth(2)
+					.setOrigin(0.5, 0.5)
+					.setScale(50),
+				true
+			);
+
+		return characterRepresentation;
+	}
+
+	updateCharacterRepresentation() {
+		// torso
+		if (
+			(this.scenePaused as Game).player.armor.torso &&
+			(this.scenePaused as Game).player.equipped.armor
+		) {
+			// update
+			this.characterRepresentation.getChildren()[1] = this.add
+				.image(
+					this.scale.gameSize.width - this.scale.gameSize.width / 6,
+					this.scale.gameSize.height / 2,
+					(this.scenePaused as Game).player.equipped.armor as string
+				)
+				.setDepth(2)
+				.setOrigin(0.5, 0.5)
+				.setScale(50);
+		}
+
+		// no torso
+		else if (this.characterRepresentation.getChildren()[1])
+			this.characterRepresentation.getChildren()[1].destroy();
+	}
+
 	populateSlots(currentInventorySelection: "spells" | "armors") {
 		// inventory
 		let rows = 3;
@@ -223,9 +276,12 @@ export class Inventory extends CoreOverlay {
 				click: { mode: "release", clickInterval: 100 },
 			})
 			.on("child.click", (slot: Label) => {
-				// slot is not empty or already equipped
+				// slot is not empty
+				if (!getItemInSlot(Number(slot.name))) return;
+
+				// spell slot already equipped (armor slots can be unequipped but spells cannot)
 				if (
-					!getItemInSlot(Number(slot.name)) ||
+					this.currentInventory === "spells" &&
 					getEquippedItem() === getItemInSlot(Number(slot.name))
 				)
 					return;
@@ -235,13 +291,25 @@ export class Inventory extends CoreOverlay {
 					volume: this.sceneHead.audio.sfx.volume.value,
 				});
 
-				// equip
-				(this.scenePaused as Game).player.equip(
-					singularInventoryName,
-					getItemInSlot(Number(slot.name))
-				);
+				// unequip
+				if (getEquippedItem() === getItemInSlot(Number(slot.name))) {
+					(this.scenePaused as Game).player.unequip(
+						singularInventoryName as "armor"
+					);
+				}
 
-				// update slot to equipped background
+				// equip
+				else {
+					(this.scenePaused as Game).player.equip(
+						singularInventoryName,
+						getItemInSlot(Number(slot.name))
+					);
+				}
+
+				// update character representation
+				this.updateCharacterRepresentation();
+
+				// update slot background
 				(slot.getElement("background") as RoundRectangle).setFillStyle(
 					getEquippedItem() === getItemInSlot(Number(slot.name))
 						? ColorScheme.LighterGray
