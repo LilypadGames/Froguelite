@@ -1,24 +1,12 @@
+// types
+import { playerStats, playerDetails } from "../types/global";
+
 // scenes
 import { Game } from "../scenes/Game";
 
 // components
 import { Entity } from "./Entity";
 import { Healthbar } from "./Healthbar";
-
-interface stats {
-	health: number;
-	healthMax: number;
-	speed: number;
-	fireRate?: number;
-}
-
-interface details {
-	healthbar?: {
-		scale: number;
-		width: number;
-	};
-	boss?: boolean;
-}
 
 export class LivingEntity extends Entity {
 	scene: Game;
@@ -32,10 +20,10 @@ export class LivingEntity extends Entity {
 	healthbar!: Healthbar;
 
 	// stats
-	stats: stats;
+	stats: playerStats;
 
 	// details
-	details: details | undefined;
+	details: playerDetails | undefined;
 
 	constructor(
 		scene: Game,
@@ -44,8 +32,8 @@ export class LivingEntity extends Entity {
 		textureKey: string,
 		label: string,
 		entityType: string,
-		stats: stats,
-		details?: details
+		stats: playerStats,
+		details?: playerDetails
 	) {
 		// pass values
 		super(scene, x, y, textureKey, label, entityType);

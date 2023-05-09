@@ -1,3 +1,6 @@
+// imports
+import store from "storejs";
+
 // scenes
 import { Game } from "../scenes/Game";
 
@@ -6,6 +9,7 @@ import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
 import { Spells } from "./Spell";
 import { Teleporter } from "./Teleporter";
+import { playerEquipped, playerInventory, playerStats } from "../types/global";
 
 export class Player extends LivingEntity {
 	// typings
@@ -31,11 +35,11 @@ export class Player extends LivingEntity {
 
 	// attacking
 	fireCooldown: number = 0;
-	spells: Spells;
+	spells!: Spells;
 
 	// inventory
-	equipped!: { spell: string; armor?: string };
-	inventory!: { spells: string[]; armors: string[] };
+	equipped!: playerEquipped;
+	inventory!: playerInventory;
 
 	// armor
 	armor: {
@@ -46,6 +50,16 @@ export class Player extends LivingEntity {
 		// get player data
 		let playerData = scene.cache.json.get("game").player;
 
+		// get player data
+		let saveData: {
+			stats: playerStats;
+			equipped: playerEquipped;
+			inventory: playerInventory;
+		} =
+			store.get("saveData") && store.get("saveData").player
+				? JSON.parse(store.get("saveData").player)
+				: undefined;
+
 		// pass values
 		super(
 			scene,
@@ -54,14 +68,14 @@ export class Player extends LivingEntity {
 			playerData.texture,
 			"Player",
 			playerData.type,
-			playerData.stats,
+			saveData ? saveData.stats : playerData.stats,
 			playerData.details
 		);
 
 		// save values
 		this.scene = scene;
-		this.equipped = playerData.equipped;
-		this.inventory = playerData.inventory;
+		this.equipped = saveData ? saveData.equipped : playerData.equipped;
+		this.inventory = saveData ? saveData.inventory : playerData.inventory;
 
 		// movement keys
 		this.keyArrows = (
@@ -101,7 +115,10 @@ export class Player extends LivingEntity {
 		this.setDepth(this.depth);
 
 		// initialize spells
-		this.spells = new Spells(scene, this.equipped.spell);
+		if (this.equipped.spell) this.equip("spell", this.equipped.spell);
+
+		// initialize armor
+		if (this.equipped.armor) this.equip("armor", this.equipped.armor);
 
 		// events
 		scene.events.on("update", this.update, this);
@@ -115,6 +132,18 @@ export class Player extends LivingEntity {
 		this.scene.events.removeListener("postupdate", this.postupdate, this);
 		this.keyF.removeListener("down", this.checkInteract, this);
 		this.keyTAB.removeListener("down", this.toggleInventory, this);
+
+		// save player data
+		store.set(
+			"saveData",
+			JSON.stringify({
+				player: {
+					stats: this.stats,
+					equipped: this.equipped,
+					inventory: this.inventory,
+				},
+			})
+		);
 	}
 
 	update() {
@@ -403,9 +432,16 @@ export class Player extends LivingEntity {
 		this.equipped[inventoryType] = item;
 
 		// update spell
+		if (inventoryType === "spell") {
+			// destroy current spells
+			if (this.spells) this.spells.destroy();
+
+			// new spell
+			this.spells = new Spells(this.scene, this.equipped.spell);
+		}
 
 		// update armor
-		if (inventoryType === "armor") {
+		else if (inventoryType === "armor") {
 			// set armor layer
 			this.armor.torso = new Phaser.GameObjects.Image(
 				this.scene,
