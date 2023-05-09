@@ -362,6 +362,15 @@ export class Player extends LivingEntity {
 		}
 	}
 
+	equip(inventoryType: "armor" | "spell", item: string) {
+		// set equipped item
+		this.equipped[inventoryType] = item;
+
+		// update spell
+
+		// update armor
+	}
+
 	toggleInventory() {
 		// pause current scene
 		this.scene.scene.pause();

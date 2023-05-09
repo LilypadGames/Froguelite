@@ -16,13 +16,14 @@ import {
 // utility
 import ColorScheme from "../../scripts/ColorScheme";
 import Utility from "../../scripts/Utility";
+import { Game } from "../Game";
 
 export class Inventory extends CoreOverlay {
 	worldView!: Phaser.Geom.Rectangle;
 	background!: Phaser.GameObjects.Rectangle;
 	keyTAB!: Phaser.Input.Keyboard.Key;
 	playerRepresentation!: Phaser.GameObjects.Image;
-	currentInventory!: string;
+	currentInventory!: "spells" | "armors";
 	tabs!: Buttons;
 	slots!: FixWidthSizer;
 	selectionDescription!: Sizer;
@@ -173,7 +174,7 @@ export class Inventory extends CoreOverlay {
 		this.events.on("resume", this.show, this);
 	}
 
-	populateSlots(currentInventorySelection: string) {
+	populateSlots(currentInventorySelection: "spells" | "armors") {
 		// inventory
 		let rows = 3;
 		let columns = 7;
@@ -183,7 +184,7 @@ export class Inventory extends CoreOverlay {
 		let slotSize = 100;
 
 		// convert inventory to singular
-		let singularInventoryName =
+		let singularInventoryName: "spell" | "armor" =
 			currentInventorySelection === "spells"
 				? "spell"
 				: currentInventorySelection === "armors"
@@ -192,16 +193,22 @@ export class Inventory extends CoreOverlay {
 
 		// get currently equipped item
 		let getEquippedItem = () => {
-			return this.cache.json.get("game").player.equipped[
+			return (this.scenePaused as Game).player.equipped[
 				singularInventoryName
 			];
+			// return this.cache.json.get("game").player.equipped[
+			// 	singularInventoryName
+			// ];
 		};
 
 		// get item in specified slot in player's inventory
 		let getItemInSlot = (slotNumber: number) => {
-			return this.cache.json.get("game").player.inventory[
+			return (this.scenePaused as Game).player.inventory[
 				currentInventorySelection
 			][slotNumber];
+			// return this.cache.json.get("game").player.inventory[
+			// 	currentInventorySelection
+			// ][slotNumber];
 		};
 
 		// create inventory sizer
@@ -216,15 +223,30 @@ export class Inventory extends CoreOverlay {
 				click: { mode: "release", clickInterval: 100 },
 			})
 			.on("child.click", (slot: Label) => {
-				// slot is not empty
-				if (!getItemInSlot(Number(slot.name))) return;
+				// slot is not empty or already equipped
+				if (
+					!getItemInSlot(Number(slot.name)) ||
+					getEquippedItem() === getItemInSlot(Number(slot.name))
+				)
+					return;
 
 				// sfx
 				this.sound.play("ui_select", {
 					volume: this.sceneHead.audio.sfx.volume.value,
 				});
 
-				// tabs[slot.name].clickCallback();
+				// equip
+				(this.scenePaused as Game).player.equip(
+					singularInventoryName,
+					getItemInSlot(Number(slot.name))
+				);
+
+				// update slot to equipped background
+				(slot.getElement("background") as RoundRectangle).setFillStyle(
+					getEquippedItem() === getItemInSlot(Number(slot.name))
+						? ColorScheme.LighterGray
+						: ColorScheme.Black
+				);
 			})
 			.on(
 				"child.over",
