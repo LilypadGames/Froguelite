@@ -148,6 +148,9 @@ export class Player extends LivingEntity {
 			// update frame
 			if (this.frame.name !== layer.frame.name)
 				layer.setFrame(this.frame.name);
+
+			// update rotation
+			layer.rotation = this.rotation;
 		}
 	}
 
