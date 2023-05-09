@@ -108,6 +108,9 @@ export class Player extends LivingEntity {
 		).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
 		this.keyTAB.on("down", this.toggleInventory, this);
 
+		// scale
+		this.setScale(playerData.scale)
+
 		// default frame
 		this.setFrame(2);
 
