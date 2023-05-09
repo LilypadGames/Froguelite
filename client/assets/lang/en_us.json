@@ -3,7 +3,8 @@
     "opening_hint": "Click Anywhere To Begin",
     "player": "Pp",
     "enemy": {
-        "lsf": "LSF"
+        "lsf": "LSF",
+        "slime": "Slime"
     },
     "armor": {
         "blue_garbs": {

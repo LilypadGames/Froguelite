@@ -46,6 +46,19 @@
                     "width": 500
                 }
             }
+        },
+        "slime": {
+            "texture": "slime",
+            "type": "splitter",
+            "scale": 0.75,
+            "stats": {
+                "health": 15,
+                "speed": 0.00001
+            },
+            "details": {
+                "splitTo": "slime_small",
+                "splitAmount": 2
+            }
         }
     },
     "spells": {

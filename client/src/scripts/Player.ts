@@ -28,6 +28,7 @@ export class Player extends LivingEntity {
 
 	// visuals
 	depth: number = 10;
+	animKey!: string;
 
 	// movement
 	turnThreshold: number = 20;
@@ -43,7 +44,7 @@ export class Player extends LivingEntity {
 
 	// armor
 	armor: {
-		torso?: Phaser.GameObjects.Image;
+		torso?: Phaser.GameObjects.Sprite;
 	} = {};
 
 	constructor(scene: Game, x: number, y: number) {
@@ -109,10 +110,10 @@ export class Player extends LivingEntity {
 		this.keyTAB.on("down", this.toggleInventory, this);
 
 		// scale
-		this.setScale(playerData.scale)
+		this.setScale(playerData.scale);
 
-		// default frame
-		this.setFrame(2);
+		// default anim
+		this.playAnim("front");
 
 		// set depth (renders under/over other sprites)
 		this.setDepth(this.depth);
@@ -162,7 +163,19 @@ export class Player extends LivingEntity {
 		this.updateArmor();
 	}
 
-	// update armor layers to match position and frame of player
+	playAnim(key: string) {
+		// check if exists
+		if (!this.anims.animationManager.exists(this.texture.key + "_" + key))
+			return;
+
+		// save anim key
+		this.animKey = key;
+
+		// set anim
+		this.anims.play(this.texture.key + "_" + key, true);
+	}
+
+	// update armor layers to match position and anim of player
 	updateArmor() {
 		// no armor
 		if (!this.armor) return;
@@ -174,12 +187,20 @@ export class Player extends LivingEntity {
 
 			// check if set
 			if (!layer) return;
+
 			// update position
 			layer.setPosition(this.x, this.y);
 
-			// update frame
-			if (this.frame.name !== layer.frame.name)
-				layer.setFrame(this.frame.name);
+			// update anim
+			if (
+				this.animKey &&
+				this.animKey !==
+					layer.anims.currentAnim?.key.replace(
+						layer?.texture.key + "_",
+						""
+					)
+			)
+				layer.play(layer?.texture.key + "_" + this.animKey, true);
 
 			// update rotation
 			layer.rotation = this.rotation;
@@ -254,42 +275,34 @@ export class Player extends LivingEntity {
 
 			// player looking left
 			if (difference.x > this.turnThreshold) {
-				this.anims.play(
-					this.scene.cache.json.get("game").player.texture +
-						"_" +
-						"left",
-					true
-				);
+				// play anim
+				this.playAnim("left");
+
+				// set direction
 				directionX = "left";
 			}
 			// player looking right
 			else if (difference.x < -this.turnThreshold) {
-				this.anims.play(
-					this.scene.cache.json.get("game").player.texture +
-						"_" +
-						"right",
-					true
-				);
+				// play anim
+				this.playAnim("right");
+
+				// set direction
 				directionX = "right";
 			}
 			// player looking away from the player
 			else if (difference.y > 0) {
-				this.anims.play(
-					this.scene.cache.json.get("game").player.texture +
-						"_" +
-						"back",
-					true
-				);
+				// play anim
+				this.playAnim("back");
+
+				// set direction
 				directionY = "up";
 			}
 			// player looking towards the player
 			else if (difference.y <= 0) {
-				this.anims.play(
-					this.scene.cache.json.get("game").player.texture +
-						"_" +
-						"front",
-					true
-				);
+				// play anim
+				this.playAnim("front");
+
+				// set direction
 				directionY = "down";
 			}
 		}
@@ -332,12 +345,8 @@ export class Player extends LivingEntity {
 
 			// play moving up animation
 			if (!this.scene.input.activePointer.isDown)
-				this.anims.play(
-					this.scene.cache.json.get("game").player.texture +
-						"_" +
-						"back",
-					true
-				);
+				// play anim
+				this.playAnim("back");
 		}
 
 		// moving down
@@ -354,12 +363,8 @@ export class Player extends LivingEntity {
 
 			// play moving down animation
 			if (!this.scene.input.activePointer.isDown)
-				this.anims.play(
-					this.scene.cache.json.get("game").player.texture +
-						"_" +
-						"front",
-					true
-				);
+				// play anim
+				this.playAnim("front");
 		}
 
 		// moving left
@@ -376,12 +381,8 @@ export class Player extends LivingEntity {
 
 			// play moving left animation
 			if (!this.scene.input.activePointer.isDown)
-				this.anims.play(
-					this.scene.cache.json.get("game").player.texture +
-						"_" +
-						"left",
-					true
-				);
+				// play anim
+				this.playAnim("left");
 		}
 
 		// moving right
@@ -398,12 +399,8 @@ export class Player extends LivingEntity {
 
 			// play moving right animation
 			if (!this.scene.input.activePointer.isDown)
-				this.anims.play(
-					this.scene.cache.json.get("game").player.texture +
-						"_" +
-						"right",
-					true
-				);
+				// play anim
+				this.playAnim("right");
 		}
 
 		// half speed if traveling diagonally
@@ -446,7 +443,7 @@ export class Player extends LivingEntity {
 		// update armor
 		else if (inventoryType === "armor") {
 			// set armor layer
-			this.armor.torso = new Phaser.GameObjects.Image(
+			this.armor.torso = new Phaser.GameObjects.Sprite(
 				this.scene,
 				0,
 				0,

@@ -118,7 +118,8 @@ export class MainMenu extends Core {
 		this.scale.on("resize", this.resizeCamera, this);
 
 		// play music
-		super.playMusic(this.cache.json.get("game").music.mainmenu);
+		if (this.cache.json.get("game").music.mainmenu)
+			super.playMusic(this.cache.json.get("game").music.mainmenu);
 	}
 
 	onPause() {

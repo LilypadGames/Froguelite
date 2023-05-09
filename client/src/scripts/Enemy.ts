@@ -5,7 +5,11 @@ import { Game } from "../scenes/Game";
 import { LivingEntity } from "./LivingEntity";
 
 export class Enemy extends LivingEntity {
+	// id
 	id: string;
+
+	// visuals
+	animKey!: string;
 
 	constructor(scene: Game, x: number, y: number, id: string) {
 		// get enemy data
@@ -32,5 +36,20 @@ export class Enemy extends LivingEntity {
 
 		// set scale
 		this.setScale(enemyData[id].scale);
+
+		// play idle anim
+		this.playAnim("idle");
+	}
+
+	playAnim(key: string) {
+		// check if exists
+		if (!this.anims.animationManager.exists(this.texture.key + "_" + key))
+			return;
+
+		// save anim key
+		this.animKey = key;
+
+		// set anim
+		this.anims.play(this.texture.key + "_" + key, true);
 	}
 }

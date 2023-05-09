@@ -1,4 +1,5 @@
 {
     "riverside": "assets/world/riverside.json",
+    "frogCaves": "assets/world/frogCaves.json",
     "dungeon": "assets/world/dungeon.json"
 }

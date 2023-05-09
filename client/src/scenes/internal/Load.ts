@@ -10,8 +10,15 @@ import store from "storejs";
 export class Load extends Phaser.Scene {
 	animQueue: {
 		texture: string;
-		anim: {
-			[key: string]: number;
+		anims: {
+			[key: string]: {
+				auto?: boolean;
+				frameRate?: number;
+				frames: {
+					start: number;
+					end?: number;
+				};
+			};
 		};
 	}[] = [];
 
@@ -96,7 +103,7 @@ export class Load extends Phaser.Scene {
 				if (textures[key])
 					this.animQueue.push({
 						texture: key,
-						anim: textures[key].anim,
+						anims: textures[key].anims,
 					});
 			}
 		}
@@ -120,15 +127,20 @@ export class Load extends Phaser.Scene {
 	create() {
 		// create anims
 		this.animQueue.forEach((element) => {
-			for (const key in element.anim) {
+			for (const key in element.anims) {
+				// create anim
 				this.anims.create({
 					key: element.texture + "_" + key,
 					frames: this.anims.generateFrameNumbers(element.texture, {
-						start: element.anim[key],
-						end: element.anim[key],
+						start: element.anims[key].frames.start,
+						end: element.anims[key].frames.end
+							? element.anims[key].frames.end
+							: element.anims[key].frames.start,
 					}),
-					frameRate: 1,
-					repeat: -1,
+					frameRate: element.anims[key].frameRate
+						? element.anims[key].frameRate
+						: 0,
+					repeat: element.anims[key].auto ? -1 : 0,
 				});
 			}
 		});
