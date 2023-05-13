@@ -67,6 +67,14 @@ export default {
 	},
 	banner: false,
 	depth: {
+		world: 1,
+		interactable: 2,
+		projectiles: 3,
+		enemy: 4,
+		player: {
+			base: 5,
+			armor: 6,
+		},
 		overlay: 100000,
 	},
 };

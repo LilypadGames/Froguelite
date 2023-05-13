@@ -5,6 +5,9 @@ import { Game } from "../scenes/Game";
 import { Entity } from "./Entity";
 import { Player } from "./Player";
 
+// config
+import config from "../config";
+
 export class Interactable extends Entity {
 	scene: Game;
 	tip: string;
@@ -24,6 +27,12 @@ export class Interactable extends Entity {
 		// save values
 		this.scene = scene;
 		this.tip = tip;
+
+		// set origin
+		this.setOrigin(0.5, 0.5);
+
+		// set depth
+		this.setDepth(config.depth.interactable);
 
 		// set as sensor (not physically collidable, but still triggers collision event)
 		this.setSensor(true);

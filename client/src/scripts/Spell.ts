@@ -5,6 +5,9 @@ import { Game } from "../scenes/Game";
 import { Enemy } from "./Enemy";
 import Utility from "./Utility";
 
+// config
+import config from "../config";
+
 export class Spell extends Phaser.Physics.Matter.Sprite {
 	// scene
 	scene: Game;
@@ -37,6 +40,15 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		this.speed = spellData[spellID].speed;
 		this.damage = spellData[spellID].damage;
 
+		// set depth (renders under/over other sprites)
+		this.setDepth(config.depth.projectiles);
+
+		// rotate with camera rotation
+		scene.fixedObjectsGroup.add(this);
+
+		// hide
+		this.hide();
+
 		// trigger collisions, but don't actually collide
 		this.setSensor(true);
 
@@ -59,15 +71,6 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 				}
 			}
 		);
-
-		// set depth (renders under/over other sprites)
-		this.setDepth(this.depth);
-
-		// rotate with camera rotation
-		scene.fixedObjectsGroup.add(this);
-
-		// hide
-		this.hide();
 
 		// events
 		scene.matter.world.on("afterupdate", this.afterupdate, this);
@@ -233,6 +236,7 @@ export class Spells extends Phaser.GameObjects.Group {
 			quantity: 10,
 			key: spellData[spellID].texture,
 			setOrigin: { x: 0.5, y: 0.5 },
+			setDepth: { value: config.depth.projectiles },
 			setScale: {
 				x: spellData[spellID].scale,
 				y: spellData[spellID].scale,

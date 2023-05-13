@@ -4,6 +4,9 @@ import { Game } from "../scenes/Game";
 // components
 import { LivingEntity } from "./LivingEntity";
 
+// config
+import config from "../config";
+
 export class Enemy extends LivingEntity {
 	// id
 	id: string;
@@ -36,6 +39,9 @@ export class Enemy extends LivingEntity {
 
 		// set scale
 		this.setScale(enemyData[id].scale);
+
+		// set depth
+		this.setDepth(config.depth.enemy);
 
 		// play idle anim
 		this.playAnim("idle");

@@ -1,6 +1,9 @@
 // imports
 import store from "storejs";
 
+// types
+import { playerEquipped, playerInventory, playerStats } from "../types/global";
+
 // scenes
 import { Game } from "../scenes/Game";
 
@@ -9,7 +12,9 @@ import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
 import { Spells } from "./Spell";
 import { Teleporter } from "./Teleporter";
-import { playerEquipped, playerInventory, playerStats } from "../types/global";
+
+// config
+import config from "../config";
 
 export class Player extends LivingEntity {
 	// typings
@@ -115,8 +120,8 @@ export class Player extends LivingEntity {
 		// default anim
 		this.playAnim("front");
 
-		// set depth (renders under/over other sprites)
-		this.setDepth(this.depth);
+		// set depth
+		this.setDepth(config.depth.player.base);
 
 		// initialize spells
 		if (this.equipped.spell) this.equip("spell", this.equipped.spell);
@@ -449,6 +454,7 @@ export class Player extends LivingEntity {
 				0,
 				item
 			)
+				.setDepth(config.depth.player.armor)
 				.setOrigin(0.5, 0.5)
 				.addToDisplayList();
 

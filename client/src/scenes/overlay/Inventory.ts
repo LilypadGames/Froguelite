@@ -1,8 +1,11 @@
+// types
+import { inventorySceneData } from "../../types/global";
+
 // internal
 import { CoreOverlay } from "../internal/CoreOverlay";
 
-// types
-import { inventorySceneData } from "../../types/global";
+// scenes
+import { Game } from "../Game";
 
 // plugin
 import {
@@ -16,7 +19,9 @@ import {
 // utility
 import ColorScheme from "../../scripts/ColorScheme";
 import Utility from "../../scripts/Utility";
-import { Game } from "../Game";
+
+// config
+import config from "../../config";
 
 export class Inventory extends CoreOverlay {
 	worldView!: Phaser.Geom.Rectangle;
@@ -177,6 +182,7 @@ export class Inventory extends CoreOverlay {
 					this.scale.gameSize.height / 2,
 					this.cache.json.get("game").player.texture
 				)
+				.setDepth(config.depth.player.base)
 				.setOrigin(0.5, 0.5)
 				.setScale(50)
 		);
@@ -195,7 +201,7 @@ export class Inventory extends CoreOverlay {
 						(this.scenePaused as Game).player.equipped
 							.armor as string
 					)
-					.setDepth(2)
+					.setDepth(config.depth.player.armor)
 					.setOrigin(0.5, 0.5)
 					.setScale(50),
 				true
@@ -217,7 +223,7 @@ export class Inventory extends CoreOverlay {
 					this.scale.gameSize.height / 2,
 					(this.scenePaused as Game).player.equipped.armor as string
 				)
-				.setDepth(2)
+				.setDepth(config.depth.player.armor)
 				.setOrigin(0.5, 0.5)
 				.setScale(50);
 		}

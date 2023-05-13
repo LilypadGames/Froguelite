@@ -18,6 +18,9 @@ import { Teleporter } from "../scripts/Teleporter";
 import { Entity } from "../scripts/Entity";
 import { Lootable } from "../scripts/Lootable";
 
+// config
+import config from "../config";
+
 //
 // This is the actual game. Every level of actual gameplay is handled by this scene. The level and its information is passed to this scene and is then populated.
 //
@@ -219,7 +222,7 @@ export class Game extends Core {
 				tileset as Phaser.Tilemaps.Tileset,
 				0,
 				0
-			);
+			).setDepth(config.depth.world);
 
 			// fix culling (fixes pop-in when player rotates camera)
 			layer.tilemapLayer.setCullPadding(4, 4);
@@ -324,7 +327,7 @@ export class Game extends Core {
 	// add player to world
 	addPlayer(x: number, y: number) {
 		// create player
-		let player = new Player(this, x, y).setOrigin(0.5, 0.5);
+		let player = new Player(this, x, y);
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(player);
