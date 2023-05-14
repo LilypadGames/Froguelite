@@ -222,7 +222,10 @@ export class Game extends Core {
 				tileset as Phaser.Tilemaps.Tileset,
 				0,
 				0
-			).setDepth(config.depth.world);
+			);
+
+			// set depth
+			layer.tilemapLayer.setDepth(config.depth.world);
 
 			// fix culling (fixes pop-in when player rotates camera)
 			layer.tilemapLayer.setCullPadding(4, 4);

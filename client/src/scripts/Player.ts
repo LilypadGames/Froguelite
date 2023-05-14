@@ -32,7 +32,6 @@ export class Player extends LivingEntity {
 	lastContact!: undefined | Interactable | Teleporter;
 
 	// visuals
-	depth: number = 10;
 	animKey!: string;
 
 	// movement
