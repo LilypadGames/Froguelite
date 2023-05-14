@@ -5,7 +5,7 @@ import store from "storejs";
 import { CoreOverlay } from "../internal/CoreOverlay";
 
 // utility
-import Utility from "../../scripts/Utility";
+import Utility from "../../scripts/utility/Utility";
 
 // UI components
 import {
@@ -15,7 +15,7 @@ import {
 	Slider,
 	RoundRectangle,
 } from "phaser3-rex-plugins/templates/ui/ui-components.js";
-import ColorScheme from "../../scripts/ColorScheme";
+import ColorScheme from "../../scripts/utility/ColorScheme";
 import { Head } from "../internal/Head";
 
 export class Options extends CoreOverlay {

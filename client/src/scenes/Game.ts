@@ -14,9 +14,9 @@ import { HUD } from "./overlay/HUD";
 import { Enemy } from "../scripts/Enemy";
 import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
-import { Teleporter } from "../scripts/Teleporter";
+import { Teleporter } from "../scripts/interactable/Teleporter";
 import { Entity } from "../scripts/Entity";
-import { Lootable } from "../scripts/Lootable";
+import { Lootable } from "../scripts/interactable/Lootable";
 
 // config
 import config from "../config";

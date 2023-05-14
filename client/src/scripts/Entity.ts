@@ -11,7 +11,7 @@ import GlowFilterPostFxPipeline from "phaser3-rex-plugins/plugins/glowfilter2pip
 import { Game } from "../scenes/Game";
 
 // utility
-import ColorScheme from "./ColorScheme";
+import ColorScheme from "./utility/ColorScheme";
 
 export class Entity extends Phaser.Physics.Matter.Sprite {
 	scene: Game;

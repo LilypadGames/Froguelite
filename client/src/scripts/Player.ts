@@ -11,7 +11,7 @@ import { Game } from "../scenes/Game";
 import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
 import { Spells } from "./Spell";
-import { Teleporter } from "./Teleporter";
+import { Teleporter } from "./interactable/Teleporter";
 
 // config
 import config from "../config";

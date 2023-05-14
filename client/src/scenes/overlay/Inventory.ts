@@ -17,8 +17,8 @@ import {
 } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 
 // utility
-import ColorScheme from "../../scripts/ColorScheme";
-import Utility from "../../scripts/Utility";
+import ColorScheme from "../../scripts/utility/ColorScheme";
+import Utility from "../../scripts/utility/Utility";
 
 // config
 import config from "../../config";

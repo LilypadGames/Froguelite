@@ -6,8 +6,8 @@ import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-p
 import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin.js";
 
 // utility
-import Utility from "./scripts/Utility";
-import ColorScheme from "./scripts/ColorScheme";
+import Utility from "./scripts/utility/Utility";
+import ColorScheme from "./scripts/utility/ColorScheme";
 
 //
 // These are the settings for the game canvas and game itself.

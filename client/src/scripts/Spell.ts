@@ -3,7 +3,7 @@ import { Game } from "../scenes/Game";
 
 // components
 import { Enemy } from "./Enemy";
-import Utility from "./Utility";
+import Utility from "./utility/Utility";
 
 // config
 import config from "../config";

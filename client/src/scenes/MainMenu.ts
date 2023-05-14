@@ -2,8 +2,8 @@
 import { Core } from "./internal/Core";
 
 // utility
-import ColorScheme from "../scripts/ColorScheme";
-import Utility from "../scripts/Utility";
+import ColorScheme from "../scripts/utility/ColorScheme";
+import Utility from "../scripts/utility/Utility";
 import { sceneData } from "../types/global";
 
 //

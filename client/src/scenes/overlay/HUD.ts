@@ -14,8 +14,8 @@ import { Healthbar } from "../../scripts/Healthbar";
 import { Player } from "../../scripts/Player";
 
 // utility
-import ColorScheme from "../../scripts/ColorScheme";
-import Utility from "../../scripts/Utility";
+import ColorScheme from "../../scripts/utility/ColorScheme";
+import Utility from "../../scripts/utility/Utility";
 
 // data
 import config from "../../config";
