@@ -8,6 +8,12 @@
 			"type": "node-terminal"
 		},
 		{
+			"name": "[Client] Dev (Hosted)",
+			"command": "cd client && npm run host",
+			"request": "launch",
+			"type": "node-terminal"
+		},
+		{
 			"name": "[Client] Run Web Server",
 			"command": "cd client && npm run serve",
 			"request": "launch",
