@@ -15,9 +15,6 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 	// id
 	spellID: string;
 
-	// visual
-	depth: number = 11;
-
 	// stats
 	speed!: number;
 	lifespan!: number;
