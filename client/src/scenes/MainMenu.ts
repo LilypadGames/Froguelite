@@ -73,40 +73,7 @@ export class MainMenu extends Core {
 		});
 
 		// on click, go to game
-		this.input.on(
-			"pointerdown",
-			() => {
-				// sfx
-				this.sound.play("ui_select", {
-					volume: this.sceneHead.audio.sfx.volume.value,
-				});
-
-				// tween logo out
-				this.tweens.add({
-					targets: this.logo,
-					scale: 0,
-					duration: 300,
-					ease: "Sine.easeOut",
-					onComplete: () => {
-						// change to game scene
-						this.changeScene("Game", {
-							sceneHead: this.sceneHead,
-							level: this.cache.json.get("game").start,
-						});
-					},
-				});
-
-				// tween text out
-				this.tweens.add({
-					targets: this.begin,
-					scaleX: 0,
-					scaleY: 0,
-					duration: 300,
-					ease: "Sine.easeOut",
-				});
-			},
-			this
-		);
+		this.input.on("pointerdown", this.enterGame, this);
 
 		// execute when game is paused/resumed
 		this.events.on("pause", this.onPause, this);
@@ -120,6 +87,42 @@ export class MainMenu extends Core {
 		// play music
 		if (this.cache.json.get("game").music.mainmenu)
 			super.playMusic(this.cache.json.get("game").music.mainmenu);
+	}
+
+	update() {
+		if (this.sceneHead.playerInput.interaction.pressed.length > 0)
+			this.enterGame();
+	}
+
+	enterGame() {
+		// sfx
+		this.sound.play("ui_select", {
+			volume: this.sceneHead.audio.sfx.volume.value,
+		});
+
+		// tween logo out
+		this.tweens.add({
+			targets: this.logo,
+			scale: 0,
+			duration: 300,
+			ease: "Sine.easeOut",
+			onComplete: () => {
+				// change to game scene
+				this.changeScene("Game", {
+					sceneHead: this.sceneHead,
+					level: this.cache.json.get("game").start,
+				});
+			},
+		});
+
+		// tween text out
+		this.tweens.add({
+			targets: this.begin,
+			scaleX: 0,
+			scaleY: 0,
+			duration: 300,
+			ease: "Sine.easeOut",
+		});
 	}
 
 	onPause() {

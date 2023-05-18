@@ -26,7 +26,7 @@ import config from "../../config";
 export class Inventory extends CoreOverlay {
 	worldView!: Phaser.Geom.Rectangle;
 	background!: Phaser.GameObjects.Rectangle;
-	keyTAB!: Phaser.Input.Keyboard.Key;
+	// keyTAB!: Phaser.Input.Keyboard.Key;
 	characterRepresentation!: Phaser.GameObjects.Group;
 	currentInventory!: "spells" | "armors";
 	tabs!: Buttons;
@@ -50,11 +50,11 @@ export class Inventory extends CoreOverlay {
 		// set up ESC key
 		super.preload();
 
-		// make TAB key close inventory (like ESC key)
-		this.keyTAB = (
-			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-		this.keyTAB.once("down", super.resumePreviousScene, this);
+		// // make TAB key close inventory (like ESC key)
+		// this.keyTAB = (
+		// 	this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// ).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+		// this.keyTAB.once("down", super.resumePreviousScene, this);
 	}
 
 	create() {
@@ -171,6 +171,12 @@ export class Inventory extends CoreOverlay {
 
 		// show menu when resumed
 		this.events.on("resume", this.show, this);
+	}
+
+	update() {
+		// close inventory
+		if (this.sceneHead.playerInput.interaction.pressed.includes("START"))
+			super.resumePreviousScene();
 	}
 
 	createCharacterRepresentation() {
@@ -650,7 +656,7 @@ export class Inventory extends CoreOverlay {
 	shutdown() {
 		// remove listeners
 		this.events.removeListener("resume", this.show, this);
-		this.keyTAB.removeListener("down", super.resumePreviousScene, this);
+		// this.keyTAB.removeListener("down", super.resumePreviousScene, this);
 
 		// base class shutdown
 		super.shutdown();

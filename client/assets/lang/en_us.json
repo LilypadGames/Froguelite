@@ -1,6 +1,6 @@
 {
     "game_title": "Froguelite",
-    "opening_hint": "Click Anywhere To Begin",
+    "opening_hint": "Press Any Key To Begin",
     "player": "Pp",
     "enemy": {
         "lsf": "LSF",

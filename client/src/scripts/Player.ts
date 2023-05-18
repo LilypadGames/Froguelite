@@ -18,15 +18,15 @@ import config from "../config";
 
 export class Player extends LivingEntity {
 	// typings
-	keyArrows: Phaser.Types.Input.Keyboard.CursorKeys;
-	keyWASD: {
-		W: Phaser.Input.Keyboard.Key;
-		A: Phaser.Input.Keyboard.Key;
-		S: Phaser.Input.Keyboard.Key;
-		D: Phaser.Input.Keyboard.Key;
-	};
-	keyF: Phaser.Input.Keyboard.Key;
-	keyTAB: Phaser.Input.Keyboard.Key;
+	// keyArrows: Phaser.Types.Input.Keyboard.CursorKeys;
+	// keyWASD: {
+	// 	W: Phaser.Input.Keyboard.Key;
+	// 	A: Phaser.Input.Keyboard.Key;
+	// 	S: Phaser.Input.Keyboard.Key;
+	// 	D: Phaser.Input.Keyboard.Key;
+	// };
+	// keyF: Phaser.Input.Keyboard.Key;
+	// keyTAB: Phaser.Input.Keyboard.Key;
 
 	// interaction
 	lastContact!: undefined | Interactable | Teleporter;
@@ -83,35 +83,35 @@ export class Player extends LivingEntity {
 		this.inventory = saveData ? saveData.inventory : playerData.inventory;
 
 		// movement keys
-		this.keyArrows = (
-			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		).createCursorKeys();
-		this.keyWASD = {
-			W: (
-				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-			).addKey(Phaser.Input.Keyboard.KeyCodes.W),
-			A: (
-				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-			).addKey(Phaser.Input.Keyboard.KeyCodes.A),
-			S: (
-				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-			).addKey(Phaser.Input.Keyboard.KeyCodes.S),
-			D: (
-				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-			).addKey(Phaser.Input.Keyboard.KeyCodes.D),
-		};
+		// this.keyArrows = (
+		// 	scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// ).createCursorKeys();
+		// this.keyWASD = {
+		// 	W: (
+		// 		scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// 	).addKey(Phaser.Input.Keyboard.KeyCodes.W),
+		// 	A: (
+		// 		scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// 	).addKey(Phaser.Input.Keyboard.KeyCodes.A),
+		// 	S: (
+		// 		scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// 	).addKey(Phaser.Input.Keyboard.KeyCodes.S),
+		// 	D: (
+		// 		scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// 	).addKey(Phaser.Input.Keyboard.KeyCodes.D),
+		// };
 
 		// interact key
-		this.keyF = (
-			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		).addKey(Phaser.Input.Keyboard.KeyCodes.F);
-		this.keyF.on("down", this.checkInteract, this);
+		// this.keyF = (
+		// 	scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// ).addKey(Phaser.Input.Keyboard.KeyCodes.F);
+		// this.keyF.on("down", this.checkInteract, this);
 
-		// inventory key
-		this.keyTAB = (
-			scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-		this.keyTAB.on("down", this.toggleInventory, this);
+		// // inventory key
+		// this.keyTAB = (
+		// 	scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// ).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+		// this.keyTAB.on("down", this.toggleInventory, this);
 
 		// scale
 		this.setScale(playerData.scale);
@@ -138,8 +138,8 @@ export class Player extends LivingEntity {
 		// remove listeners
 		this.scene.events.removeListener("update", this.update, this);
 		this.scene.events.removeListener("postupdate", this.postupdate, this);
-		this.keyF.removeListener("down", this.checkInteract, this);
-		this.keyTAB.removeListener("down", this.toggleInventory, this);
+		// this.keyF.removeListener("down", this.checkInteract, this);
+		// this.keyTAB.removeListener("down", this.toggleInventory, this);
 
 		// save player data
 		store.set(
@@ -155,6 +155,22 @@ export class Player extends LivingEntity {
 	}
 
 	update() {
+		// open inventory
+		if (
+			this.scene.sceneHead.playerInput.interaction.pressed.includes(
+				"START"
+			)
+		)
+			this.toggleInventory();
+
+		// interact
+		if (
+			this.scene.sceneHead.playerInput.interaction.pressed.includes(
+				"RC_E"
+			)
+		)
+			this.checkInteract();
+
 		// handle attacking
 		if (this.scene.time.now > 2000) this.handleAttack();
 
@@ -311,32 +327,32 @@ export class Player extends LivingEntity {
 			}
 		}
 
-		// get keyboard presses
-		let key = {
-			left: {
-				isDown: this.keyArrows.left.isDown
-					? this.keyArrows.left.isDown
-					: this.keyWASD.A.isDown,
-			},
-			right: {
-				isDown: this.keyArrows.right.isDown
-					? this.keyArrows.right.isDown
-					: this.keyWASD.D.isDown,
-			},
-			up: {
-				isDown: this.keyArrows.up.isDown
-					? this.keyArrows.up.isDown
-					: this.keyWASD.W.isDown,
-			},
-			down: {
-				isDown: this.keyArrows.down.isDown
-					? this.keyArrows.down.isDown
-					: this.keyWASD.S.isDown,
-			},
-		};
+		// // get keyboard presses
+		// let key = {
+		// 	left: {
+		// 		isDown: this.keyArrows.left.isDown
+		// 			? this.keyArrows.left.isDown
+		// 			: this.keyWASD.A.isDown,
+		// 	},
+		// 	right: {
+		// 		isDown: this.keyArrows.right.isDown
+		// 			? this.keyArrows.right.isDown
+		// 			: this.keyWASD.D.isDown,
+		// 	},
+		// 	up: {
+		// 		isDown: this.keyArrows.up.isDown
+		// 			? this.keyArrows.up.isDown
+		// 			: this.keyWASD.W.isDown,
+		// 	},
+		// 	down: {
+		// 		isDown: this.keyArrows.down.isDown
+		// 			? this.keyArrows.down.isDown
+		// 			: this.keyWASD.S.isDown,
+		// 	},
+		// };
 
 		// moving up
-		if (key.up.isDown) {
+		if (this.scene.sceneHead.playerInput.direction.UP) {
 			// determine direction
 			if (directionY === "") directionY = "up";
 
@@ -354,7 +370,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving down
-		else if (key.down.isDown) {
+		else if (this.scene.sceneHead.playerInput.direction.DOWN) {
 			// determine direction
 			if (directionY === "") directionY = "down";
 
@@ -372,7 +388,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving left
-		if (key.left.isDown) {
+		if (this.scene.sceneHead.playerInput.direction.LEFT) {
 			// determine direction
 			if (directionX === "") directionX = "left";
 
@@ -390,7 +406,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving right
-		else if (key.right.isDown) {
+		else if (this.scene.sceneHead.playerInput.direction.RIGHT) {
 			// determine direction
 			if (directionX === "") directionX = "right";
 
@@ -422,10 +438,10 @@ export class Player extends LivingEntity {
 
 		// not moving
 		if (
-			!key.left.isDown &&
-			!key.right.isDown &&
-			!key.up.isDown &&
-			!key.down.isDown
+			!this.scene.sceneHead.playerInput.direction.UP &&
+			!this.scene.sceneHead.playerInput.direction.DOWN &&
+			!this.scene.sceneHead.playerInput.direction.LEFT &&
+			!this.scene.sceneHead.playerInput.direction.RIGHT
 		) {
 			this.setVelocity(0, 0);
 		}

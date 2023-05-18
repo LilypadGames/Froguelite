@@ -65,7 +65,7 @@
   "resolved" "https://registry.npmjs.org/@types/node/-/node-18.16.1.tgz"
   "version" "18.16.1"
 
-"@types/storejs@^2.0.1":
+"@types/storejs@^2.0.3":
   "integrity" "sha512-VF/KPGUEKxi7j3//HaPCKaKbMtKOnWYf+aLzZcBQrhQAcHevA4OA2HwFpeJ6S6JD7xpS06G3K7oZkyIfp9lfeQ=="
   "resolved" "https://registry.npmjs.org/@types/storejs/-/storejs-2.0.3.tgz"
   "version" "2.0.3"
@@ -242,12 +242,22 @@
   "resolved" "https://registry.npmjs.org/papaparse/-/papaparse-5.4.1.tgz"
   "version" "5.4.1"
 
-"phaser@^3.60.0":
+"phaser-matter-collision-plugin@^1.0.0":
+  "integrity" "sha512-8ihbK5tPmMzpLSbJkrnyPKNZT/TyhN2bjHtthTl2cmTCiJpY6Ih7SZf1Kb6zWtUD8kWlllPrBktF1CcwmMvc0w=="
+  "resolved" "https://registry.npmjs.org/phaser-matter-collision-plugin/-/phaser-matter-collision-plugin-1.0.0.tgz"
+  "version" "1.0.0"
+
+"phaser@^3.55.2", "phaser@^3.60.0":
   "integrity" "sha512-IKUy35EnoEVcl2EmJ8WOyK4X8OoxHYdlhZLgRGpNrvD1fEagYffhVmwHcapE/tGiLgyrnezmXIo5RrH2NcrTHw=="
   "resolved" "https://registry.npmjs.org/phaser/-/phaser-3.60.0.tgz"
   "version" "3.60.0"
   dependencies:
     "eventemitter3" "^5.0.0"
+
+"phaser3-merged-input@^1.6.0":
+  "integrity" "sha512-/9Qa+APji8+KmIQXLr70aEovvH6/cT7pxNEF5qf1kvme5u4amNgx3VlNg+fr+K8KbCguLBvMd4MQ67PZigZ82w=="
+  "resolved" "https://registry.npmjs.org/phaser3-merged-input/-/phaser3-merged-input-1.6.0.tgz"
+  "version" "1.6.0"
 
 "phaser3-rex-plugins@^1.60.0":
   "integrity" "sha512-poYBr/pfRvjDe7J7Z3tqmrHcUDSLNehiNu95wnvSLVwDEePNwuPSvuw6oat3z0tx0Qmw04AtCHfXd1ADLeuFXA=="
@@ -302,7 +312,7 @@
   "resolved" "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz"
   "version" "1.0.2"
 
-"storejs@^2.0.1":
+"storejs@^2.0.3":
   "integrity" "sha512-yswAIcCeLpHpJk366b8ICzZQneoV9W+wC5qt+XCKa+FkqwAtdQBhOGejaJK2JUuIFxUpu/FUZq3YG7uSQwoXEQ=="
   "resolved" "https://registry.npmjs.org/storejs/-/storejs-2.0.3.tgz"
   "version" "2.0.3"

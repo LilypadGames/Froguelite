@@ -12,7 +12,7 @@ import { overlaySceneData } from "../../types/global";
 export class CoreOverlay extends Phaser.Scene {
 	sceneHead!: Head;
 	scenePaused!: Phaser.Scene;
-	keyESC!: Phaser.Input.Keyboard.Key;
+	// keyESC!: Phaser.Input.Keyboard.Key;
 
 	constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
 		super(config);
@@ -33,21 +33,27 @@ export class CoreOverlay extends Phaser.Scene {
 		// turn off default debug lines when game first launches
 		this.matter.world.drawDebug = false;
 
-		// menu overlay toggle hotkey
-		this.keyESC = (
-			this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+		// // menu overlay toggle hotkey
+		// this.keyESC = (
+		// 	this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+		// ).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
-		// toggle menu overlay
-		this.keyESC.on("down", this.resumePreviousScene, this);
+		// // toggle menu overlay
+		// this.keyESC.on("down", this.resumePreviousScene, this);
 
 		// shutdown event
 		this.events.once("shutdown", this.shutdown, this);
 	}
 
+	update() {
+		// resume previous scene
+		if (this.sceneHead.playerInput.interaction.pressed.includes("SELECT"))
+			this.resumePreviousScene();
+	}
+
 	shutdown() {
-		// remove listeners
-		this.keyESC.removeListener("down", this.resumePreviousScene, this);
+		// // remove listeners
+		// this.keyESC.removeListener("down", this.resumePreviousScene, this);
 	}
 
 	resumePreviousScene() {

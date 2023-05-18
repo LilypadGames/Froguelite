@@ -46,14 +46,44 @@ export class Debug extends Phaser.Scene {
 		let pressedKeys: Array<string> = [];
 
 		// populate pressed keys
-		if (this.player.keyArrows.up.isDown) pressedKeys.push("Up Arrow");
-		if (this.player.keyArrows.down.isDown) pressedKeys.push("Down Arrow");
-		if (this.player.keyArrows.left.isDown) pressedKeys.push("Left Arrow");
-		if (this.player.keyArrows.right.isDown) pressedKeys.push("Right Arrow");
-		if (this.player.keyWASD.W.isDown) pressedKeys.push("W Key (Up)");
-		if (this.player.keyWASD.S.isDown) pressedKeys.push("S Key (Down)");
-		if (this.player.keyWASD.A.isDown) pressedKeys.push("A Key (Left)");
-		if (this.player.keyWASD.D.isDown) pressedKeys.push("D Key (Right)");
+		if (this.sceneGame.sceneHead.playerInput.direction.UP)
+			pressedKeys.push("UP");
+		if (this.sceneGame.sceneHead.playerInput.direction.DOWN)
+			pressedKeys.push("DOWN");
+		if (this.sceneGame.sceneHead.playerInput.direction.LEFT)
+			pressedKeys.push("LEFT");
+		if (this.sceneGame.sceneHead.playerInput.direction.RIGHT)
+			pressedKeys.push("RIGHT");
+		if (
+			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+				"START"
+			)
+		)
+			pressedKeys.push("START");
+		if (
+			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+				"SELECT"
+			)
+		)
+			pressedKeys.push("SELECT");
+		if (
+			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+				"RC_E"
+			)
+		)
+			pressedKeys.push("INTERACT");
+		if (
+			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+				"LB"
+			)
+		)
+			pressedKeys.push("CYCLE LEFT");
+		if (
+			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+				"RB"
+			)
+		)
+			pressedKeys.push("CYCLE RIGHT");
 
 		// update debug
 		this.debugText.setText([

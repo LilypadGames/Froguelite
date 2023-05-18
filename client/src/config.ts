@@ -4,6 +4,7 @@ import Phaser from "phaser";
 // plugins
 import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin.js";
+import MergedInput from "phaser3-merged-input";
 
 // utility
 import Utility from "./scripts/utility/Utility";
@@ -48,6 +49,9 @@ export default {
 			},
 		},
 	},
+	input: {
+		gamepad: true,
+	},
 	dom: {
 		createContainer: true,
 	},
@@ -62,6 +66,13 @@ export default {
 				key: "rexGlowFilterPipeline",
 				plugin: GlowFilterPipelinePlugin,
 				start: true,
+			},
+		],
+		scene: [
+			{
+				key: "mergedInput",
+				plugin: MergedInput,
+				mapping: "mergedInput",
 			},
 		],
 	},
