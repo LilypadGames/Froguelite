@@ -43,7 +43,7 @@ I am currently working alone on this project- creating both the assets and the c
 
 Typescript is easy to develop with, as it is essentially just Javascript with type-safety. This project uses the Phaser game framework which makes it really easy to use JS knowledge to make a game for the web, and with the Tauri framework, we can then easily wrap web apps into a standalone cross-platform desktop app.
 
-You can clone this repository, make changes, and then submit a push request. Reach out to me on Discord (Dan Mizu#8420) if you are interested or have absolutely ANY questions.
+You can clone this repository, make changes, and then submit a pull request. Reach out to me on Discord (Dan Mizu#8420) if you are interested or have absolutely ANY questions.
 
 1. **Install Node.js/npm, Rust, and Visual Studio Code**
 
@@ -79,4 +79,4 @@ If you want to build the app yourself, you can use the `Build` task.
 
 6. **Submit Changes For Review and Merging**
 
-When you're finished implementing a new feature/mechanic, push your changes to the repo and then submit a PR. This process is detailed here: <https://github.com/firstcontributions/first-contributions>.
+When you're finished implementing a new feature/mechanic, push your changes (it will prompt you to fork the main repository) then submit a pull request to the main repository. This process is detailed here: <https://github.com/firstcontributions/first-contributions>.
