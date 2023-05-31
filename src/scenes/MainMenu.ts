@@ -72,8 +72,8 @@ export class MainMenu extends Core {
 			repeat: -1,
 		});
 
-		// on click, go to game
-		this.input.on("pointerdown", this.enterGame, this);
+		// // on click, go to game
+		// this.input.on("pointerdown", this.enterGame, this);
 
 		// execute when game is paused/resumed
 		this.events.on("pause", this.onPause, this);
@@ -90,7 +90,7 @@ export class MainMenu extends Core {
 	}
 
 	update() {
-		if (this.sceneHead.playerInput.interaction.pressed.length > 0)
+		if (this.input.activePointer.isDown || this.sceneHead.playerInput.interaction.pressed.length > 0)
 			this.enterGame();
 	}
 
@@ -140,7 +140,7 @@ export class MainMenu extends Core {
 		this.events.removeListener("pause", this.onPause, this);
 		this.events.removeListener("resume", this.onResume, this);
 		this.scale.removeListener("resize", this.resizeCamera, this);
-		this.input.removeListener("pointerdown");
+		// this.input.removeListener("pointerdown");
 
 		// base class shutdown
 		super.shutdown();

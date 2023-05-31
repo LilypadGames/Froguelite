@@ -63,6 +63,18 @@ export class Head extends Phaser.Scene {
 		this.scene.launch("MainMenu", { sceneHead: this });
 	}
 
+	update() {
+		// handle cursor
+		if (this.input.activePointer.isDown)
+			this.input.setDefaultCursor(
+				"url(/input/cursors/cursor_small.cur) 16 16, pointer"
+			);
+		else
+			this.input.setDefaultCursor(
+				"url(/input/cursors/cursor_large.cur) 16 16, pointer"
+			);
+	}
+
 	// cursor
 	cursor = {
 		init: () => {
@@ -71,27 +83,27 @@ export class Head extends Phaser.Scene {
 				"url(/input/cursors/cursor_large.cur) 16 16, pointer"
 			);
 
-			// change cursor on click
-			this.input.on(
-				"pointerdown",
-				() => {
-					this.input.setDefaultCursor(
-						"url(/input/cursors/cursor_small.cur) 16 16, pointer"
-					);
-				},
-				this
-			);
+			// // change cursor on click
+			// this.input.on(
+			// 	"pointerdown",
+			// 	() => {
+			// 		this.input.setDefaultCursor(
+			// 			"url(/input/cursors/cursor_small.cur) 16 16, pointer"
+			// 		);
+			// 	},
+			// 	this
+			// );
 
-			// change cursor back when click released
-			this.input.on(
-				"pointerup",
-				() => {
-					this.input.setDefaultCursor(
-						"url(/input/cursors/cursor_large.cur) 16 16, pointer"
-					);
-				},
-				this
-			);
+			// // change cursor back when click released
+			// this.input.on(
+			// 	"pointerup",
+			// 	() => {
+			// 		this.input.setDefaultCursor(
+			// 			"url(/input/cursors/cursor_large.cur) 16 16, pointer"
+			// 		);
+			// 	},
+			// 	this
+			// );
 		},
 	};
 

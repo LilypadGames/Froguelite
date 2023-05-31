@@ -26,6 +26,13 @@ export class HUD extends Phaser.Scene {
 	tip!: Phaser.GameObjects.Text;
 	playerHealthbar!: Healthbar;
 	camera!: Camera;
+	itemDisplay:
+		| {
+				background: Phaser.GameObjects.Rectangle;
+				display: Sizer;
+				close: () => void;
+		  }
+		| undefined;
 
 	constructor() {
 		super({ key: "HUD" });
@@ -88,10 +95,20 @@ export class HUD extends Phaser.Scene {
 	update() {
 		// if there are bosses, detect if any nearby the player
 		if (this.sceneGame.bossGroup.getLength() > 0) this.detectBosses();
+
+		// close item display
+		if (
+			this.itemDisplay &&
+			(this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
+				"RC_E"
+			) ||
+				this.input.activePointer.isDown)
+		)
+			this.itemDisplay.close();
 	}
 
 	// set tip above player
-	setTip(text: string, time?: number) {
+	setTip(text: string, _time?: number) {
 		this.tip.setText(text);
 	}
 
@@ -168,7 +185,6 @@ export class HUD extends Phaser.Scene {
 		// pause game
 		this.scene.pause("Game", { pauseHUD: false });
 
-		// create transparent background overlay
 		let background = this.add
 			.rectangle(
 				this.scale.gameSize.width / 2,
@@ -180,15 +196,6 @@ export class HUD extends Phaser.Scene {
 			)
 			.setAlpha(0);
 
-		// fade in background
-		this.tweens.add({
-			targets: background,
-			ease: "Sine.easeIn",
-			duration: 300,
-			alpha: 0.5,
-		});
-
-		// create display
 		let display = new Sizer(this, {
 			x: this.scale.gameSize.width / 2,
 			y: this.scale.gameSize.height / 2,
@@ -266,6 +273,59 @@ export class HUD extends Phaser.Scene {
 			.setScale(0.5)
 			.layout();
 
+		let close = () => {
+			// remove input listener
+			// this.input.removeListener("pointerdown");
+			if (this.itemDisplay) delete this.itemDisplay;
+
+			// sfx
+			this.sound.play("ui_select", {
+				volume: this.sceneGame.sceneHead.audio.sfx.volume.value,
+			});
+
+			// fade out background
+			this.tweens.add({
+				targets: background,
+				ease: "Sine.easeOut",
+				duration: 300,
+				alpha: 0,
+				onComplete: () => {
+					// delete background
+					background.destroy();
+				},
+			});
+
+			// tween out display
+			this.tweens.add({
+				targets: display,
+				scale: 0,
+				ease: "Sine.easeOut",
+				duration: 300,
+				onComplete: () => {
+					// delete item display
+					display.destroy();
+
+					// resume game
+					this.scene.resume("Game");
+				},
+			});
+		};
+
+		// create display
+		this.itemDisplay = {
+			background,
+			display,
+			close,
+		};
+
+		// fade in background
+		this.tweens.add({
+			targets: background,
+			ease: "Sine.easeIn",
+			duration: 300,
+			alpha: 0.5,
+		});
+
 		// delay show
 		setTimeout(() => {
 			// show
@@ -281,46 +341,10 @@ export class HUD extends Phaser.Scene {
 					// displayed item callback
 					displayedCallback();
 				},
-				onComplete: () => {
-					// allow closing
-					this.input.on("pointerdown", () => {
-						// remove input listener
-						this.input.removeListener("pointerdown");
-
-						// sfx
-						this.sound.play("ui_select", {
-							volume: this.sceneGame.sceneHead.audio.sfx.volume
-								.value,
-						});
-
-						// fade out background
-						this.tweens.add({
-							targets: background,
-							ease: "Sine.easeOut",
-							duration: 300,
-							alpha: 0,
-							onComplete: () => {
-								// delete background
-								background.destroy();
-							},
-						});
-
-						// tween out display
-						this.tweens.add({
-							targets: display,
-							scale: 0,
-							ease: "Sine.easeOut",
-							duration: 300,
-							onComplete: () => {
-								// delete item display
-								display.destroy();
-
-								// resume game
-								this.scene.resume("Game");
-							},
-						});
-					});
-				},
+				// onComplete: () => {
+				// 	// allow closing
+				// 	this.input.on("pointerdown", close);
+				// },
 			});
 		}, 1300);
 	}
