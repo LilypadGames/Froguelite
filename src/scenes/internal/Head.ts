@@ -18,6 +18,7 @@ import { Game } from "../Game";
 //
 
 export class Head extends Phaser.Scene {
+	// scenes
 	sceneMain!: Core;
 	sceneOverlayMenu!: CoreOverlay;
 	sceneHUD!: HUD;
@@ -25,21 +26,6 @@ export class Head extends Phaser.Scene {
 	// inputs
 	private mergedInput!: MergedInput;
 	playerInput!: Player;
-	// keyBack!: Phaser.Input.Keyboard.Key | Phaser.Input.Gamepad.Button; // used for returning to previous screen, or accessing pause menu from the game (also called select on some gamepads)
-	// keyStart!: Phaser.Input.Keyboard.Key | Phaser.Input.Gamepad.Button; // used for inventory menu
-	// keySelect!: Phaser.Input.Gamepad.Button; // (gamepad only) used for selecting an option or continuing past a screen
-	// keyReturn!: Phaser.Input.Gamepad.Button; // (gamepad only) used for returning from a menu
-	// keyMove!:
-	// 	| {
-	// 			up: Phaser.Input.Keyboard.Key;
-	// 			left: Phaser.Input.Keyboard.Key;
-	// 			right: Phaser.Input.Keyboard.Key;
-	// 			down: Phaser.Input.Keyboard.Key;
-	// 	  }
-	// 	| Phaser.Input.Gamepad.Axis; // player movement and GUI maneuvering
-	// keyInteract!: Phaser.Input.Keyboard.Key | Phaser.Input.Gamepad.Button; // used mainly in game for interacting
-	// keyLeft!: Phaser.Input.Keyboard.Key | Phaser.Input.Gamepad.Button; // used to rotate camera left or in GUI maneuvering
-	// keyRight!: Phaser.Input.Keyboard.Key | Phaser.Input.Gamepad.Button; // used to rotate camera right or in GUI maneuvering
 
 	constructor() {
 		super({ key: "Head" });
@@ -75,69 +61,14 @@ export class Head extends Phaser.Scene {
 
 		// start menu scene
 		this.scene.launch("MainMenu", { sceneHead: this });
-
-		// // check for controller
-		// if (
-		// 	(this.input.gamepad as Phaser.Input.Gamepad.GamepadPlugin).total > 0
-		// )
-		// 	this.inputType.controller.connect();
-		// // default to kbm
-		// else this.inputType.kbm.detected();
-
-		// // listen for controller connection
-		// (this.input.gamepad as Phaser.Input.Gamepad.GamepadPlugin).once(
-		// 	"connected",
-		// 	this.inputType.controller.connect
-		// );
-
-		// // listen for controller disconnection
-		// (this.input.gamepad as Phaser.Input.Gamepad.GamepadPlugin).once(
-		// 	"disconnected",
-		// 	this.inputType.controller.disconnect
-		// );
-
-		// // listen for touch detection
-		// window.addEventListener("touchstart", this.inputType.touch.detected);
 	}
-
-	// input type
-	// inputType = {
-	// 	kbm: {
-	// 		detected: () => {
-	// 			// set inputs
-	// 		},
-	// 	},
-	// 	controller: {
-	// 		connect: () => {
-	// 			console.log("controller detected");
-
-	// 			// set inputs
-	// 			this.playerInput = this.mergedInput.addPlayer(0);
-	// 			this.mergedInput
-	// 				.defineKey(0, "UP", "W")
-	// 				.defineKey(0, "DOWN", "S")
-	// 				.defineKey(0, "LEFT", "A")
-	// 				.defineKey(0, "RIGHT", "D")
-	// 				.defineKey(0, "RC_S", "U")
-	// 				.defineKey(0, "RC_E", "I")
-	// 				.defineKey(0, "RC_W", "O")
-	// 				.defineKey(0, "RC_N", "P");
-	// 		},
-	// 		disconnect: () => {
-	// 			console.log("controller disconnected");
-	// 		},
-	// 	},
-	// 	touch: {
-	// 		detected: () => {},
-	// 	},
-	// };
 
 	// cursor
 	cursor = {
 		init: () => {
 			// default cursor
 			this.input.setDefaultCursor(
-				"url(input/cursors/cursor_large.cur) 16 16, pointer"
+				"url(/input/cursors/cursor_large.cur) 16 16, pointer"
 			);
 
 			// change cursor on click
@@ -145,7 +76,7 @@ export class Head extends Phaser.Scene {
 				"pointerdown",
 				() => {
 					this.input.setDefaultCursor(
-						"url(input/cursors/cursor_small.cur) 16 16, pointer"
+						"url(/input/cursors/cursor_small.cur) 16 16, pointer"
 					);
 				},
 				this
@@ -156,7 +87,7 @@ export class Head extends Phaser.Scene {
 				"pointerup",
 				() => {
 					this.input.setDefaultCursor(
-						"url(input/cursors/cursor_large.cur) 16 16, pointer"
+						"url(/input/cursors/cursor_large.cur) 16 16, pointer"
 					);
 				},
 				this

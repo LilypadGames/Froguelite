@@ -47,7 +47,7 @@ export class CoreOverlay extends Phaser.Scene {
 
 	update() {
 		// resume previous scene
-		if (this.sceneHead.playerInput.interaction.pressed.includes("SELECT"))
+		if (this.sceneHead.playerInput.interaction_mapped.pressed.includes("SELECT"))
 			this.resumePreviousScene();
 	}
 

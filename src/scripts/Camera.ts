@@ -6,7 +6,6 @@ import store from "storejs";
 import { Game } from "../scenes/Game";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
-	keyQE: { Q: Phaser.Input.Keyboard.Key; E: Phaser.Input.Keyboard.Key };
 	scene: Game;
 
 	// config
@@ -43,14 +42,6 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		);
 
 		// populate key inputs
-		this.keyQE = {
-			Q: (
-				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-			).addKey(Phaser.Input.Keyboard.KeyCodes.Q),
-			E: (
-				scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-			).addKey(Phaser.Input.Keyboard.KeyCodes.E),
-		};
 		scene.input.on(
 			"wheel",
 			(pointer: Phaser.Input.Pointer) => {
@@ -65,7 +56,16 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 
 	update() {
 		// rotate camera
-		if (this.keyQE.Q.isDown || this.keyQE.E.isDown) this.handleRotation();
+		// if (this.keyQE.Q.isDown || this.keyQE.E.isDown) this.handleRotation();
+		if (
+			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
+				"LB"
+			) ||
+			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
+				"RB"
+			)
+		)
+			this.handleRotation();
 	}
 
 	resize(gameSize: Phaser.Structs.Size) {
@@ -92,9 +92,12 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	// handle rotation of objects that are to be fixed to camera rotation
 	handleRotation() {
 		// get new rotation
-		let newRotation = this.keyQE.Q.isDown
-			? (this as any).rotation + this.rotationSpeed
-			: (this as any).rotation - this.rotationSpeed;
+		let newRotation =
+			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
+				"LB"
+			)
+				? (this as any).rotation + this.rotationSpeed
+				: (this as any).rotation - this.rotationSpeed;
 
 		// store rotation
 		store.set("settings.options.camera.rotation", newRotation);

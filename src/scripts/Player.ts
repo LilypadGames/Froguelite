@@ -17,17 +17,6 @@ import { Teleporter } from "./interactable/Teleporter";
 import config from "../config";
 
 export class Player extends LivingEntity {
-	// typings
-	// keyArrows: Phaser.Types.Input.Keyboard.CursorKeys;
-	// keyWASD: {
-	// 	W: Phaser.Input.Keyboard.Key;
-	// 	A: Phaser.Input.Keyboard.Key;
-	// 	S: Phaser.Input.Keyboard.Key;
-	// 	D: Phaser.Input.Keyboard.Key;
-	// };
-	// keyF: Phaser.Input.Keyboard.Key;
-	// keyTAB: Phaser.Input.Keyboard.Key;
-
 	// interaction
 	lastContact!: undefined | Interactable | Teleporter;
 
@@ -82,37 +71,6 @@ export class Player extends LivingEntity {
 		this.equipped = saveData ? saveData.equipped : playerData.equipped;
 		this.inventory = saveData ? saveData.inventory : playerData.inventory;
 
-		// movement keys
-		// this.keyArrows = (
-		// 	scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// ).createCursorKeys();
-		// this.keyWASD = {
-		// 	W: (
-		// 		scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// 	).addKey(Phaser.Input.Keyboard.KeyCodes.W),
-		// 	A: (
-		// 		scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// 	).addKey(Phaser.Input.Keyboard.KeyCodes.A),
-		// 	S: (
-		// 		scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// 	).addKey(Phaser.Input.Keyboard.KeyCodes.S),
-		// 	D: (
-		// 		scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// 	).addKey(Phaser.Input.Keyboard.KeyCodes.D),
-		// };
-
-		// interact key
-		// this.keyF = (
-		// 	scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// ).addKey(Phaser.Input.Keyboard.KeyCodes.F);
-		// this.keyF.on("down", this.checkInteract, this);
-
-		// // inventory key
-		// this.keyTAB = (
-		// 	scene.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// ).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-		// this.keyTAB.on("down", this.toggleInventory, this);
-
 		// scale
 		this.setScale(playerData.scale);
 
@@ -138,8 +96,6 @@ export class Player extends LivingEntity {
 		// remove listeners
 		this.scene.events.removeListener("update", this.update, this);
 		this.scene.events.removeListener("postupdate", this.postupdate, this);
-		// this.keyF.removeListener("down", this.checkInteract, this);
-		// this.keyTAB.removeListener("down", this.toggleInventory, this);
 
 		// save player data
 		store.set(
@@ -157,7 +113,7 @@ export class Player extends LivingEntity {
 	update() {
 		// open inventory
 		if (
-			this.scene.sceneHead.playerInput.interaction.pressed.includes(
+			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
 				"START"
 			)
 		)
@@ -165,7 +121,7 @@ export class Player extends LivingEntity {
 
 		// interact
 		if (
-			this.scene.sceneHead.playerInput.interaction.pressed.includes(
+			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
 				"RC_E"
 			)
 		)
@@ -326,30 +282,6 @@ export class Player extends LivingEntity {
 				directionY = "down";
 			}
 		}
-
-		// // get keyboard presses
-		// let key = {
-		// 	left: {
-		// 		isDown: this.keyArrows.left.isDown
-		// 			? this.keyArrows.left.isDown
-		// 			: this.keyWASD.A.isDown,
-		// 	},
-		// 	right: {
-		// 		isDown: this.keyArrows.right.isDown
-		// 			? this.keyArrows.right.isDown
-		// 			: this.keyWASD.D.isDown,
-		// 	},
-		// 	up: {
-		// 		isDown: this.keyArrows.up.isDown
-		// 			? this.keyArrows.up.isDown
-		// 			: this.keyWASD.W.isDown,
-		// 	},
-		// 	down: {
-		// 		isDown: this.keyArrows.down.isDown
-		// 			? this.keyArrows.down.isDown
-		// 			: this.keyWASD.S.isDown,
-		// 	},
-		// };
 
 		// moving up
 		if (this.scene.sceneHead.playerInput.direction.UP) {

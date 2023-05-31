@@ -175,7 +175,7 @@ export class Game extends Core {
 		this.player.destroy();
 
 		// stop HUD
-		this.HUD.scene.stop();
+		if (this.HUD) this.HUD.scene.stop();
 
 		// stop Debug info
 		this.scene.stop("Debug");
