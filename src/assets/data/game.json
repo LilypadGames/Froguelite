@@ -1,0 +1,105 @@
+{
+    "start": "riverside",
+    "music": {
+        "mainmenu": "under_her_spell_8_bit_loop",
+        "room": {
+            "riverside": "riverside",
+            "dungeon": "the_bauws"
+        }
+    },
+    "player": {
+        "texture": "pp",
+        "type": "player",
+        "scale": 1,
+        "stats": {
+            "health": 25,
+            "speed": 0.00006
+        },
+        "details": {
+            "healthbar": {
+                "scale": 6,
+                "width": 160
+            }
+        },
+        "equipped": {
+            "spell": "snot_bubble"
+        },
+        "inventory": {
+            "spells": [
+                "snot_bubble"
+            ],
+            "armors": []
+        }
+    },
+    "enemies": {
+        "lsf": {
+            "texture": "lsf",
+            "type": "boss",
+            "scale": 0.25,
+            "stats": {
+                "health": 100,
+                "speed": 0.00002
+            },
+            "details": {
+                "healthbar": {
+                    "scale": 6,
+                    "width": 500
+                }
+            }
+        },
+        "slime": {
+            "texture": "slime",
+            "type": "splitter",
+            "scale": 0.75,
+            "stats": {
+                "health": 15,
+                "speed": 0.00001
+            },
+            "details": {
+                "splitTo": "slime_small",
+                "splitAmount": 2
+            }
+        }
+    },
+    "spells": {
+        "snot_bubble": {
+            "texture": "snot_bubble",
+            "sounds": {
+                "start": "sfx_shoot",
+                "fail": "sfx_pop_fail",
+                "success": "sfx_pop_success"
+            },
+            "scale": 0.5,
+            "damage": 2,
+            "lifespan": 450,
+            "firerate": 600,
+            "speed": 0.00025,
+            "inventory": {
+                "texture": "gui_snot_bubble",
+                "scale": 6
+            }
+        }
+    },
+    "armors": {
+        "blue_garbs": {
+            "type": "torso",
+            "texture": "blue_garbs",
+            "scale": 0.5,
+            "defense": 0,
+            "inventory": {
+                "texture": "gui_blue_garbs",
+                "scale": 5
+            }
+        }
+    },
+    "teleporters": {
+        "cave": {
+            "texture": "cave"
+        }
+    },
+    "loot": {
+        "lootable": {
+            "riverside_chest": "blue_garbs"
+        }
+    }
+}
