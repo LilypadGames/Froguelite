@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Install Dependencies",
+			"type": "shell",
+			"command": "npm install"
+		},
+		{
+			"label": "Build",
+			"type": "shell",
+			"command": "npm run build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Create Icon",
+			"type": "shell",
+			"command": "npm run tauri icon src/assets/site/icon/icon.png"
+		}
+	]
+}
