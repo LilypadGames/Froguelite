@@ -13,6 +13,7 @@
     "dev": "vite",
     "host": "vite --host",
     "preview": "vite preview",
+    "build": "vite build",
     "tauri": "tauri"
   },
   "dependencies": {

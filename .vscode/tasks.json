@@ -9,7 +9,7 @@
 		{
 			"label": "Build",
 			"type": "shell",
-			"command": "npm run build",
+			"command": "npm run tauri build",
 			"group": {
 				"kind": "build",
 				"isDefault": true
