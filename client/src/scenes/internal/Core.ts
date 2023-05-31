@@ -52,7 +52,7 @@ export class Core extends Phaser.Scene {
 
 	update() {
 		// open pause menu
-		if (this.sceneHead.playerInput.interaction.pressed.includes("SELECT"))
+		if (this.sceneHead.playerInput.interaction_mapped.pressed.includes("SELECT"))
 			this.launchMenuOverlay();
 	}
 

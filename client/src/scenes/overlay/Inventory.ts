@@ -26,7 +26,6 @@ import config from "../../config";
 export class Inventory extends CoreOverlay {
 	worldView!: Phaser.Geom.Rectangle;
 	background!: Phaser.GameObjects.Rectangle;
-	// keyTAB!: Phaser.Input.Keyboard.Key;
 	characterRepresentation!: Phaser.GameObjects.Group;
 	currentInventory!: "spells" | "armors";
 	tabs!: Buttons;
@@ -49,12 +48,6 @@ export class Inventory extends CoreOverlay {
 	preload() {
 		// set up ESC key
 		super.preload();
-
-		// // make TAB key close inventory (like ESC key)
-		// this.keyTAB = (
-		// 	this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// ).addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-		// this.keyTAB.once("down", super.resumePreviousScene, this);
 	}
 
 	create() {
@@ -175,7 +168,11 @@ export class Inventory extends CoreOverlay {
 
 	update() {
 		// close inventory
-		if (this.sceneHead.playerInput.interaction.pressed.includes("START"))
+		if (
+			this.sceneHead.playerInput.interaction_mapped.pressed.includes(
+				"START"
+			)
+		)
 			super.resumePreviousScene();
 	}
 
@@ -261,9 +258,6 @@ export class Inventory extends CoreOverlay {
 			return (this.scenePaused as Game).player.equipped[
 				singularInventoryName
 			];
-			// return this.cache.json.get("game").player.equipped[
-			// 	singularInventoryName
-			// ];
 		};
 
 		// get item in specified slot in player's inventory
@@ -271,9 +265,6 @@ export class Inventory extends CoreOverlay {
 			return (this.scenePaused as Game).player.inventory[
 				currentInventorySelection
 			][slotNumber];
-			// return this.cache.json.get("game").player.inventory[
-			// 	currentInventorySelection
-			// ][slotNumber];
 		};
 
 		// create inventory sizer

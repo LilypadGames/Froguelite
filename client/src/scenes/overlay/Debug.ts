@@ -55,31 +55,31 @@ export class Debug extends Phaser.Scene {
 		if (this.sceneGame.sceneHead.playerInput.direction.RIGHT)
 			pressedKeys.push("RIGHT");
 		if (
-			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
 				"START"
 			)
 		)
 			pressedKeys.push("START");
 		if (
-			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
 				"SELECT"
 			)
 		)
 			pressedKeys.push("SELECT");
 		if (
-			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
 				"RC_E"
 			)
 		)
 			pressedKeys.push("INTERACT");
 		if (
-			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
 				"LB"
 			)
 		)
 			pressedKeys.push("CYCLE LEFT");
 		if (
-			this.sceneGame.sceneHead.playerInput.interaction.pressed.includes(
+			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
 				"RB"
 			)
 		)
