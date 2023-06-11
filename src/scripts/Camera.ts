@@ -56,14 +56,9 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 
 	update() {
 		// rotate camera
-		// if (this.keyQE.Q.isDown || this.keyQE.E.isDown) this.handleRotation();
 		if (
-			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"LB"
-			) ||
-			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"RB"
-			)
+			this.scene.sceneHead.playerInput.buttons_mapped.LB > 0 ||
+			this.scene.sceneHead.playerInput.buttons_mapped.RB > 0
 		)
 			this.handleRotation();
 	}
@@ -93,9 +88,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	handleRotation() {
 		// get new rotation
 		let newRotation =
-			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"LB"
-			)
+			this.scene.sceneHead.playerInput.buttons_mapped.LB > 0
 				? (this as any).rotation + this.rotationSpeed
 				: (this as any).rotation - this.rotationSpeed;
 
