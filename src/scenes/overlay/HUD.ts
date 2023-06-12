@@ -100,7 +100,7 @@ export class HUD extends Phaser.Scene {
 		if (
 			this.itemDisplay &&
 			(this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"RC_E"
+				"RC_W"
 			) ||
 				this.input.activePointer.isDown)
 		)

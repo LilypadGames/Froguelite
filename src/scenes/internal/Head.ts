@@ -46,7 +46,7 @@ export class Head extends Phaser.Scene {
 			.defineKey(0, "RIGHT", "D") // move right
 			.defineKey(0, "START", "TAB") // inventory
 			.defineKey(0, "SELECT", "ESC") // back/pause
-			.defineKey(0, "RC_E", "F") // interact
+			.defineKey(0, "RC_W", "F") // interact
 			.defineKey(0, "LB", "Q") // rotate left/pagination left
 			.defineKey(0, "RB", "E") // rotate right/pagination right
 			.defineKey(0, "LC_N", "PAGE_UP") // zoom in

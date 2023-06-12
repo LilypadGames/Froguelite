@@ -29,7 +29,11 @@ export class Debug extends Phaser.Scene {
 
 	create() {
 		// init debug info text
-		this.debugText = this.add.text(0, 0, "").setScrollFactor(0);
+		this.debugText = this.add
+			.text(0, 0, "", {
+				fontSize: "32px",
+			})
+			.setScrollFactor(0);
 
 		// enable debug lines
 		this.sceneGame.matter.world.drawDebug = true;
@@ -54,36 +58,22 @@ export class Debug extends Phaser.Scene {
 			pressedKeys.push("LEFT");
 		if (this.sceneGame.sceneHead.playerInput.direction.RIGHT)
 			pressedKeys.push("RIGHT");
-		if (
-			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"START"
-			)
-		)
+		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.START > 0)
 			pressedKeys.push("START");
-		if (
-			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"SELECT"
-			)
-		)
+		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.SELECT > 0)
 			pressedKeys.push("SELECT");
-		if (
-			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"RC_E"
-			)
-		)
-			pressedKeys.push("INTERACT");
-		if (
-			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"LB"
-			)
-		)
-			pressedKeys.push("CYCLE LEFT");
-		if (
-			this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"RB"
-			)
-		)
-			pressedKeys.push("CYCLE RIGHT");
+		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.RC_E > 0)
+			pressedKeys.push("RC_E");
+		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.RC_W > 0)
+			pressedKeys.push("RC_W");
+		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.LB > 0)
+			pressedKeys.push("LB");
+		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.RB > 0)
+			pressedKeys.push("RB");
+		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.LC_N > 0)
+			pressedKeys.push("LC_N");
+		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.LC_S > 0)
+			pressedKeys.push("LC_S");
 
 		// update debug
 		this.debugText.setText([

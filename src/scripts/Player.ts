@@ -122,7 +122,7 @@ export class Player extends LivingEntity {
 		// interact
 		if (
 			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"RC_E"
+				"RC_W"
 			)
 		)
 			this.checkInteract();

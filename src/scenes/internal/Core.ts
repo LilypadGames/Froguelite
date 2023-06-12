@@ -16,7 +16,6 @@ import { Head } from "./Head";
 
 export class Core extends Phaser.Scene {
 	sceneHead!: Head;
-	// keyESC!: Phaser.Input.Keyboard.Key;
 	music: Phaser.Sound.WebAudioSound | undefined = undefined;
 
 	constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
@@ -38,27 +37,26 @@ export class Core extends Phaser.Scene {
 		// reset average fps
 		this.game.loop.resetDelta();
 
-		// // menu overlay toggle hotkey
-		// this.keyESC = (
-		// 	this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
-		// ).addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-
-		// // toggle menu overlay
-		// this.keyESC.on("down", this.launchMenuOverlay, this);
+		// update event
+		this.events.on("update", this.detectMenu, this);
 
 		// shutdown event
 		this.events.once("shutdown", this.shutdown, this);
 	}
 
-	update() {
+	detectMenu() {
 		// open pause menu
-		if (this.sceneHead.playerInput.interaction_mapped.pressed.includes("SELECT"))
+		if (
+			this.sceneHead.playerInput.interaction_mapped.pressed.includes(
+				"SELECT"
+			)
+		)
 			this.launchMenuOverlay();
 	}
 
 	shutdown() {
-		// // remove listeners
-		// this.keyESC.removeListener("down", this.launchMenuOverlay, this);
+		// remove listeners
+		this.events.removeListener("update", this.detectMenu, this);
 
 		// fade out music
 		if (this.music) SoundFade.fadeOut(this.music, 500);
