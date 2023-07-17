@@ -95,7 +95,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	}
 
 	applyShaders(performanceMode = false) {
-		// get options
+		// get options (create duplicate instead of reference)
 		let outlineSettings = JSON.parse(JSON.stringify(this.outline));
 		let glowSettings = JSON.parse(JSON.stringify(this.glow));
 

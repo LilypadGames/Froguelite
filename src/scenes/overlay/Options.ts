@@ -16,7 +16,6 @@ import {
 	RoundRectangle,
 } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 import ColorScheme from "../../scripts/utility/ColorScheme";
-import { Head } from "../internal/Head";
 
 export class Options extends CoreOverlay {
 	background!: Phaser.GameObjects.Rectangle;
