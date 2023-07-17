@@ -13,6 +13,7 @@ import { sceneData } from "../types/global";
 export class MainMenu extends Core {
 	logo!: Phaser.GameObjects.Text;
 	begin!: Phaser.GameObjects.Text;
+	entering: boolean = false;
 
 	constructor() {
 		super({ key: "MainMenu" });
@@ -90,11 +91,19 @@ export class MainMenu extends Core {
 	}
 
 	update() {
-		if (this.input.activePointer.isDown || this.sceneHead.playerInput.interaction.pressed.length > 0)
+		if (
+			(this.input.activePointer.isDown ||
+				this.sceneHead.playerInput.interaction.pressed.length > 0) &&
+			!this.entering
+		)
 			this.enterGame();
 	}
 
 	enterGame() {
+		// TODO - replace with a legitimate way, not a weird workaround. this was due to checking for click in update and not in a once event, after implementing controller inputs.
+		// prevent multi clicking
+		this.entering = true;
+
 		// sfx
 		this.sound.play("ui_select", {
 			volume: this.sceneHead.audio.sfx.volume.value,
