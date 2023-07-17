@@ -51,8 +51,9 @@
     "healthbar_empty_right": "gui/healthbar/empty.png",
     "slime_small": {
         "spritesheet": "enemy/slime_small.png",
-        "frameWidth": 22,
-        "frameHeight": 18,
+        "frameWidth": 20,
+        "frameHeight": 16,
+        "spacing": 1,
         "anims": {
             "idle": {
                 "auto": true,
@@ -67,8 +68,8 @@
     "slime": {
         "spritesheet": "enemy/slime.png",
         "frameRate": 4,
-        "frameWidth": 24,
-        "frameHeight": 23,
+        "frameWidth": 22,
+        "frameHeight": 21,
         "anims": {
             "idle": {
                 "auto": true,
@@ -82,8 +83,9 @@
     },
     "slime_electric_small": {
         "spritesheet": "enemy/slime_electric_small.png",
-        "frameWidth": 22,
-        "frameHeight": 18,
+        "frameWidth": 20,
+        "frameHeight": 16,
+        "spacing": 1,
         "anims": {
             "idle": {
                 "auto": true,
@@ -97,8 +99,8 @@
     },
     "slime_electric": {
         "spritesheet": "enemy/slime_electric.png",
-        "frameWidth": 24,
-        "frameHeight": 23,
+        "frameWidth": 22,
+        "frameHeight": 21,
         "anims": {
             "idle": {
                 "auto": true,
@@ -112,8 +114,9 @@
     },
     "slime_fire_small": {
         "spritesheet": "enemy/slime_fire_small.png",
-        "frameWidth": 22,
-        "frameHeight": 18,
+        "frameWidth": 20,
+        "frameHeight": 16,
+        "spacing": 1,
         "anims": {
             "idle": {
                 "auto": true,
@@ -127,8 +130,8 @@
     },
     "slime_fire": {
         "spritesheet": "enemy/slime_fire.png",
-        "frameWidth": 24,
-        "frameHeight": 23,
+        "frameWidth": 22,
+        "frameHeight": 21,
         "anims": {
             "idle": {
                 "auto": true,
@@ -142,8 +145,9 @@
     },
     "slime_ice_small": {
         "spritesheet": "enemy/slime_ice_small.png",
-        "frameWidth": 22,
-        "frameHeight": 18,
+        "frameWidth": 20,
+        "frameHeight": 16,
+        "spacing": 1,
         "anims": {
             "idle": {
                 "auto": true,
@@ -157,8 +161,8 @@
     },
     "slime_ice": {
         "spritesheet": "enemy/slime_ice.png",
-        "frameWidth": 24,
-        "frameHeight": 23,
+        "frameWidth": 22,
+        "frameHeight": 21,
         "anims": {
             "idle": {
                 "auto": true,
@@ -172,8 +176,9 @@
     },
     "slime_wind_small": {
         "spritesheet": "enemy/slime_wind_small.png",
-        "frameWidth": 22,
-        "frameHeight": 18,
+        "frameWidth": 20,
+        "frameHeight": 16,
+        "spacing": 1,
         "anims": {
             "idle": {
                 "auto": true,
@@ -187,8 +192,8 @@
     },
     "slime_wind": {
         "spritesheet": "enemy/slime_electric.png",
-        "frameWidth": 24,
-        "frameHeight": 23,
+        "frameWidth": 22,
+        "frameHeight": 21,
         "anims": {
             "idle": {
                 "auto": true,
