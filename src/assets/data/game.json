@@ -13,7 +13,7 @@
         "scale": 1,
         "stats": {
             "health": 25,
-            "speed": 0.00007
+            "speed": 0.75
         },
         "details": {
             "healthbar": {

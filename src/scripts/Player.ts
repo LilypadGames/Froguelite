@@ -87,14 +87,13 @@ export class Player extends LivingEntity {
 		if (this.equipped.armor) this.equip("armor", this.equipped.armor);
 
 		// events
-		scene.events.on("update", this.update, this);
 		scene.events.on("postupdate", this.postupdate, this);
-		this.once("destroy", this.onDestroy, this);
 	}
 
 	onDestroy() {
+		super.onDestroy();
+
 		// remove listeners
-		this.scene.events.removeListener("update", this.update, this);
 		this.scene.events.removeListener("postupdate", this.postupdate, this);
 
 		// save player data
@@ -111,6 +110,8 @@ export class Player extends LivingEntity {
 	}
 
 	update() {
+		super.update();
+
 		// open inventory
 		if (
 			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(

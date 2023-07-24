@@ -1,6 +1,3 @@
-// imports
-import store from "storejs";
-
 // plugins
 import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin";
@@ -74,12 +71,15 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		);
 
 		// prevent rotation when moving
-		this.setFixedRotation();
-		this.setFriction(1, 0.2, 10);
-		this.setBounce(0);
+		this.setMass(100);
+		this.setFriction(1, 1, 0);
 
 		// apply shader
 		this.applyShaders(this.scene.sceneHead.highPerformanceMode.get());
+
+		// events
+		scene.events.on("update", this.update, this);
+		this.once("destroy", this.onDestroy, this);
 	}
 
 	// show
@@ -92,6 +92,14 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	hide() {
 		this.setVisible(false);
 		this.setActive(false);
+	}
+
+	update() {
+		if (this.body) this.setFixedRotation();
+	}
+
+	onDestroy() {
+		this.scene.events.removeListener("update", this.update, this);
 	}
 
 	applyShaders(performanceMode = false) {
