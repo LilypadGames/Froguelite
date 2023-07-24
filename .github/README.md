@@ -1,31 +1,30 @@
 <p align="center">
   <a align="center" href='#'/>
-    <img src="logo.svg" height="200rem" alt="Logo" />
+    <img src="logo.svg" height="180rem" alt="Logo" />
   </a>
 </p>
 
 <hr>
 
-## **Languages**
+## 🔠 **Languages**
 
 -   [Typescript](https://www.typescriptlang.org/)
 -   [Rust](https://www.rust-lang.org/)
 
-## **Tools**
+## 🧰 **Tools**
 
+-   [Phaser 3](https://phaser.io/)
 -   [Vite](https://vitejs.dev/)
 -   [Tauri](https://tauri.app/)
--   [Phaser 3](https://phaser.io/)
 
-## **Inspirations**
+## 💡 **Inspirations**
 
--   Binding of Isaac: Dungeon Crawling & Character Building
--   Realm of the Mad God: Combat Mechanics and Controls
--   The Legend Of Zelda: Dungeon Puzzle Solving
+-   Realm of the Mad God (Bullet Hell Mechanics and Visuals)
+-   Top-Down Legend of Zelda (RPG/Boss Battles)
+-   Binding of Isaac (Unique Runs)
+-   Vampire Survivors (Endless Runs)
 
-<hr>
-
-## **Contribute**
+## 🗳️ **Contribute**
 
 There are two ways to contribute.
 
