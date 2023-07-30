@@ -87,12 +87,12 @@ export class Healthbar {
 		this.hide();
 
 		// update bar
-		scene.events.on("postupdate", this.update, this);
+		scene.events.on("postupdate", this.postupdate, this);
 	}
 
 	destroy() {
 		// remove listeners
-		this.scene.events.removeListener("postupdate", this.update, this);
+		this.scene.events.removeListener("postupdate", this.postupdate, this);
 
 		// destroy
 		this.bar.destroy();
@@ -197,12 +197,12 @@ export class Healthbar {
 	}
 
 	// update healthbar position and scale when in use
-	update() {
+	postupdate() {
 		// get owner health percent from health
 		let percent = this.owner.getHealthPercent();
 
 		// individual health bar
-		if (this.owner.type === "individual") {
+		if (this.owner.label === "Player" || this.owner.label === "Enemy") {
 			// get owner position
 			let relativePos = this.owner.getRelativePosition(
 				this.scene.sceneGame.camera

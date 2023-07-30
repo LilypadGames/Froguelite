@@ -12,6 +12,7 @@ import { Teleporter } from "./interactable/Teleporter";
 
 // config
 import config from "../config";
+import { Enemy } from "./Enemy";
 
 export class Player extends LivingEntity {
 	// interaction
@@ -36,6 +37,7 @@ export class Player extends LivingEntity {
 	armor: {
 		torso?: Phaser.GameObjects.Sprite;
 	} = {};
+	forces: MatterJS.Vector | undefined;
 
 	constructor(scene: Game, x: number, y: number) {
 		// get player data
@@ -74,6 +76,9 @@ export class Player extends LivingEntity {
 		// default anim
 		this.playAnim("front");
 
+		// set friction
+		// this.setFriction(0.1,0.5);
+
 		// set depth
 		this.setDepth(config.depth.player.base);
 
@@ -83,7 +88,18 @@ export class Player extends LivingEntity {
 		// initialize armor
 		if (this.equipped.armor) this.equip("armor", this.equipped.armor);
 
+		// detect specific collisions
+		this.setOnCollide(
+			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// collided with enemy
+				if (entities.bodyA.gameObject instanceof Enemy) {
+					this.collideEnemy(entities.bodyA);
+				}
+			}
+		);
+
 		// events
+		scene.matter.world.on("beforeupdate", this.beforeupdate, this);
 		scene.events.on("postupdate", this.postupdate, this);
 	}
 
@@ -91,6 +107,11 @@ export class Player extends LivingEntity {
 		super.onDestroy();
 
 		// remove listeners
+		this.scene.matter.world.removeListener(
+			"beforeupdate",
+			this.beforeupdate,
+			this
+		);
 		this.scene.events.removeListener("postupdate", this.postupdate, this);
 
 		// save player data
@@ -106,35 +127,65 @@ export class Player extends LivingEntity {
 		);
 	}
 
+	beforeupdate() {
+		// apply cached forces
+		if (this.forces) {
+			this.scene.matter.body.applyForce(
+				this.body as MatterJS.BodyType,
+				(this.body as MatterJS.BodyType).position,
+				this.forces
+			);
+
+			// clear forces
+			delete this.forces;
+		}
+	}
+
 	update() {
 		super.update();
 
-		// open inventory
-		if (
-			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"START"
+		// still alive
+		if (!this.isDead) {
+			// open inventory
+			if (
+				this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
+					"START"
+				)
 			)
-		)
-			this.toggleInventory();
+				this.toggleInventory();
 
-		// interact
-		if (
-			this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"RC_W"
+			// interact
+			if (
+				this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
+					"RC_W"
+				)
 			)
-		)
-			this.checkInteract();
+				this.checkInteract();
 
-		// handle attacking
-		if (this.scene.time.now > 2000) this.handleAttack();
+			// handle attacking
+			if (this.scene.time.now > 2000) this.handleAttack();
 
-		// handle movement
-		this.handleMovement();
+			// handle movement
+			this.handleMovement();
+		}
 	}
 
 	// update visuals
 	postupdate() {
 		this.updateArmor();
+	}
+
+	// kill player
+	kill() {
+		// remove entity if not already dead
+		if (!this.isDead) {
+			// hide health bar
+			if (this.healthbar !== undefined) this.healthbar.hide();
+
+			// hide entity
+			this.isDead = true;
+			this.hide();
+		}
 	}
 
 	playAnim(key: string) {
@@ -433,5 +484,15 @@ export class Player extends LivingEntity {
 			sceneHead: this.scene.sceneHead,
 			scenePaused: this.scene,
 		});
+	}
+
+	collideEnemy(enemy: MatterJS.BodyType) {
+		// cache force
+		this.forces = this.scene.matter.vector.mult(enemy.velocity, 5);
+
+		// apply damage
+		this.changeHealth(
+			-((enemy.gameObject as Enemy).stats as enemyStats).strength
+		);
 	}
 }

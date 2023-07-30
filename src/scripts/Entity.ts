@@ -99,6 +99,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	}
 
 	onDestroy() {
+		// remove listeners
 		this.scene.events.removeListener("update", this.update, this);
 	}
 

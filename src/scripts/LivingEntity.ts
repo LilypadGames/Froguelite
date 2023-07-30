@@ -17,7 +17,7 @@ export class LivingEntity extends Entity {
 	healthbar!: Healthbar;
 
 	// stats
-	stats: playerStats;
+	stats: playerStats | enemyStats;
 
 	// details
 	details: playerDetails | undefined;
@@ -29,7 +29,7 @@ export class LivingEntity extends Entity {
 		textureKey: string,
 		label: string,
 		entityType: string,
-		stats: playerStats,
+		stats: playerStats | enemyStats,
 		details?: playerDetails
 	) {
 		// pass values
@@ -55,7 +55,7 @@ export class LivingEntity extends Entity {
 		// remove entity if not already dead
 		if (!this.isDead) {
 			// hide health bar
-			if (this.healthbar !== undefined) this.healthbar.hide();
+			if (this.healthbar !== undefined) this.healthbar.destroy();
 
 			// hide entity
 			this.isDead = true;

@@ -38,7 +38,8 @@
             "scale": 0.25,
             "stats": {
                 "health": 100,
-                "speed": 0.00002
+                "speed": 0.00002,
+                "strength": 15
             },
             "details": {
                 "healthbar": {
@@ -53,9 +54,14 @@
             "scale": 0.75,
             "stats": {
                 "health": 15,
-                "speed": 0.00001
+                "speed": 0.00001,
+                "strength": 3
             },
             "details": {
+                "healthbar": {
+                    "scale": 6,
+                    "width": 160
+                },
                 "splitTo": "slime_small",
                 "splitAmount": 2
             }

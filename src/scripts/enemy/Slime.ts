@@ -14,8 +14,4 @@ export class Slime extends Enemy {
 		// pass values
 		super(scene, x, y, id);
 	}
-
-	update() {}
-
-	handleAI() {}
 }

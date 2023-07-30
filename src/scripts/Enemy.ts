@@ -47,6 +47,30 @@ export class Enemy extends LivingEntity {
 		this.playAnim("idle");
 	}
 
+	update() {
+		super.update();
+
+		// run movement
+		if (!this.scene.player.isDead) this.updateMovement();
+	}
+
+	updateMovement() {
+		// get movement vector
+		const deltaVector = this.scene.matter.vector.sub(
+			(this.scene.player.body as MatterJS.BodyType).position,
+			(this.body as MatterJS.BodyType).position
+		);
+		const normalizedDelta = this.scene.matter.vector.normalise(deltaVector);
+		const forceVector = this.scene.matter.vector.mult(normalizedDelta, 0.1);
+
+		// apply force
+		this.scene.matter.body.applyForce(
+			this.body as MatterJS.BodyType,
+			(this.body as MatterJS.BodyType).position,
+			forceVector
+		);
+	}
+
 	playAnim(key: string) {
 		// check if exists
 		if (!this.anims.animationManager.exists(this.texture.key + "_" + key))

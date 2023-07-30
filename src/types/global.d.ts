@@ -25,7 +25,14 @@ declare global {
 		health: number;
 		healthMax: number;
 		speed: number;
-		fireRate?: number;
+		fireRate: number;
+	}
+
+	interface enemyStats {
+		health: number;
+		healthMax: number;
+		speed: number;
+		strength: number;
 	}
 
 	interface playerDetails {
