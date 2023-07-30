@@ -184,7 +184,27 @@ export class Player extends LivingEntity {
 
 			// hide entity
 			this.isDead = true;
-			this.hide();
+
+			// death animation
+			this.scene.tweens.add({
+				targets: this,
+				scale: 0.01,
+				duration: 800,
+				ease: "Sine.easeOut",
+				onComplete: () => {
+					// ppPoof animation
+					const poof = this.scene.add
+						.sprite(this.x, this.y, "poof")
+						.setOrigin(0.5)
+						.setScale(0.2)
+						.setDepth(config.depth.particle)
+						.on("animationcomplete", () => poof.destroy())
+						.play("poof_run");
+
+					// hide player sprite
+					this.hide();
+				},
+			});
 		}
 	}
 
@@ -215,6 +235,9 @@ export class Player extends LivingEntity {
 
 			// update position
 			layer.setPosition(this.x, this.y);
+
+			// update scale
+			layer.setScale(this.scale);
 
 			// update anim
 			if (

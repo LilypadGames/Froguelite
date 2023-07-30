@@ -86,6 +86,7 @@ export default {
 			base: 5,
 			armor: 6,
 		},
+		particle: 7,
 		overlay: 100000,
 	},
 };

@@ -28,6 +28,20 @@
             }
         }
     },
+    "poof": {
+        "spritesheet": "particle/poof.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "anims": {
+            "run": {
+                "frameRate": 15,
+                "frames": {
+                    "start": 0,
+                    "end": 17
+                }
+            }
+        }
+    },
     "lsf": "enemy/lsf.png",
     "cave": "interactable/teleporter/cave.png",
     "snot_bubble": {
