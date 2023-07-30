@@ -3,7 +3,6 @@ import Phaser from "phaser";
 
 // internal
 import { Head } from "./Head";
-import { overlaySceneData } from "../../types/global";
 
 //
 // These are overall mechanics that are common to several different scenes, such as a custom cursor or other UI.

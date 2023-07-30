@@ -1,6 +1,3 @@
-// types
-import { inventorySceneData } from "../../types/global";
-
 // internal
 import { CoreOverlay } from "../internal/CoreOverlay";
 

@@ -4,7 +4,6 @@ import { Core } from "./internal/Core";
 // utility
 import ColorScheme from "../scripts/utility/ColorScheme";
 import Utility from "../scripts/utility/Utility";
-import { sceneData } from "../types/global";
 
 //
 // This is the Main Menu, what you first see when you open the game.

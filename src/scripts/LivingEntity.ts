@@ -1,6 +1,3 @@
-// types
-import { playerStats, playerDetails } from "../types/global";
-
 // scenes
 import { Game } from "../scenes/Game";
 

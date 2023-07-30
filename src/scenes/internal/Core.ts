@@ -1,9 +1,6 @@
 // imports
 import Phaser from "phaser";
 
-// types
-import { gameSceneData, overlaySceneData, sceneData } from "../../types/global";
-
 // plugins
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 

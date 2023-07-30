@@ -1,9 +1,6 @@
 // imports
 import store from "storejs";
 
-// types
-import { playerEquipped, playerInventory, playerStats } from "../types/global";
-
 // scenes
 import { Game } from "../scenes/Game";
 

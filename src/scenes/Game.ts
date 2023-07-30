@@ -1,9 +1,6 @@
 // imports
 import store from "storejs";
 
-// types
-import { gameSceneData } from "../types/global";
-
 // internal
 import { Core } from "./internal/Core";
 
