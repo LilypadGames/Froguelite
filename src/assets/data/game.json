@@ -55,7 +55,7 @@
             "stats": {
                 "health": 15,
                 "speed": 0.00001,
-                "strength": 3
+                "strength": 8
             },
             "details": {
                 "healthbar": {
