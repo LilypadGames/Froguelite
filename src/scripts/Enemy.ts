@@ -31,7 +31,6 @@ export class Enemy extends LivingEntity {
 		);
 
 		// save values
-		this.textureKey = enemyData[id].texture;
 		this.id = id;
 
 		// set name

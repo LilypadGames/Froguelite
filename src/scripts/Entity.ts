@@ -12,6 +12,7 @@ import ColorScheme from "./utility/ColorScheme";
 
 export class Entity extends Phaser.Physics.Matter.Sprite {
 	scene: Game;
+	label: string;
 	textureKey: string;
 	entityType: string;
 
@@ -47,6 +48,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 
 		// save values
 		this.scene = scene;
+		this.label = label;
 		this.textureKey = textureKey;
 		this.entityType = entityType;
 

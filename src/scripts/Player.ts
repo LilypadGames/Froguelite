@@ -67,7 +67,6 @@ export class Player extends LivingEntity {
 		);
 
 		// save values
-		this.scene = scene;
 		this.equipped = saveData ? saveData.equipped : playerData.equipped;
 		this.inventory = saveData ? saveData.inventory : playerData.inventory;
 

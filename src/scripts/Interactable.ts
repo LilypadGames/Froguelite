@@ -9,7 +9,6 @@ import { Player } from "./Player";
 import config from "../config";
 
 export class Interactable extends Entity {
-	scene: Game;
 	tip: string;
 	enabled: boolean = true;
 
@@ -25,7 +24,6 @@ export class Interactable extends Entity {
 		super(scene, x, y, textureKey, "Interactable", entityType);
 
 		// save values
-		this.scene = scene;
 		this.tip = tip;
 
 		// set origin

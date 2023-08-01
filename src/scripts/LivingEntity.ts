@@ -6,10 +6,6 @@ import { Entity } from "./Entity";
 import { Healthbar } from "./Healthbar";
 
 export class LivingEntity extends Entity {
-	scene: Game;
-	label: string;
-	textureKey: string;
-
 	// state
 	isDead: boolean;
 
@@ -34,11 +30,6 @@ export class LivingEntity extends Entity {
 	) {
 		// pass values
 		super(scene, x, y, textureKey, label, entityType);
-
-		// save values
-		this.scene = scene;
-		this.label = label;
-		this.textureKey = textureKey;
 
 		// init stats
 		this.isDead = false;
