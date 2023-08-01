@@ -67,11 +67,11 @@ export class Head extends Phaser.Scene {
 		// handle cursor
 		if (this.input.activePointer.isDown)
 			this.input.setDefaultCursor(
-				"url(/input/cursors/cursor_small.cur) 16 16, pointer"
+				"url(/texture/input/cursors/cursor_small.cur) 16 16, pointer"
 			);
 		else
 			this.input.setDefaultCursor(
-				"url(/input/cursors/cursor_large.cur) 16 16, pointer"
+				"url(/texture/input/cursors/cursor_large.cur) 16 16, pointer"
 			);
 	}
 
@@ -80,7 +80,7 @@ export class Head extends Phaser.Scene {
 		init: () => {
 			// default cursor
 			this.input.setDefaultCursor(
-				"url(/input/cursors/cursor_large.cur) 16 16, pointer"
+				"url(/texture/input/cursors/cursor_large.cur) 16 16, pointer"
 			);
 
 			// // change cursor on click
@@ -88,7 +88,7 @@ export class Head extends Phaser.Scene {
 			// 	"pointerdown",
 			// 	() => {
 			// 		this.input.setDefaultCursor(
-			// 			"url(/input/cursors/cursor_small.cur) 16 16, pointer"
+			// 			"url(/texture/input/cursors/cursor_small.cur) 16 16, pointer"
 			// 		);
 			// 	},
 			// 	this
@@ -99,7 +99,7 @@ export class Head extends Phaser.Scene {
 			// 	"pointerup",
 			// 	() => {
 			// 		this.input.setDefaultCursor(
-			// 			"url(/input/cursors/cursor_large.cur) 16 16, pointer"
+			// 			"url(/texture/input/cursors/cursor_large.cur) 16 16, pointer"
 			// 		);
 			// 	},
 			// 	this

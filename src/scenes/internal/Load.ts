@@ -111,7 +111,22 @@ export class Load extends Phaser.Scene {
 		// load audio
 		let audio = this.cache.json.get("audio");
 		for (const key in audio) {
-			this.load.audio(key, audio[key]);
+			// single audio files
+			if (typeof audio[key] === "string")
+				this.load.audio(key, audio[key]);
+			// multiple audio file
+			else if (
+				Array.isArray(audio[key]) &&
+				audio[key].length > 0 &&
+				audio[key].every((value: any) => {
+					return typeof value === "string";
+				})
+			) {
+				// load all audio files
+				for (const [i, file] of audio[key].entries()) {
+					this.load.audio(key + "_" + (i + 1), file);
+				}
+			}
 		}
 
 		// load tilemaps

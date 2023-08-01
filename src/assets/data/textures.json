@@ -1,7 +1,7 @@
 {
-    "world_tiles": "world/tiles.png",
+    "world_tiles": "texture/world/tiles.png",
     "pp": {
-        "spritesheet": "character/pp.png",
+        "spritesheet": "texture/character/pp.png",
         "frameWidth": 9,
         "frameHeight": 7,
         "spacing": 1,
@@ -29,7 +29,7 @@
         }
     },
     "poof": {
-        "spritesheet": "particle/poof.png",
+        "spritesheet": "texture/particle/poof.png",
         "frameWidth": 128,
         "frameHeight": 128,
         "anims": {
@@ -42,10 +42,10 @@
             }
         }
     },
-    "lsf": "enemy/lsf.png",
-    "cave": "interactable/teleporter/cave.png",
+    "lsf": "texture/enemy/lsf.png",
+    "cave": "texture/interactable/teleporter/cave.png",
     "snot_bubble": {
-        "spritesheet": "spell/snot_bubble.png",
+        "spritesheet": "texture/spell/snot_bubble.png",
         "frameWidth": 13,
         "frameHeight": 13,
         "anims": {
@@ -57,14 +57,14 @@
             }
         }
     },
-    "healthbar_full_left": "gui/healthbar/full_left.png",
-    "healthbar_full_middle": "gui/healthbar/full_middle.png",
-    "healthbar_full_right": "gui/healthbar/full_right.png",
-    "healthbar_empty_left": "gui/healthbar/empty.png",
-    "healthbar_empty_middle": "gui/healthbar/empty.png",
-    "healthbar_empty_right": "gui/healthbar/empty.png",
+    "healthbar_full_left": "texture/gui/healthbar/full_left.png",
+    "healthbar_full_middle": "texture/gui/healthbar/full_middle.png",
+    "healthbar_full_right": "texture/gui/healthbar/full_right.png",
+    "healthbar_empty_left": "texture/gui/healthbar/empty.png",
+    "healthbar_empty_middle": "texture/gui/healthbar/empty.png",
+    "healthbar_empty_right": "texture/gui/healthbar/empty.png",
     "slime_small": {
-        "spritesheet": "enemy/slime_small.png",
+        "spritesheet": "texture/enemy/slime_small.png",
         "frameWidth": 20,
         "frameHeight": 16,
         "spacing": 1,
@@ -80,7 +80,7 @@
         }
     },
     "slime": {
-        "spritesheet": "enemy/slime.png",
+        "spritesheet": "texture/enemy/slime.png",
         "frameRate": 4,
         "frameWidth": 22,
         "frameHeight": 21,
@@ -96,7 +96,7 @@
         }
     },
     "slime_electric_small": {
-        "spritesheet": "enemy/slime_electric_small.png",
+        "spritesheet": "texture/enemy/slime_electric_small.png",
         "frameWidth": 20,
         "frameHeight": 16,
         "spacing": 1,
@@ -112,7 +112,7 @@
         }
     },
     "slime_electric": {
-        "spritesheet": "enemy/slime_electric.png",
+        "spritesheet": "texture/enemy/slime_electric.png",
         "frameWidth": 22,
         "frameHeight": 21,
         "anims": {
@@ -127,7 +127,7 @@
         }
     },
     "slime_fire_small": {
-        "spritesheet": "enemy/slime_fire_small.png",
+        "spritesheet": "texture/enemy/slime_fire_small.png",
         "frameWidth": 20,
         "frameHeight": 16,
         "spacing": 1,
@@ -143,7 +143,7 @@
         }
     },
     "slime_fire": {
-        "spritesheet": "enemy/slime_fire.png",
+        "spritesheet": "texture/enemy/slime_fire.png",
         "frameWidth": 22,
         "frameHeight": 21,
         "anims": {
@@ -158,7 +158,7 @@
         }
     },
     "slime_ice_small": {
-        "spritesheet": "enemy/slime_ice_small.png",
+        "spritesheet": "texture/enemy/slime_ice_small.png",
         "frameWidth": 20,
         "frameHeight": 16,
         "spacing": 1,
@@ -174,7 +174,7 @@
         }
     },
     "slime_ice": {
-        "spritesheet": "enemy/slime_ice.png",
+        "spritesheet": "texture/enemy/slime_ice.png",
         "frameWidth": 22,
         "frameHeight": 21,
         "anims": {
@@ -189,7 +189,7 @@
         }
     },
     "slime_wind_small": {
-        "spritesheet": "enemy/slime_wind_small.png",
+        "spritesheet": "texture/enemy/slime_wind_small.png",
         "frameWidth": 20,
         "frameHeight": 16,
         "spacing": 1,
@@ -205,7 +205,7 @@
         }
     },
     "slime_wind": {
-        "spritesheet": "enemy/slime_electric.png",
+        "spritesheet": "texture/enemy/slime_electric.png",
         "frameWidth": 22,
         "frameHeight": 21,
         "anims": {
@@ -220,7 +220,7 @@
         }
     },
     "blue_garbs": {
-        "spritesheet": "armor/blue_garbs.png",
+        "spritesheet": "texture/armor/blue_garbs.png",
         "frameWidth": 9,
         "frameHeight": 7,
         "spacing": 1,
@@ -247,12 +247,12 @@
             }
         }
     },
-    "gui_blue_garbs": "gui/inventory/armor/blue_garbs.png",
-    "gui_snot_bubble": "gui/inventory/spell/snot_bubble.png",
-    "gui_tab_spell": "gui/inventory/tab/spell.png",
-    "gui_tab_armor": "gui/inventory/tab/armor.png",
+    "gui_blue_garbs": "texture/gui/inventory/armor/blue_garbs.png",
+    "gui_snot_bubble": "texture/gui/inventory/spell/snot_bubble.png",
+    "gui_tab_spell": "texture/gui/inventory/tab/spell.png",
+    "gui_tab_armor": "texture/gui/inventory/tab/armor.png",
     "chest_gold": {
-        "spritesheet": "interactable/lootable/chest_gold.png",
+        "spritesheet": "texture/interactable/lootable/chest_gold.png",
         "frameWidth": 23,
         "frameHeight": 21,
         "anims": {
@@ -270,7 +270,7 @@
         "scale": 0.7
     },
     "chest_silver": {
-        "spritesheet": "interactable/lootable/chest_silver.png",
+        "spritesheet": "texture/interactable/lootable/chest_silver.png",
         "frameWidth": 23,
         "frameHeight": 21,
         "anims": {
@@ -288,7 +288,7 @@
         "scale": 0.7
     },
     "chest_wood": {
-        "spritesheet": "interactable/lootable/chest_wood.png",
+        "spritesheet": "texture/interactable/lootable/chest_wood.png",
         "frameWidth": 23,
         "frameHeight": 21,
         "anims": {

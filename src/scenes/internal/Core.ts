@@ -8,7 +8,7 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { Head } from "./Head";
 
 //
-// These are overall mechanics that are common to several different scenes, such as a custom cursor or other UI.
+// These are overall mechanics that are common to several different scenes.
 //
 
 export class Core extends Phaser.Scene {

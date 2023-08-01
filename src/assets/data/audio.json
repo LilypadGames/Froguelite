@@ -10,5 +10,13 @@
     "sfx_shoot": "audio/sfx/shoot.ogg",
     "sfx_pop_success": "audio/sfx/pop_success.ogg",
     "sfx_pop_fail": "audio/sfx/pop_fail.ogg",
-    "ui_open": "audio/ui/open.ogg"
+    "ui_open": "audio/ui/open.ogg",
+    "sfx_hit": [
+        "audio/sfx/hit_1.ogg",
+        "audio/sfx/hit_2.ogg",
+        "audio/sfx/hit_3.ogg",
+        "audio/sfx/hit_4.ogg",
+        "audio/sfx/hit_5.ogg",
+        "audio/sfx/hit_6.ogg"
+    ]
 }

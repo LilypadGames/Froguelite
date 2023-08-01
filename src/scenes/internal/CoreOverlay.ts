@@ -5,7 +5,7 @@ import Phaser from "phaser";
 import { Head } from "./Head";
 
 //
-// These are overall mechanics that are common to several different scenes, such as a custom cursor or other UI.
+// These are overall mechanics that are common to several different scenes.
 //
 
 export class CoreOverlay extends Phaser.Scene {
