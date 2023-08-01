@@ -13,6 +13,7 @@ import { Teleporter } from "./interactable/Teleporter";
 // config
 import config from "../config";
 import { Enemy } from "./Enemy";
+import Utility from "./utility/Utility";
 
 export class Player extends LivingEntity {
 	// interaction
@@ -517,5 +518,8 @@ export class Player extends LivingEntity {
 		this.changeHealth(
 			-((enemy.gameObject as Enemy).stats as enemyStats).strength
 		);
+
+		// sfx
+		this.scene.sound.play("sfx_hit_" + Utility.random.int(1, 6));
 	}
 }
