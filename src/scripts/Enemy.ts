@@ -47,8 +47,8 @@ export class Enemy extends LivingEntity {
 		this.playAnim("idle");
 	}
 
-	update() {
-		super.update();
+	preupdate() {
+		super.preupdate();
 
 		// run movement
 		if (!this.scene.player.isDead) this.updateMovement();

@@ -78,6 +78,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		this.applyShaders(this.scene.sceneHead.highPerformanceMode.get());
 
 		// events
+		scene.events.on("preupdate", this.preupdate, this);
 		scene.events.on("update", this.update, this);
 		this.once("destroy", this.onDestroy, this);
 	}
@@ -94,12 +95,15 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		this.setActive(false);
 	}
 
+	preupdate() {}
+
 	update() {
 		if (this.body) this.setFixedRotation();
 	}
 
 	onDestroy() {
 		// remove listeners
+		this.scene.events.removeListener("preupdate", this.preupdate, this);
 		this.scene.events.removeListener("update", this.update, this);
 	}
 
