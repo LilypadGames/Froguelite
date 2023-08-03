@@ -5,9 +5,6 @@ import { Game } from "../../scenes/Game";
 import { Interactable } from "../Interactable";
 import { Spell } from "../Spell";
 
-// utility
-import Utility from "../utility/Utility";
-
 export class Lootable extends Interactable {
 	// info
 	loot: string;
@@ -75,15 +72,10 @@ export class Lootable extends Interactable {
 		);
 
 		// sfx
-		this.scene.sound.play(
-			Utility.random.stringFromArray(
-				this.scene.cache.json.get("game").interactables[
-					this.interactableType
-				].sounds.hit
-			),
-			{
-				volume: this.scene.sceneHead.audio.sfx.volume.value,
-			}
+		this.scene.sceneHead.play.sound(
+			this.scene.cache.json.get("game").interactables[
+				this.interactableType
+			].sounds.hit
 		);
 	}
 }

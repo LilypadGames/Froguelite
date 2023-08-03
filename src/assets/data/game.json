@@ -31,14 +31,7 @@
             "armors": []
         },
         "sounds": {
-            "hit": [
-                "sfx_hit_1",
-                "sfx_hit_2",
-                "sfx_hit_3",
-                "sfx_hit_4",
-                "sfx_hit_5",
-                "sfx_hit_6"
-            ]
+            "hit": "sfx_hit"
         }
     },
     "enemies": {
@@ -76,14 +69,7 @@
                 "splitAmount": 2
             },
             "sounds": {
-                "hit": [
-                    "sfx_hit_1",
-                    "sfx_hit_2",
-                    "sfx_hit_3",
-                    "sfx_hit_4",
-                    "sfx_hit_5",
-                    "sfx_hit_6"
-                ]
+                "hit": "sfx_hit"
             }
         }
     },
@@ -125,14 +111,19 @@
         "wooden_chest": {
             "texture": "chest_wood",
             "sounds": {
-                "hit": [
-                    "sfx_hit_1",
-                    "sfx_hit_2",
-                    "sfx_hit_3",
-                    "sfx_hit_4",
-                    "sfx_hit_5",
-                    "sfx_hit_6"
-                ]
+                "hit": "sfx_hit"
+            }
+        },
+        "silver_chest": {
+            "texture": "chest_silver",
+            "sounds": {
+                "hit": "sfx_hit_metal"
+            }
+        },
+        "golden_chest": {
+            "texture": "chest_gold",
+            "sounds": {
+                "hit": "sfx_hit_metal"
             }
         }
     },

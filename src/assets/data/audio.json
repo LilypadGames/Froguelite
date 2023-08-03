@@ -18,5 +18,11 @@
         "audio/sfx/hit_4.ogg",
         "audio/sfx/hit_5.ogg",
         "audio/sfx/hit_6.ogg"
+    ],
+    "sfx_hit_metal": [
+        "audio/sfx/hit_metal_1.ogg",
+        "audio/sfx/hit_metal_2.ogg",
+        "audio/sfx/hit_metal_3.ogg",
+        "audio/sfx/hit_metal_4.ogg"
     ]
 }

@@ -14,9 +14,6 @@ import { Enemy } from "./Enemy";
 // config
 import config from "../config";
 
-// utility
-import Utility from "./utility/Utility";
-
 export class Player extends LivingEntity {
 	// interaction
 	lastContact!: undefined | Interactable | Teleporter;
@@ -500,13 +497,8 @@ export class Player extends LivingEntity {
 		);
 
 		// sfx
-		this.scene.sound.play(
-			Utility.random.stringFromArray(
-				this.scene.cache.json.get("game").player.sounds.hit
-			),
-			{
-				volume: this.scene.sceneHead.audio.sfx.volume.value,
-			}
+		this.scene.sceneHead.play.sound(
+			this.scene.cache.json.get("game").player.sounds.hit
 		);
 	}
 }

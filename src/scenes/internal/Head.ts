@@ -13,6 +13,9 @@ import { CoreOverlay } from "./CoreOverlay";
 import { HUD } from "../overlay/HUD";
 import { Game } from "../Game";
 
+// utility
+import Utility from "../../scripts/utility/Utility";
+
 //
 // This scene runs in the background and acts as a manager for all the current scenes and stores useful information that persists between scenes
 //
@@ -266,6 +269,31 @@ export class Head extends Phaser.Scene {
 					this.audio.update("sfx");
 				},
 			},
+		},
+	};
+
+	play = {
+		sound: (key: string): void => {
+			// provided sound key has multiple sources: choose random one
+			if (
+				Array.isArray(this.cache.json.get("audio")[key]) &&
+				this.cache.json.get("audio")[key].length > 0 &&
+				this.cache.json.get("audio")[key].every((value: any) => {
+					return typeof value === "string";
+				})
+			)
+				key =
+					key +
+					"_" +
+					Utility.random.int(
+						1,
+						this.cache.json.get("audio")[key].length
+					);
+
+			// play sound at current volume
+			this.sceneMain.sound.play(key, {
+				volume: this.audio.sfx.volume.value,
+			});
 		},
 	};
 

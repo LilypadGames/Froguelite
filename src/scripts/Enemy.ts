@@ -3,11 +3,10 @@ import { Game } from "../scenes/Game";
 
 // components
 import { LivingEntity } from "./LivingEntity";
+import { Spell } from "./Spell";
 
 // config
 import config from "../config";
-import { Spell } from "./Spell";
-import Utility from "./utility/Utility";
 
 export class Enemy extends LivingEntity {
 	// id
@@ -105,13 +104,8 @@ export class Enemy extends LivingEntity {
 		this.forces = this.scene.matter.vector.mult(spell.velocity, 1);
 
 		// sfx
-		this.scene.sound.play(
-			Utility.random.stringFromArray(
-				this.scene.cache.json.get("game").enemies[this.id].sounds.hit
-			),
-			{
-				volume: this.scene.sceneHead.audio.sfx.volume.value,
-			}
+		this.scene.sceneHead.play.sound(
+			this.scene.cache.json.get("game").enemies[this.id].sounds.hit
 		);
 	}
 }
