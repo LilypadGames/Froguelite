@@ -78,7 +78,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 
 		// prevent rotation when moving
 		this.setMass(100);
-		this.setFriction(1, 1, 0);
+		this.setFriction(0.5, 0.5, 0);
 
 		// apply shader
 		this.applyShaders(this.scene.sceneHead.highPerformanceMode.get());

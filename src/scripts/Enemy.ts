@@ -75,7 +75,10 @@ export class Enemy extends LivingEntity {
 			(this.body as MatterJS.BodyType).position
 		);
 		const normalizedDelta = this.scene.matter.vector.normalise(deltaVector);
-		const forceVector = this.scene.matter.vector.mult(normalizedDelta, 0.1);
+		const forceVector = this.scene.matter.vector.mult(
+			normalizedDelta,
+			this.stats.speed / 10
+		);
 
 		// apply force
 		this.scene.matter.body.applyForce(
