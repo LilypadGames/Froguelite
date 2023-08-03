@@ -43,7 +43,7 @@
         }
     },
     "lsf": "texture/enemy/lsf.png",
-    "cave": "texture/interactable/teleporter/cave.png",
+    "entrance_cave": "texture/interactable/teleporter/cave.png",
     "snot_bubble": {
         "spritesheet": "texture/spell/snot_bubble.png",
         "frameWidth": 13,

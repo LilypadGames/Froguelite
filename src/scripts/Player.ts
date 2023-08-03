@@ -9,10 +9,12 @@ import { Interactable } from "./Interactable";
 import { LivingEntity } from "./LivingEntity";
 import { Spells } from "./Spell";
 import { Teleporter } from "./interactable/Teleporter";
+import { Enemy } from "./Enemy";
 
 // config
 import config from "../config";
-import { Enemy } from "./Enemy";
+
+// utility
 import Utility from "./utility/Utility";
 
 export class Player extends LivingEntity {
@@ -43,7 +45,7 @@ export class Player extends LivingEntity {
 		// get player data
 		let playerData = scene.cache.json.get("game").player;
 
-		// get player data
+		// get player save data
 		let saveData: {
 			stats: playerStats;
 			equipped: playerEquipped;
@@ -74,9 +76,6 @@ export class Player extends LivingEntity {
 
 		// default anim
 		this.playAnim("front");
-
-		// set friction
-		// this.setFriction(0.1,0.5);
 
 		// set depth
 		this.setDepth(config.depth.player.base);
@@ -501,6 +500,13 @@ export class Player extends LivingEntity {
 		);
 
 		// sfx
-		this.scene.sound.play("sfx_hit_" + Utility.random.int(1, 6));
+		this.scene.sound.play(
+			Utility.random.stringFromArray(
+				this.scene.cache.json.get("game").player.sounds.hit
+			),
+			{
+				volume: this.scene.sceneHead.audio.sfx.volume.value,
+			}
+		);
 	}
 }

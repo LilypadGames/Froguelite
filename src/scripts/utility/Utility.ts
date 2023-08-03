@@ -10,6 +10,24 @@ export default {
 		fromArray: function (array: Array<any>) {
 			return array[Math.floor(Math.random() * array.length)];
 		},
+
+		// gets random string from array, or returns if just one string
+		stringFromArray: function (array: string | string[]) {
+			// single string
+			if (typeof array === "string") return array;
+			// multiple strings
+			else if (
+				Array.isArray(array) &&
+				array.length > 0 &&
+				array.every((value: any) => {
+					return typeof value === "string";
+				})
+			)
+				return this.fromArray(array);
+
+			// none found, or not a string/string array
+			return "";
+		},
 	},
 
 	// time

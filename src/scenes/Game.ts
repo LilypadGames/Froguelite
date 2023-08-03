@@ -252,18 +252,10 @@ export class Game extends Core {
 				type properties = {
 					type: string;
 				};
+
 				// object properties
 				interface gameObjectProperties extends properties {
 					id: string;
-				}
-				// teleporter properties
-				interface teleporterProperties extends gameObjectProperties {
-					tip: string;
-					teleportTo: string;
-				}
-				// lootable properties
-				interface lootableProperties extends gameObjectProperties {
-					lootableType: string;
 				}
 
 				// init properties
@@ -303,21 +295,18 @@ export class Game extends Core {
 				// teleporter
 				if (properties.type === "teleporter") {
 					this.spawnTeleporter(
-						(properties as teleporterProperties).id,
+						(properties as gameObjectProperties).id,
 						(object as any).x,
-						(object as any).y,
-						(properties as teleporterProperties).tip,
-						(properties as teleporterProperties).teleportTo
+						(object as any).y
 					);
 				}
 
 				// lootable
 				if (properties.type === "lootable") {
 					this.spawnLootable(
-						(properties as lootableProperties).id,
+						(properties as gameObjectProperties).id,
 						(object as any).x,
-						(object as any).y,
-						(properties as lootableProperties).lootableType
+						(object as any).y
 					);
 				}
 			}, this);
@@ -351,24 +340,18 @@ export class Game extends Core {
 	}
 
 	// spawn teleport
-	spawnTeleporter(
-		id: string,
-		x: number,
-		y: number,
-		tip: string,
-		teleportTo: string
-	) {
+	spawnTeleporter(id: string, x: number, y: number) {
 		// create teleport
-		let teleporter = new Teleporter(this, x, y, id, tip, teleportTo);
+		let teleporter = new Teleporter(this, x, y, id);
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(teleporter);
 	}
 
 	// spawn lootable
-	spawnLootable(id: string, x: number, y: number, type: string) {
+	spawnLootable(id: string, x: number, y: number) {
 		// create lootable
-		let lootable = new Lootable(this, x, y, id, type);
+		let lootable = new Lootable(this, x, y, id);
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(lootable);

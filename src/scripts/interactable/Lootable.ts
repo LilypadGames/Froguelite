@@ -3,60 +3,54 @@ import { Game } from "../../scenes/Game";
 
 // components
 import { Interactable } from "../Interactable";
+import { Spell } from "../Spell";
+
+// utility
+import Utility from "../utility/Utility";
 
 export class Lootable extends Interactable {
-	sceneGame: Game;
-	id: string;
+	// info
 	loot: string;
 
-	constructor(
-		scene: Game,
-		x: number,
-		y: number,
-		id: string,
-		lootableType: string
-	) {
+	constructor(scene: Game, x: number, y: number, id: string) {
+		// get lootable data
+		const lootableData = scene.cache.json.get("game").lootable[id];
+
 		// pass values
-		super(scene, x, y, lootableType, "lootable", "Open");
+		super(scene, x, y, id, lootableData.type, "lootable", "Open");
 
 		// save values
-		this.sceneGame = scene;
-		this.id = id;
-		this.loot = scene.cache.json.get("game").loot.lootable[id];
-
-		// set scale
-		if (scene.cache.json.get("textures")[lootableType].scale)
-			this.setScale(scene.cache.json.get("textures")[lootableType].scale);
+		this.loot = lootableData.loot;
 	}
 
 	// give loot
 	interact() {
 		try {
 			// give armor
-			if (this.sceneGame.cache.json.get("game").armors[this.loot])
-				this.sceneGame.player.inventory.armors.push(this.loot);
+			if (this.scene.cache.json.get("game").armors[this.loot])
+				this.scene.player.inventory.armors.push(this.loot);
 			// give spell
-			else if (this.sceneGame.cache.json.get("game").spells[this.loot])
-				this.sceneGame.player.inventory.spells.push(this.loot);
+			else if (this.scene.cache.json.get("game").spells[this.loot])
+				this.scene.player.inventory.spells.push(this.loot);
 		} catch {
 			return;
 		}
 
 		// lootable open sound
-		this.sceneGame.sound.play("sfx_chest_open", {
+		this.scene.sound.play("sfx_chest_open", {
 			volume: this.scene.sceneHead.audio.sfx.volume.value,
 		});
 
 		// display item
-		this.sceneGame.HUD.displayItem(
-			this.sceneGame.cache.json.get("game").armors[this.loot].inventory
+		this.scene.HUD.displayItem(
+			this.scene.cache.json.get("game").armors[this.loot].inventory
 				.texture,
-			this.sceneGame.cache.json.get("lang.en_us").armor[this.loot].name,
-			this.sceneGame.cache.json.get("lang.en_us").armor[this.loot]
+			this.scene.cache.json.get("lang.en_us").armor[this.loot].name,
+			this.scene.cache.json.get("lang.en_us").armor[this.loot]
 				.description,
 			() => {
 				// acquired sound
-				this.sceneGame.sound.play("sfx_acquired", {
+				this.scene.sound.play("sfx_acquired", {
 					volume: this.scene.sceneHead.audio.sfx.volume.value,
 				});
 			}
@@ -70,5 +64,26 @@ export class Lootable extends Interactable {
 
 		// end collision
 		super.interact();
+	}
+
+	// handle spell collision
+	onCollideSpell(spell: Spell) {
+		// cache force
+		this.forces = this.scene.matter.vector.mult(
+			(spell.body as MatterJS.BodyType).velocity,
+			0.25
+		);
+
+		// sfx
+		this.scene.sound.play(
+			Utility.random.stringFromArray(
+				this.scene.cache.json.get("game").interactables[
+					this.interactableType
+				].sounds.hit
+			),
+			{
+				volume: this.scene.sceneHead.audio.sfx.volume.value,
+			}
+		);
 	}
 }

@@ -139,18 +139,8 @@
                         {
                          "name":"id",
                          "type":"string",
-                         "value":"cave"
-                        }, 
-                        {
-                         "name":"teleportTo",
-                         "type":"string",
-                         "value":"frogCaves"
-                        }, 
-                        {
-                         "name":"tip",
-                         "type":"string",
-                         "value":"Enter the Frog Caves"
-                        }, 
+                         "value":"riverside_cave"
+                        },
                         {
                          "name":"type",
                          "type":"string",
@@ -173,12 +163,7 @@
                          "name":"id",
                          "type":"string",
                          "value":"riverside_chest"
-                        }, 
-                        {
-                         "name":"lootableType",
-                         "type":"string",
-                         "value":"chest_wood"
-                        }, 
+                        },
                         {
                          "name":"type",
                          "type":"string",

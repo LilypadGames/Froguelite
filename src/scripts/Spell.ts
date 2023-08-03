@@ -3,10 +3,13 @@ import { Game } from "../scenes/Game";
 
 // components
 import { Enemy } from "./Enemy";
-import Utility from "./utility/Utility";
+import { Interactable } from "./Interactable";
 
 // config
 import config from "../config";
+
+// utility
+import Utility from "./utility/Utility";
 
 export class Spell extends Phaser.Physics.Matter.Sprite {
 	// scene
@@ -65,6 +68,10 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 					Phaser.Physics.Matter.TileBody
 				) {
 					this.collideWall();
+				}
+				// collided with interactable
+				else if (entities.bodyA.gameObject instanceof Interactable) {
+					this.collideInteractable();
 				}
 			}
 		);
@@ -178,6 +185,24 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 
 		// DEBUG
 		console.log("Collided with Wall");
+
+		// hide spell
+		this.pop();
+	}
+
+	// collided with interactable
+	collideInteractable() {
+		// sfx
+		this.scene.sound.play(
+			this.scene.cache.json.get("game").spells[this.spellID].sounds.fail,
+			{
+				volume: this.scene.sceneHead.audio.sfx.volume.value,
+				detune: Utility.random.int(-300, 300),
+			}
+		);
+
+		// DEBUG
+		console.log("Collided with Interactable");
 
 		// hide spell
 		this.pop();

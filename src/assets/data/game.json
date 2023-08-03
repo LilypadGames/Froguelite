@@ -29,6 +29,16 @@
                 "snot_bubble"
             ],
             "armors": []
+        },
+        "sounds": {
+            "hit": [
+                "sfx_hit_1",
+                "sfx_hit_2",
+                "sfx_hit_3",
+                "sfx_hit_4",
+                "sfx_hit_5",
+                "sfx_hit_6"
+            ]
         }
     },
     "enemies": {
@@ -64,6 +74,16 @@
                 },
                 "splitTo": "slime_small",
                 "splitAmount": 2
+            },
+            "sounds": {
+                "hit": [
+                    "sfx_hit_1",
+                    "sfx_hit_2",
+                    "sfx_hit_3",
+                    "sfx_hit_4",
+                    "sfx_hit_5",
+                    "sfx_hit_6"
+                ]
             }
         }
     },
@@ -98,14 +118,35 @@
             }
         }
     },
-    "teleporters": {
-        "cave": {
-            "texture": "cave"
+    "interactables": {
+        "cave_entrance": {
+            "texture": "entrance_cave"
+        },
+        "wooden_chest": {
+            "texture": "chest_wood",
+            "sounds": {
+                "hit": [
+                    "sfx_hit_1",
+                    "sfx_hit_2",
+                    "sfx_hit_3",
+                    "sfx_hit_4",
+                    "sfx_hit_5",
+                    "sfx_hit_6"
+                ]
+            }
         }
     },
-    "loot": {
-        "lootable": {
-            "riverside_chest": "blue_garbs"
+    "teleporters": {
+        "riverside_cave": {
+            "type": "cave_entrance",
+            "destination": "frogCaves",
+            "tip": "Enter the Frog Caves"
+        }
+    },
+    "lootable": {
+        "riverside_chest": {
+            "type": "wooden_chest",
+            "loot": "blue_garbs"
         }
     }
 }

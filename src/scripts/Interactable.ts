@@ -4,27 +4,51 @@ import { Game } from "../scenes/Game";
 // components
 import { Entity } from "./Entity";
 import { Player } from "./Player";
+import { Spell } from "./Spell";
 
 // config
 import config from "../config";
 
 export class Interactable extends Entity {
+	// info
+	id: string;
+	interactableType: string;
 	tip: string;
-	enabled: boolean = true;
+	enabled: boolean = false;
 
 	constructor(
 		scene: Game,
 		x: number,
 		y: number,
-		textureKey: string,
+		id: string,
+		interactableType: string,
 		entityType: string,
 		tip: string
 	) {
+		// get interactable data
+		let interactableData =
+			scene.cache.json.get("game").interactables[interactableType];
+
 		// pass values
-		super(scene, x, y, textureKey, "Interactable", entityType);
+		super(
+			scene,
+			x,
+			y,
+			interactableData.texture,
+			"Interactable",
+			entityType
+		);
 
 		// save values
+		this.id = id;
+		this.interactableType = interactableType;
 		this.tip = tip;
+
+		// set scale
+		if (scene.cache.json.get("textures")[interactableData.texture].scale)
+			this.setScale(
+				scene.cache.json.get("textures")[interactableData.texture].scale
+			);
 
 		// set origin
 		this.setOrigin(0.5, 0.5);
@@ -33,37 +57,55 @@ export class Interactable extends Entity {
 		this.setDepth(config.depth.interactable);
 
 		// set as sensor (not physically collidable, but still triggers collision event)
-		this.setSensor(true);
+		this.setSensor(false);
 
-		// detect player collisions
+		// detect collision
 		this.setOnCollide(
-			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
-				// not enabled
-				if (!this.enabled) return;
-
-				// player colliding
-				if (entities.bodyB.gameObject instanceof Player) {
-					this.collidePlayer(entities.bodyB.gameObject);
-				}
-			}
+			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) =>
+				this.onCollide(entities)
 		);
 
-		// detect end of player collision
+		// detect collision end
 		this.setOnCollideEnd(
-			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
-				// not enabled
-				if (!this.enabled) return;
-
-				// player no longer colliding
-				if (entities.bodyB.gameObject instanceof Player) {
-					this.collideEndPlayer(entities.bodyB.gameObject);
-				}
-			}
+			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) =>
+				this.onCollideEnd(entities)
 		);
+
+		// enable on spawn
+		this.enabled = true;
 	}
 
-	// player colliding with this interactable object
-	collidePlayer(player: Player) {
+	// handle collision
+	onCollide(entities: Phaser.Types.Physics.Matter.MatterCollisionData) {
+		// player colliding
+		if (
+			this.enabled &&
+			entities.bodyB.gameObject instanceof Player &&
+			entities.bodyB.gameObject.active
+		) {
+			this.onCollidePlayer(entities.bodyB.gameObject);
+		} else if (
+			entities.bodyB.gameObject instanceof Spell &&
+			entities.bodyB.gameObject.active
+		) {
+			this.onCollideSpell(entities.bodyB.gameObject);
+		}
+	}
+
+	// handle collision end
+	onCollideEnd(entities: Phaser.Types.Physics.Matter.MatterCollisionData) {
+		// player no longer colliding
+		if (
+			this.enabled &&
+			entities.bodyB.gameObject instanceof Player &&
+			entities.bodyB.gameObject.active
+		) {
+			this.onCollidePlayerEnd(entities.bodyB.gameObject);
+		}
+	}
+
+	// handle player collision
+	onCollidePlayer(player: Player) {
 		// show tip
 		this.scene.HUD.setTip("[F] " + this.tip);
 
@@ -71,8 +113,8 @@ export class Interactable extends Entity {
 		player.lastContact = this;
 	}
 
-	// player no longer colliding with this interactable object
-	collideEndPlayer(player: Player) {
+	// handle player collision end
+	onCollidePlayerEnd(player: Player) {
 		// hide tip
 		this.scene.HUD.setTip("");
 
@@ -80,9 +122,12 @@ export class Interactable extends Entity {
 		if (player.lastContact == this) player.lastContact = undefined;
 	}
 
+	// handle spell collision
+	onCollideSpell(_spell: Spell) {}
+
 	// player interacted
 	interact() {
-		// end collision
-		this.collideEndPlayer(this.scene.player);
+		// end player collision
+		this.onCollidePlayerEnd(this.scene.player);
 	}
 }
