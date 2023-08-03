@@ -38,7 +38,6 @@ export class Player extends LivingEntity {
 	armor: {
 		torso?: Phaser.GameObjects.Sprite;
 	} = {};
-	forces: MatterJS.Vector | undefined;
 
 	constructor(scene: Game, x: number, y: number) {
 		// get player data
@@ -92,14 +91,16 @@ export class Player extends LivingEntity {
 		this.setOnCollide(
 			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
 				// collided with enemy
-				if (entities.bodyA.gameObject instanceof Enemy) {
+				if (
+					entities.bodyA.gameObject instanceof Enemy &&
+					entities.bodyA.gameObject.active
+				) {
 					this.collideEnemy(entities.bodyA);
 				}
 			}
 		);
 
 		// events
-		scene.matter.world.on("beforeupdate", this.beforeupdate, this);
 		scene.events.on("postupdate", this.postupdate, this);
 	}
 
@@ -107,11 +108,6 @@ export class Player extends LivingEntity {
 		super.onDestroy();
 
 		// remove listeners
-		this.scene.matter.world.removeListener(
-			"beforeupdate",
-			this.beforeupdate,
-			this
-		);
 		this.scene.events.removeListener("postupdate", this.postupdate, this);
 
 		// save player data
@@ -125,20 +121,6 @@ export class Player extends LivingEntity {
 				},
 			})
 		);
-	}
-
-	beforeupdate() {
-		// apply cached forces
-		if (this.forces) {
-			this.scene.matter.body.applyForce(
-				this.body as MatterJS.BodyType,
-				(this.body as MatterJS.BodyType).position,
-				this.forces
-			);
-
-			// clear forces
-			delete this.forces;
-		}
 	}
 
 	update() {

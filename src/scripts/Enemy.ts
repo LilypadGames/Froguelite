@@ -6,6 +6,8 @@ import { LivingEntity } from "./LivingEntity";
 
 // config
 import config from "../config";
+import { Spell } from "./Spell";
+import Utility from "./utility/Utility";
 
 export class Enemy extends LivingEntity {
 	// id
@@ -44,6 +46,19 @@ export class Enemy extends LivingEntity {
 
 		// play idle anim
 		this.playAnim("idle");
+
+		// detect specific collisions
+		this.setOnCollide(
+			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// collided with spell
+				if (
+					entities.bodyB.gameObject instanceof Spell &&
+					entities.bodyB.gameObject.active
+				) {
+					this.collideSpell(entities.bodyB);
+				}
+			}
+		);
 	}
 
 	preupdate() {
@@ -80,5 +95,13 @@ export class Enemy extends LivingEntity {
 
 		// set anim
 		this.anims.play(this.texture.key + "_" + key, true);
+	}
+
+	collideSpell(spell: MatterJS.BodyType) {
+		// cache force
+		this.forces = this.scene.matter.vector.mult(spell.velocity, 1);
+
+		// sfx
+		this.scene.sound.play("sfx_hit_" + Utility.random.int(1, 6));
 	}
 }

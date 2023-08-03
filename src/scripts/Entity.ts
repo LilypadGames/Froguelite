@@ -11,6 +11,7 @@ import { Game } from "../scenes/Game";
 import ColorScheme from "./utility/ColorScheme";
 
 export class Entity extends Phaser.Physics.Matter.Sprite {
+	// info
 	scene: Game;
 	label: string;
 	textureKey: string;
@@ -21,6 +22,9 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	glowFxInstance!: GlowFilterPostFxPipeline;
 	outlineFx;
 	glowFx;
+
+	// movement
+	forces: MatterJS.Vector | undefined;
 
 	// config
 	outline = {
@@ -80,6 +84,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		this.applyShaders(this.scene.sceneHead.highPerformanceMode.get());
 
 		// events
+		scene.matter.world.on("beforeupdate", this.beforeupdate, this);
 		scene.events.on("preupdate", this.preupdate, this);
 		scene.events.on("update", this.update, this);
 		this.once("destroy", this.onDestroy, this);
@@ -97,6 +102,20 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		this.setActive(false);
 	}
 
+	beforeupdate() {
+		// apply cached forces
+		if (this.forces) {
+			this.scene.matter.body.applyForce(
+				this.body as MatterJS.BodyType,
+				(this.body as MatterJS.BodyType).position,
+				this.forces
+			);
+
+			// clear forces
+			delete this.forces;
+		}
+	}
+
 	preupdate() {}
 
 	update() {
@@ -105,6 +124,11 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 
 	onDestroy() {
 		// remove listeners
+		this.scene.matter.world.removeListener(
+			"beforeupdate",
+			this.beforeupdate,
+			this
+		);
 		this.scene.events.removeListener("preupdate", this.preupdate, this);
 		this.scene.events.removeListener("update", this.update, this);
 	}
