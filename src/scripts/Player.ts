@@ -77,6 +77,14 @@ export class Player extends LivingEntity {
 		// set depth
 		this.setDepth(config.depth.player.base);
 
+		// set collision filter
+		this.setCollisionCategory(config.collisionGroup.player);
+		this.setCollidesWith([
+			config.collisionGroup.world,
+			config.collisionGroup.enemy,
+			config.collisionGroup.interactables,
+		]);
+
 		// initialize spells
 		if (this.equipped.spell) this.equip("spell", this.equipped.spell);
 

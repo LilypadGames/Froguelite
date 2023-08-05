@@ -49,8 +49,16 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		// hide
 		this.hide();
 
-		// trigger collisions, but don't actually collide
+		// trigger collisions without physically colliding
 		this.setSensor(true);
+
+		// set collision filters
+		this.setCollisionCategory(config.collisionGroup.spell);
+		this.setCollidesWith([
+			config.collisionGroup.world,
+			config.collisionGroup.enemy,
+			config.collisionGroup.traversable,
+		]);
 
 		// detect specific collisions
 		this.setOnCollide(
@@ -59,20 +67,20 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 				if (!this.active || !this.visible) return;
 
 				// collided with enemy
-				if (entities.bodyA.gameObject instanceof Enemy) {
+				if (entities.bodyA.gameObject instanceof Enemy)
 					this.collideEnemy(entities.bodyA);
-				}
 				// collided with wall
 				else if (
 					entities.bodyA.gameObject instanceof
 					Phaser.Physics.Matter.TileBody
-				) {
+				)
 					this.collideWall();
-				}
-				// collided with interactable
-				else if (entities.bodyA.gameObject instanceof Interactable) {
-					this.collideInteractable();
-				}
+				// collided with traversable
+				else if (
+					entities.bodyA.collisionFilter.category ===
+					config.collisionGroup.traversable
+				)
+					this.collideTraversable();
 			}
 		);
 
@@ -190,8 +198,8 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		this.pop();
 	}
 
-	// collided with interactable
-	collideInteractable() {
+	// collided with traversable
+	collideTraversable() {
 		// sfx
 		this.scene.sound.play(
 			this.scene.cache.json.get("game").spells[this.spellID].sounds.fail,
@@ -202,7 +210,7 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		);
 
 		// DEBUG
-		console.log("Collided with Interactable");
+		console.log("Collided with Traversable");
 
 		// hide spell
 		this.pop();

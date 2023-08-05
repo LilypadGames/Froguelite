@@ -3,6 +3,9 @@ import Phaser from "phaser";
 import WebFont from "webfontloader";
 import store from "storejs";
 
+// config
+import config from "../../config";
+
 //
 // This is meant for loading in any data, such as a save game state, prior to entering the main menu.
 //
@@ -133,6 +136,12 @@ export class Load extends Phaser.Scene {
 		let tilemaps = this.cache.json.get("tilemaps");
 		for (const key in tilemaps) {
 			this.load.tilemapTiledJSON(key, tilemaps[key]);
+		}
+
+		// set up collision groups
+		for (const [group, _value] of Object.entries(config.collisionGroup)) {
+			config.collisionGroup[group as keyof typeof config.collisionGroup] =
+				this.matter.world.nextCategory();
 		}
 
 		// load fonts

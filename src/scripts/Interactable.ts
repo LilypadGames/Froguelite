@@ -4,7 +4,6 @@ import { Game } from "../scenes/Game";
 // components
 import { Entity } from "./Entity";
 import { Player } from "./Player";
-import { Spell } from "./Spell";
 
 // config
 import config from "../config";
@@ -56,8 +55,12 @@ export class Interactable extends Entity {
 		// set depth
 		this.setDepth(config.depth.interactable);
 
-		// set as sensor (not physically collidable, but still triggers collision event)
-		this.setSensor(false);
+		// trigger collisions without physically colliding
+		this.setSensor(true);
+
+		// set collision filter
+		this.setCollisionCategory(config.collisionGroup.interactables);
+		this.setCollidesWith(config.collisionGroup.player);
 
 		// detect collision
 		this.setOnCollide(
@@ -84,11 +87,6 @@ export class Interactable extends Entity {
 			entities.bodyB.gameObject.active
 		) {
 			this.onCollidePlayer(entities.bodyB.gameObject);
-		} else if (
-			entities.bodyB.gameObject instanceof Spell &&
-			entities.bodyB.gameObject.active
-		) {
-			this.onCollideSpell(entities.bodyB.gameObject);
 		}
 	}
 
@@ -121,9 +119,6 @@ export class Interactable extends Entity {
 		// remove last contact
 		if (player.lastContact == this) player.lastContact = undefined;
 	}
-
-	// handle spell collision
-	onCollideSpell(_spell: Spell) {}
 
 	// player interacted
 	interact() {

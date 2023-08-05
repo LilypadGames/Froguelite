@@ -89,4 +89,12 @@ export default {
 		particle: 7,
 		overlay: 100000,
 	},
+	collisionGroup: {
+		world: 0,
+		interactables: 0,
+		player: 0,
+		enemy: 0,
+		spell: 0,
+		traversable: 0,
+	},
 };

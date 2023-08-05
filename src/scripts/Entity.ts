@@ -73,12 +73,13 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 			{
 				isSensor: false,
 				label: label,
+				mass: 100,
+				friction: 0.5,
+				frictionAir: 0.5,
 			}
-		);
-
-		// prevent rotation when moving
-		this.setMass(100);
-		this.setFriction(0.5, 0.5, 0);
+		)
+			// collide with nothing by default
+			.setCollidesWith(0);
 
 		// apply shader
 		this.applyShaders(this.scene.sceneHead.highPerformanceMode.get());
@@ -103,17 +104,7 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 	}
 
 	beforeupdate() {
-		// apply cached forces
-		if (this.forces) {
-			this.scene.matter.body.applyForce(
-				this.body as MatterJS.BodyType,
-				(this.body as MatterJS.BodyType).position,
-				this.forces
-			);
-
-			// clear forces
-			delete this.forces;
-		}
+		this.applyCachedForces();
 	}
 
 	preupdate() {}
@@ -131,6 +122,20 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 		);
 		this.scene.events.removeListener("preupdate", this.preupdate, this);
 		this.scene.events.removeListener("update", this.update, this);
+	}
+
+	applyCachedForces() {
+		// apply cached forces
+		if (this.forces) {
+			this.scene.matter.body.applyForce(
+				this.body as MatterJS.BodyType,
+				(this.body as MatterJS.BodyType).position,
+				this.forces
+			);
+
+			// clear forces
+			delete this.forces;
+		}
 	}
 
 	applyShaders(performanceMode = false) {

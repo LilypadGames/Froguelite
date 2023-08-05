@@ -46,6 +46,15 @@ export class Enemy extends LivingEntity {
 		// play idle anim
 		this.playAnim("idle");
 
+		// set collision filter
+		this.setCollisionCategory(config.collisionGroup.enemy);
+		this.setCollidesWith([
+			config.collisionGroup.world,
+			config.collisionGroup.player,
+			config.collisionGroup.spell,
+			config.collisionGroup.traversable,
+		]);
+
 		// detect specific collisions
 		this.setOnCollide(
 			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {

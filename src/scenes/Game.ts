@@ -212,7 +212,7 @@ export class Game extends Core {
 		let tileset = map.addTilesetImage("tiles", "world_tiles");
 
 		// init layers
-		map.layers.forEach((layer) => {
+		map.layers.forEach((layer: Phaser.Tilemaps.LayerData): void => {
 			// add layer
 			map.createLayer(
 				layer.name,
@@ -237,6 +237,28 @@ export class Game extends Core {
 					// add collision
 					layer.tilemapLayer.setCollisionByExclusion([-1, 0]);
 					this.matter.world.convertTilemapLayer(layer.tilemapLayer);
+					layer.tilemapLayer.forEachTile(
+						(tile: Phaser.Tilemaps.Tile) => {
+							if (
+								tile.physics &&
+								(tile.physics as any).matterBody &&
+								(tile.physics as any).matterBody.body
+							) {
+								// get tile body
+								const tileBody = (tile.physics as any)
+									.matterBody.body;
+
+								// set collision filter
+								tileBody.collisionFilter.category =
+									config.collisionGroup.world;
+								tileBody.collisionFilter.mask =
+									config.collisionGroup.player |
+									config.collisionGroup.enemy |
+									config.collisionGroup.spell |
+									config.collisionGroup.traversable;
+							}
+						}
+					);
 				}
 			});
 		});
