@@ -3,7 +3,6 @@ import { Game } from "../scenes/Game";
 
 // components
 import { Enemy } from "./Enemy";
-import { Interactable } from "./Interactable";
 
 // config
 import config from "../config";
@@ -12,11 +11,9 @@ import config from "../config";
 import Utility from "./utility/Utility";
 
 export class Spell extends Phaser.Physics.Matter.Sprite {
-	// scene
+	// info
 	scene: Game;
-
-	// id
-	spellID: string;
+	id: string;
 
 	// stats
 	speed!: number;
@@ -24,21 +21,21 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 	state: number = 0;
 	damage: number;
 
-	constructor(scene: Game, x: number, y: number, spellID: string) {
+	constructor(scene: Game, x: number, y: number, id: string) {
 		// get spell data
 		let spellData = scene.cache.json.get("game").spells;
 
 		// pass values
-		super(scene.matter.world, x, y, spellData[spellID].texture);
+		super(scene.matter.world, x, y, spellData[id].texture);
 
 		// save values
 		this.scene = scene;
 		this.x = x;
 		this.y = y;
-		this.spellID = spellID;
-		this.lifespan = spellData[spellID].lifespan;
-		this.speed = spellData[spellID].speed;
-		this.damage = spellData[spellID].damage;
+		this.id = id;
+		this.lifespan = spellData[id].lifespan;
+		this.speed = spellData[id].speed;
+		this.damage = spellData[id].damage;
 
 		// set depth (renders under/over other sprites)
 		this.setDepth(config.depth.projectiles);
@@ -50,7 +47,17 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		this.hide();
 
 		// trigger collisions without physically colliding
-		this.setSensor(true);
+		this.setBody(
+			{ type: "rectangle", width: this.width, height: this.height },
+			{
+				isSensor: true,
+				label: "Spell",
+				mass: 100,
+				friction: 0.1,
+				frictionAir: 0.01,
+				frictionStatic: 0.5,
+			}
+		);
 
 		// set collision filters
 		this.setCollisionCategory(config.collisionGroup.spell);
@@ -91,7 +98,13 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 
 	// runs on spells after physics have been applied
 	afterupdate() {
+		// only run on active spells
+		if (!this.active) return;
+
+		// get time alive
 		let delta = this.scene.matter.world.getDelta();
+
+		// kill if at end of lifespan
 		if (this.state > 0) {
 			// lower lifespan
 			this.state -= delta;
@@ -159,8 +172,7 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 	collideEnemy(enemyBody: MatterJS.BodyType) {
 		// sfx
 		this.scene.sound.play(
-			this.scene.cache.json.get("game").spells[this.spellID].sounds
-				.success,
+			this.scene.cache.json.get("game").spells[this.id].sounds.success,
 			{
 				volume: this.scene.sceneHead.audio.sfx.volume.value,
 				detune: Utility.random.int(-300, 300),
@@ -173,9 +185,6 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		// damage enemy
 		enemy.changeHealth(-this.damage);
 
-		// DEBUG
-		console.log("Collided with Enemy: " + enemy.name);
-
 		// hide spell
 		this.pop();
 	}
@@ -184,15 +193,12 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 	collideWall() {
 		// sfx
 		this.scene.sound.play(
-			this.scene.cache.json.get("game").spells[this.spellID].sounds.fail,
+			this.scene.cache.json.get("game").spells[this.id].sounds.fail,
 			{
 				volume: this.scene.sceneHead.audio.sfx.volume.value,
 				detune: Utility.random.int(-300, 300),
 			}
 		);
-
-		// DEBUG
-		console.log("Collided with Wall");
 
 		// hide spell
 		this.pop();
@@ -202,15 +208,12 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 	collideTraversable() {
 		// sfx
 		this.scene.sound.play(
-			this.scene.cache.json.get("game").spells[this.spellID].sounds.fail,
+			this.scene.cache.json.get("game").spells[this.id].sounds.fail,
 			{
 				volume: this.scene.sceneHead.audio.sfx.volume.value,
 				detune: Utility.random.int(-300, 300),
 			}
 		);
-
-		// DEBUG
-		console.log("Collided with Traversable");
 
 		// hide spell
 		this.pop();
@@ -244,13 +247,12 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 
 // group of spells. its better to spawn a ton of spells, hide them all, then show them one at a time as needed and hide them again when done.
 export class Spells extends Phaser.GameObjects.Group {
-	// scene
+	// info
 	scene: Game;
+	id: string;
+	config: Phaser.Types.GameObjects.Group.GroupCreateConfig;
 
-	// id
-	spellID: string;
-
-	constructor(scene: Game, spellID: string) {
+	constructor(scene: Game, id: string) {
 		// get spell data
 		let spellData = scene.cache.json.get("game").spells;
 
@@ -259,22 +261,25 @@ export class Spells extends Phaser.GameObjects.Group {
 
 		// save values
 		this.scene = scene;
-		this.spellID = spellID;
+		this.id = id;
 
-		// create spells and hide them
-		this.createMultiple({
+		// create spell configuration
+		this.config = {
 			quantity: 10,
-			key: spellData[spellID].texture,
+			key: spellData[id].texture,
 			setOrigin: { x: 0.5, y: 0.5 },
 			setDepth: { value: config.depth.projectiles },
 			setScale: {
-				x: spellData[spellID].scale,
-				y: spellData[spellID].scale,
+				x: spellData[id].scale,
+				y: spellData[id].scale,
 			},
 			active: false,
 			visible: false,
 			classType: Spell,
-		});
+		};
+
+		// create spells and hide them
+		this.createMultiple(this.config);
 	}
 
 	// fire spell. this finds a hidden spell and fires it.
@@ -287,20 +292,24 @@ export class Spells extends Phaser.GameObjects.Group {
 		// find hidden spell
 		let spell: Spell = this.getFirstDead();
 
-		// found spell
-		if (spell) {
-			// sfx
-			this.scene.sound.play(
-				this.scene.cache.json.get("game").spells[this.spellID].sounds
-					.start,
-				{
-					volume: this.scene.sceneHead.audio.sfx.volume.value,
-					detune: Utility.random.int(-300, 300),
-				}
-			);
+		// no spell found: create one
+		if (!spell)
+			spell = this.createFromConfig(this.config) as unknown as Spell;
 
-			// fire
+		// sfx
+		this.scene.sound.play(
+			this.scene.cache.json.get("game").spells[this.id].sounds.start,
+			{
+				volume: this.scene.sceneHead.audio.sfx.volume.value,
+				detune: Utility.random.int(-300, 300),
+			}
+		);
+
+		// fire
+		if (spell.fire)
 			spell.fire(originX, originY, destinationX, destinationY);
+		else if (Array.isArray(spell) && spell.length > 0) {
+			spell[0].fire(originX, originY, destinationX, destinationY);
 		}
 	}
 }

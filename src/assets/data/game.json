@@ -85,7 +85,7 @@
             "damage": 2,
             "lifespan": 450,
             "firerate": 600,
-            "speed": 0.00025,
+            "speed": 0.15,
             "inventory": {
                 "texture": "gui_snot_bubble",
                 "scale": 6
