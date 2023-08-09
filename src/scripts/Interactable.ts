@@ -64,46 +64,38 @@ export class Interactable extends Entity {
 
 		// detect collision
 		this.setOnCollide(
-			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) =>
-				this.onCollide(entities)
-		);
-
-		// detect collision end
-		this.setOnCollideEnd(
-			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) =>
-				this.onCollideEnd(entities)
+			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// player collision
+				if (
+					this.enabled &&
+					entities.bodyB.gameObject instanceof Player &&
+					entities.bodyB.gameObject.active
+				) {
+					this.onCollidePlayer(entities.bodyB.gameObject);
+				}
+			}
 		);
 
 		// enable on spawn
 		this.enabled = true;
 	}
 
-	// handle collision
-	onCollide(entities: Phaser.Types.Physics.Matter.MatterCollisionData) {
-		// player colliding
-		if (
-			this.enabled &&
-			entities.bodyB.gameObject instanceof Player &&
-			entities.bodyB.gameObject.active
-		) {
-			this.onCollidePlayer(entities.bodyB.gameObject);
-		}
-	}
-
-	// handle collision end
-	onCollideEnd(entities: Phaser.Types.Physics.Matter.MatterCollisionData) {
-		// player no longer colliding
-		if (
-			this.enabled &&
-			entities.bodyB.gameObject instanceof Player &&
-			entities.bodyB.gameObject.active
-		) {
-			this.onCollidePlayerEnd(entities.bodyB.gameObject);
-		}
-	}
-
 	// handle player collision
 	onCollidePlayer(player: Player) {
+		// detect collision end
+		this.setOnCollideEnd(
+			(entities: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+				// player collision end
+				if (
+					this.enabled &&
+					entities.bodyB.gameObject instanceof Player &&
+					entities.bodyB.gameObject.active
+				) {
+					this.onCollidePlayerEnd(entities.bodyB.gameObject);
+				}
+			}
+		);
+
 		// show tip
 		this.scene.HUD.setTip("[F] " + this.tip);
 
@@ -113,6 +105,9 @@ export class Interactable extends Entity {
 
 	// handle player collision end
 	onCollidePlayerEnd(player: Player) {
+		// stop detecting collision ends
+		this.setOnCollideEnd(() => {});
+
 		// hide tip
 		this.scene.HUD.setTip("");
 
