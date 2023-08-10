@@ -191,13 +191,13 @@
                  "class":"",
                  "height":0,
                  "id":2,
-                 "name":"Slime Enemy",
+                 "name":"Enemy",
                  "point":true,
                  "properties":[
                         {
                          "name":"id",
                          "type":"string",
-                         "value":"slime"
+                         "value":"fly"
                         }, 
                         {
                          "name":"type",

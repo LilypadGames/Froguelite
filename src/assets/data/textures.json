@@ -79,9 +79,23 @@
             }
         }
     },
+    "fly": {
+        "spritesheet": "texture/enemy/fly.png",
+        "frameWidth": 32,
+        "frameHeight": 27,
+        "anims": {
+            "idle": {
+                "auto": true,
+                "frameRate": 40,
+                "frames": {
+                    "start": 0,
+                    "end": 1
+                }
+            }
+        }
+    },
     "slime": {
         "spritesheet": "texture/enemy/slime.png",
-        "frameRate": 4,
         "frameWidth": 22,
         "frameHeight": 21,
         "anims": {

@@ -71,6 +71,26 @@
             "sounds": {
                 "hit": "sfx_hit"
             }
+        },
+        "fly": {
+            "texture": "fly",
+            "type": "spitter",
+            "scale": 0.75,
+            "stats": {
+                "health": 40,
+                "speed": 0.35,
+                "strength": 3
+            },
+            "details": {
+                "healthbar": {
+                    "scale": 6,
+                    "width": 160
+                },
+                "spit": "slime_ball"
+            },
+            "sounds": {
+                "hit": "sfx_hit"
+            }
         }
     },
     "spells": {

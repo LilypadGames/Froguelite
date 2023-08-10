@@ -73,7 +73,23 @@ export class Enemy extends LivingEntity {
 		super.preupdate();
 
 		// run movement
-		if (!this.scene.player.isDead) this.updateMovement();
+		if (!this.scene.player.isDead) {
+			this.updateDirection();
+			this.updateMovement();
+		}
+	}
+
+	updateDirection() {
+		// compare position of enemy to player to get direction this enemy should face (use cos to get left/right instead of up/down)
+		let direction = Math.cos(
+			Phaser.Math.Angle.BetweenPoints(
+				this.scene.player.getRelativePosition(this.scene.cameras.main),
+				this.getRelativePosition(this.scene.cameras.main)
+			)
+		);
+
+		// set direction
+		this.flipX = direction > 0 ? false : true;
 	}
 
 	updateMovement() {

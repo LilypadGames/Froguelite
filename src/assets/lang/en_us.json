@@ -4,7 +4,9 @@
     "player": "Pp",
     "enemy": {
         "lsf": "LSF",
-        "slime": "Slime"
+        "slime": "Slime",
+        "slime_small": "Small Slime",
+        "fly": "Fly"
     },
     "armor": {
         "blue_garbs": {
