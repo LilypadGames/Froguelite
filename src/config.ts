@@ -97,4 +97,8 @@ export default {
 		spell: 0,
 		traversable: 0,
 	},
+	world: {
+		chunkSize: 16,
+		tileSize: 16,
+	},
 };
