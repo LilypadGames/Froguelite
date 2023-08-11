@@ -98,7 +98,7 @@ export default {
 		traversable: 0,
 	},
 	world: {
-		chunkSize: 16,
+		chunkSize: 18,
 		tileSize: 25,
 	},
 };

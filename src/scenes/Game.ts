@@ -8,6 +8,7 @@ import { Core } from "./internal/Core";
 import { HUD } from "./overlay/HUD";
 
 // components
+import { Level } from "../scripts/World";
 import { Enemy } from "../scripts/Enemy";
 import { Player } from "../scripts/Player";
 import { Camera } from "../scripts/Camera";
@@ -32,7 +33,8 @@ export class Game extends Core {
 		x: number;
 		y: number;
 	};
-	level!: string;
+	level!: Level;
+	levelID!: string;
 
 	// player
 	player!: Player;
@@ -57,7 +59,7 @@ export class Game extends Core {
 		super.init(data);
 
 		// store current level
-		this.level = data.level;
+		this.levelID = data.level;
 	}
 
 	preload() {
@@ -131,7 +133,10 @@ export class Game extends Core {
 		this.bossGroup = this.add.group();
 
 		// create world and add objects/enemies within it
-		this.createWorld();
+		if (this.levelID == "frogCaves") {
+			this.level = new Level(this, this.levelID);
+			this.spawnpoint = { x: 0, y: 0 };
+		} else this.createWorld();
 
 		// add player to world
 		this.player = this.addPlayer(this.spawnpoint.x, this.spawnpoint.y);
@@ -148,8 +153,10 @@ export class Game extends Core {
 		this.events.on("resume", this.onResume, this);
 
 		// play music
-		if (this.cache.json.get("game").music.room[this.level])
-			super.playMusic(this.cache.json.get("game").music.room[this.level]);
+		if (this.cache.json.get("game").music.room[this.levelID])
+			super.playMusic(
+				this.cache.json.get("game").music.room[this.levelID]
+			);
 	}
 
 	update() {
@@ -206,7 +213,7 @@ export class Game extends Core {
 	// create tilemap world
 	createWorld() {
 		// make map
-		let map = this.make.tilemap({ key: this.level });
+		let map = this.make.tilemap({ key: this.levelID });
 
 		// add tileset to map
 		let tileset = map.addTilesetImage("tiles", "world_tiles");

@@ -1,6 +1,7 @@
 {
     "world_tiles": "texture/world/tiles.png",
     "dirt": "texture/world/dirt.png",
+    "dirt_noisy": "texture/world/dirt_noisy.png",
     "pp": {
         "spritesheet": "texture/character/pp.png",
         "frameWidth": 9,
