@@ -115,14 +115,6 @@ export class Game extends Core {
 		// set hz
 		this.matter.set60Hz();
 
-		// set world bounds
-		this.matter.world.setBounds(
-			0,
-			0,
-			this.game.canvas.width,
-			this.game.canvas.height
-		);
-
 		// init fixed objects group (objects that rotate with the camera)
 		this.fixedObjectsGroup = this.add.group();
 
