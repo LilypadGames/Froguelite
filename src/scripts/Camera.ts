@@ -102,7 +102,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	// updates current camera rotation as well as objects in scene
 	updateRotation(rotation: number) {
 		// set rotation
-		(this as any).rotation = rotation;
+		(this as any).rotation = Phaser.Math.Angle.Normalize(rotation);
 
 		// rotate objects counter to cameras rotation
 		this.scene.fixedObjectsGroup
