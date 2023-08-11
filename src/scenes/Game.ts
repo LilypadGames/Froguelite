@@ -194,11 +194,9 @@ export class Game extends Core {
 	}
 
 	reloadGraphics() {
-		[
-			this.player as Entity,
-			...(this.enemyGroup.getChildren() as Array<Entity>),
-		].forEach((object: Entity) => {
-			object.applyShaders(this.sceneHead.highPerformanceMode.get());
+		this.children.list.forEach((object: any) => {
+			if (object instanceof Entity)
+				object.applyShaders(this.sceneHead.highPerformanceMode.get());
 		});
 	}
 
