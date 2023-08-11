@@ -7,4 +7,7 @@ export default {
 	Black: 0x000000,
 	Green: 0x05ad32,
 	Red: 0xff0000,
+	DebugBlue: 0x1327e4,
+	DebugGreen: 0x28de19,
+	DebugPink: 0xe042da,
 };

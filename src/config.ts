@@ -88,6 +88,7 @@ export default {
 		},
 		particle: 7,
 		overlay: 100000,
+		debug: 100001,
 	},
 	collisionGroup: {
 		world: 0,
