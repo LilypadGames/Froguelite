@@ -99,6 +99,6 @@ export default {
 	},
 	world: {
 		chunkSize: 16,
-		tileSize: 16,
+		tileSize: 25,
 	},
 };

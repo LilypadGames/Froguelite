@@ -4,7 +4,31 @@ import { Game } from "../scenes/Game";
 // config
 import config from "../config";
 
-// generates and handles individual chunks
+// handles each level
+class Level {
+	level: string;
+	chunks: Chunk[];
+
+	constructor(level: string) {
+		// save values
+		this.level = level;
+
+		// init first chunks
+	}
+
+	// get the chunk at a given world position
+	getChunk(x: number, y: number): Chunk | null {
+		// loop through saved chunks and find chunk that has position within it
+		for (var i = 0; i < this.chunks.length; i++) {
+			if (this.chunks[i].x == x && this.chunks[i].y == y) {
+				return this.chunks[i];
+			}
+		}
+		return null
+	}
+}
+
+// generates and handles individual chunks within a level
 class Chunk {
 	scene: Game;
 	x: number;
@@ -85,7 +109,7 @@ class Chunk {
 		// if (perlinValue < 0.2) return "sprWater";
 		// else if (perlinValue >= 0.2 && perlinValue < 0.3) return "sprSand";
 		// else return "sprGrass";
-		return "sprGrass";
+		return "dirt";
 	}
 }
 
