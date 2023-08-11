@@ -34,7 +34,7 @@ export default {
 	time: {
 		// get current timestamp
 		currentTimestamp: function () {
-			var timestamp = new Date(Date.now()).toLocaleString();
+			let timestamp = new Date(Date.now()).toLocaleString();
 			return timestamp;
 		},
 
@@ -136,7 +136,7 @@ export default {
 		arrayB: Record<string, any>
 	) {
 		// init new merged array
-		var mergedArray: Record<string, any> = {};
+		let mergedArray: Record<string, any> = {};
 
 		// merge provided arrays into new array
 		let key: keyof typeof arrayA;

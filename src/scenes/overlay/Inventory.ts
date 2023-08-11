@@ -376,7 +376,7 @@ export class Inventory extends CoreOverlay {
 			);
 
 		// create slots
-		for (var i = 0; i < rows * columns; i += 1) {
+		for (let i = 0; i < rows * columns; i += 1) {
 			// check if theres an item in this slot
 			let slotItem = getItemInSlot(i);
 

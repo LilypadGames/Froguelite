@@ -115,7 +115,7 @@ export class HUD extends Phaser.Scene {
 	// check for bosses nearby player and display HUD
 	detectBosses() {
 		// init distance object
-		var distance: {
+		let distance: {
 			[key: number]: number;
 		} = {};
 
@@ -145,7 +145,7 @@ export class HUD extends Phaser.Scene {
 		// boss distances found
 		if (Object.keys(distance).length > 0) {
 			// find shortest distance
-			var min: number = Number(
+			let min: number = Number(
 				Object.keys(distance).reduce((key, v) =>
 					distance[v as any] < distance[key as any] ? v : key
 				)
