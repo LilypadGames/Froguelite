@@ -3,8 +3,6 @@ import { Game } from "../scenes/Game";
 
 // config
 import config from "../config";
-import ColorScheme from "./utility/ColorScheme";
-import Utility from "./utility/Utility";
 
 // handles each level
 export class Level {
