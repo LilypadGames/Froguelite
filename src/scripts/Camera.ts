@@ -1,5 +1,4 @@
 // imports
-import { GameObjects } from "phaser";
 import store from "storejs";
 
 // scenes
