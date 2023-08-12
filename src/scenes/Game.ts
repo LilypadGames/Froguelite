@@ -45,7 +45,6 @@ export class Game extends Core {
 
 	// camera
 	camera!: Camera;
-	fixedObjectsGroup!: Phaser.GameObjects.Group;
 
 	// keys
 	keySHIFT!: Phaser.Input.Keyboard.Key;
@@ -114,9 +113,6 @@ export class Game extends Core {
 
 		// set hz
 		this.matter.set60Hz();
-
-		// init fixed objects group (objects that rotate with the camera)
-		this.fixedObjectsGroup = this.add.group();
 
 		// init enemy group
 		this.enemyGroup = this.add.group({
@@ -340,9 +336,6 @@ export class Game extends Core {
 		// create player
 		let player = new Player(this, x, y);
 
-		// rotate with camera rotation
-		this.fixedObjectsGroup.add(player);
-
 		return player;
 	}
 
@@ -350,9 +343,6 @@ export class Game extends Core {
 	spawnEnemy(id: string, x: number, y: number) {
 		// create enemy
 		let enemy = new Enemy(this, x, y, id);
-
-		// rotate with camera rotation
-		this.fixedObjectsGroup.add(enemy);
 
 		// add enemy to enemy group
 		this.enemyGroup.add(enemy);
@@ -364,19 +354,13 @@ export class Game extends Core {
 	// spawn teleport
 	spawnTeleporter(id: string, x: number, y: number) {
 		// create teleport
-		let teleporter = new Teleporter(this, x, y, id);
-
-		// rotate with camera rotation
-		this.fixedObjectsGroup.add(teleporter);
+		new Teleporter(this, x, y, id);
 	}
 
 	// spawn lootable
 	spawnLootable(id: string, x: number, y: number) {
 		// create lootable
-		let lootable = new Lootable(this, x, y, id);
-
-		// rotate with camera rotation
-		this.fixedObjectsGroup.add(lootable);
+		new Lootable(this, x, y, id);
 	}
 
 	// create custom console commands for debugging

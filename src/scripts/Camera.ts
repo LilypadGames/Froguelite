@@ -4,6 +4,8 @@ import store from "storejs";
 
 // scenes
 import { Game } from "../scenes/Game";
+import { Spell } from "./Spell";
+import { Entity } from "./Entity";
 
 export class Camera extends Phaser.Cameras.Scene2D.Camera {
 	scene: Game;
@@ -105,10 +107,9 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 		(this as any).rotation = Phaser.Math.Angle.Normalize(rotation);
 
 		// rotate objects counter to cameras rotation
-		this.scene.fixedObjectsGroup
-			.getChildren()
-			.forEach((object: GameObjects.GameObject) => {
+		this.scene.children.list.forEach((object: any) => {
+			if (object instanceof Entity || Spell)
 				(object as any).rotation = -(this as any).rotation;
-			}, this);
+		});
 	}
 }

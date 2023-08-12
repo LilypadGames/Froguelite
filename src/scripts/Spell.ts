@@ -40,9 +40,6 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 		// set depth (renders under/over other sprites)
 		this.setDepth(config.depth.projectiles);
 
-		// rotate with camera rotation
-		scene.fixedObjectsGroup.add(this);
-
 		// hide
 		this.hide();
 
