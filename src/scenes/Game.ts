@@ -40,7 +40,6 @@ export class Game extends Core {
 	player!: Player;
 
 	// enemy
-	enemyGroup!: Phaser.GameObjects.Group;
 	bossGroup!: Phaser.GameObjects.Group;
 
 	// camera
@@ -114,10 +113,7 @@ export class Game extends Core {
 		// set hz
 		this.matter.set60Hz();
 
-		// init enemy group
-		this.enemyGroup = this.add.group({
-			classType: Enemy,
-		});
+		// init groups
 		this.bossGroup = this.add.group();
 
 		// create world and add objects/enemies within it
@@ -127,7 +123,7 @@ export class Game extends Core {
 		} else this.createWorld();
 
 		// add player to world
-		this.player = this.addPlayer(this.spawnpoint.x, this.spawnpoint.y);
+		this.player = new Player(this, this.spawnpoint.x, this.spawnpoint.y);
 
 		// set up camera to follow player
 		this.camera = new Camera(this, 0, 0);
@@ -331,21 +327,10 @@ export class Game extends Core {
 		}, this);
 	}
 
-	// add player to world
-	addPlayer(x: number, y: number) {
-		// create player
-		let player = new Player(this, x, y);
-
-		return player;
-	}
-
 	// spawn enemy
 	spawnEnemy(id: string, x: number, y: number) {
 		// create enemy
 		let enemy = new Enemy(this, x, y, id);
-
-		// add enemy to enemy group
-		this.enemyGroup.add(enemy);
 
 		// add enemy to boss group
 		if (enemy.entityType === "boss") this.bossGroup.add(enemy);
@@ -372,10 +357,11 @@ export class Game extends Core {
 				this.input.activePointer.updateWorldPoint(this.camera);
 
 				// spawn enemy
-				this.spawnEnemy(
-					enemyType,
+				new Enemy(
+					this,
 					this.input.activePointer.worldX,
-					this.input.activePointer.worldY
+					this.input.activePointer.worldY,
+					enemyType
 				);
 
 				// success
