@@ -149,6 +149,9 @@ export class Game extends Core {
 			super.playMusic(
 				this.cache.json.get("game").music.room[this.levelID]
 			);
+
+		// create console commands
+		this.createCommands();
 	}
 
 	update() {
@@ -374,5 +377,40 @@ export class Game extends Core {
 
 		// rotate with camera rotation
 		this.fixedObjectsGroup.add(lootable);
+	}
+
+	// create custom console commands for debugging
+	createCommands() {
+		// spawn enemy command
+		const spawnEnemyAtCursor = (enemyType: string) => {
+			try {
+				// get world point of cursor
+				this.input.activePointer.updateWorldPoint(this.camera);
+
+				// spawn enemy
+				this.spawnEnemy(
+					enemyType,
+					this.input.activePointer.worldX,
+					this.input.activePointer.worldY
+				);
+
+				// success
+				return (
+					"Successfully Spawned Enemy at " +
+					this.input.activePointer.x +
+					" " +
+					this.input.activePointer.y
+				);
+			} catch (error: any) {
+				// fail
+				return error;
+			}
+		};
+
+		// apply command to window (browser) and global (node or other server) console
+		[
+			(window as any).spawnEnemyAtCursor,
+			(globalThis as any).spawnEnemyAtCursor,
+		] = [spawnEnemyAtCursor, spawnEnemyAtCursor];
 	}
 }
