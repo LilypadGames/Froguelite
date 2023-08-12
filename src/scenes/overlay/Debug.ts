@@ -43,6 +43,9 @@ export class Debug extends Phaser.Scene {
 		// get actual mouse position
 		let pointer = this.sceneGame.input.activePointer;
 
+		// update pointer world position
+		pointer.updateWorldPoint(this.camera);
+
 		// get relative positions
 		let relativePosCamera = this.player.getRelativePosition(this.camera);
 
