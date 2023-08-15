@@ -1,8 +1,16 @@
 {
     "level": {
-        "riverside": "world/level/riverside.json",
-        "frog_caves": "world/level/frog_caves.json",
-        "dungeon": "world/level/dungeon.json"
+        "riverside": {
+            "type": "tilemap",
+            "file": "world/level/riverside.json"
+        },
+        "dungeon": {
+            "type": "tilemap",
+            "file": "world/level/dungeon.json"
+        },
+        "frog_caves": {
+            "type": "infinite"
+        }
     },
     "structure": {
         "grass_patch": "world/structure/grass_patch.json"

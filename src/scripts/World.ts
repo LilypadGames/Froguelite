@@ -1,13 +1,246 @@
 // imports
 import { Game } from "../scenes/Game";
 
+// components
+import { Enemy } from "../scripts/Enemy";
+import { Teleporter } from "../scripts/interactable/Teleporter";
+import { Lootable } from "../scripts/interactable/Lootable";
+
 // config
 import config from "../config";
 
-// handles each level
-export class Level {
+// general level setup
+class Level {
+	// info
 	scene: Game;
-	level: string;
+	levelID: string;
+
+	// spawn point of level
+	spawnpoint!: {
+		x: number;
+		y: number;
+	};
+
+	constructor(scene: Game, levelID: string) {
+		// save values
+		this.scene = scene;
+		this.levelID = levelID;
+
+		// TODO: move console commands to head scene so they only get created once, with reference to currently active level
+		// // create console commands
+		// this.createCommands();
+	}
+
+	// spawn enemy
+	spawnEnemy(id: string, x: number, y: number) {
+		// create enemy
+		new Enemy(this.scene, x, y, id);
+
+		// TODO: add new way to distinguish normal enemies from boss enemies
+	}
+
+	// spawn teleport
+	spawnTeleporter(id: string, x: number, y: number) {
+		// create teleport
+		new Teleporter(this.scene, x, y, id);
+	}
+
+	// spawn lootable
+	spawnLootable(id: string, x: number, y: number) {
+		// create lootable
+		new Lootable(this.scene, x, y, id);
+	}
+
+	// // create custom console commands for debugging
+	// createCommands() {
+	// 	// spawn enemy command
+	// 	const spawnEnemyAtCursor = (enemyType: string) => {
+	// 		try {
+	// 			// get world point of cursor
+	// 			this.input.activePointer.updateWorldPoint(this.camera);
+
+	// 			// spawn enemy
+	// 			new Enemy(
+	// 				this,
+	// 				this.input.activePointer.worldX,
+	// 				this.input.activePointer.worldY,
+	// 				enemyType
+	// 			);
+
+	// 			// success
+	// 			return (
+	// 				"Successfully Spawned Enemy at " +
+	// 				this.input.activePointer.x +
+	// 				" " +
+	// 				this.input.activePointer.y
+	// 			);
+	// 		} catch (error: any) {
+	// 			// fail
+	// 			return error;
+	// 		}
+	// 	};
+
+	// 	// apply command to window (browser) and global (node or other server) console
+	// 	[
+	// 		(window as any).spawnEnemyAtCursor,
+	// 		(globalThis as any).spawnEnemyAtCursor,
+	// 	] = [spawnEnemyAtCursor, spawnEnemyAtCursor];
+	// }
+}
+
+// handles each tiled level
+export class TilemapLevel extends Level {
+	// tilemap
+	tilemap: Phaser.Tilemaps.Tilemap;
+
+	// collision layers
+	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
+
+	constructor(scene: Game, levelID: string) {
+		// pass values
+		super(scene, levelID);
+
+		// create tile map
+		this.tilemap = this.scene.make.tilemap({ key: levelID });
+
+		// add tileset to map
+		const tileset = this.tilemap.addTilesetImage("tiles", "world_tiles");
+
+		// init layers
+		this.tilemap.layers.forEach(
+			(layer: Phaser.Tilemaps.LayerData): void => {
+				// add layer
+				this.tilemap.createLayer(
+					layer.name,
+					tileset as Phaser.Tilemaps.Tileset,
+					0,
+					0
+				);
+
+				// set depth
+				layer.tilemapLayer.setDepth(config.depth.world);
+
+				// fix culling (fixes pop-in when player rotates camera)
+				layer.tilemapLayer.setCullPadding(4, 4);
+
+				// add collisions (if layer has them)
+				layer.properties.forEach((property: any) => {
+					// this layer is a wall
+					if (property.name === "wall" && property.value) {
+						// add layer to list of collide=able layers
+						this.collisionLayers.push(layer.tilemapLayer);
+
+						// add collision
+						layer.tilemapLayer.setCollisionByExclusion([-1, 0]);
+						this.scene.matter.world.convertTilemapLayer(
+							layer.tilemapLayer
+						);
+						layer.tilemapLayer.forEachTile(
+							(tile: Phaser.Tilemaps.Tile) => {
+								if (
+									tile.physics &&
+									(tile.physics as any).matterBody &&
+									(tile.physics as any).matterBody.body
+								) {
+									// get tile body
+									const tileBody = (tile.physics as any)
+										.matterBody.body;
+
+									// set collision filter
+									tileBody.collisionFilter.category =
+										config.collisionGroup.world;
+									tileBody.collisionFilter.mask =
+										config.collisionGroup.player |
+										config.collisionGroup.enemy |
+										config.collisionGroup.spell |
+										config.collisionGroup.traversable;
+								}
+							}
+						);
+					}
+				});
+			}
+		);
+
+		// animate tiles
+		this.scene.animatedTiles.init(this.tilemap);
+
+		// populate objects in object layer
+		this.tilemap.objects.forEach((objectLayer) => {
+			// each object
+			objectLayer.objects.forEach((object) => {
+				// cancel if no position provided
+				if (object.x === undefined || object.y === undefined) return;
+
+				// general properties
+				type properties = {
+					type: string;
+				};
+
+				// object properties
+				interface gameObjectProperties extends properties {
+					id: string;
+				}
+
+				// init properties
+				let properties: properties = {
+					type: "",
+				};
+
+				// format properties
+				object.properties.forEach(
+					(property: {
+						name: string;
+						type: string;
+						value: string;
+					}) => {
+						(properties as any)[property.name] = property.value;
+					},
+					this
+				);
+
+				// spawn
+				if (properties.type === "spawn") {
+					this.spawnpoint = {
+						x: object.x,
+						y: object.y,
+					};
+				}
+
+				// enemy
+				if (properties.type === "enemy") {
+					this.spawnEnemy(
+						(properties as gameObjectProperties).id,
+						object.x,
+						object.y
+					);
+				}
+
+				// teleporter
+				if (properties.type === "teleporter") {
+					this.spawnTeleporter(
+						(properties as gameObjectProperties).id,
+						(object as any).x,
+						(object as any).y
+					);
+				}
+
+				// lootable
+				if (properties.type === "lootable") {
+					this.spawnLootable(
+						(properties as gameObjectProperties).id,
+						(object as any).x,
+						(object as any).y
+					);
+				}
+			}, this);
+		}, this);
+	}
+}
+
+// handles each infinite level
+export class InfiniteLevel extends Level {
+	// chunk map
 	chunks: {
 		all: {
 			top_left: Chunk[][];
@@ -18,10 +251,9 @@ export class Level {
 		active: { x: number; y: number }[];
 	};
 
-	constructor(scene: Game, level: string) {
-		// save values
-		this.scene = scene;
-		this.level = level;
+	constructor(scene: Game, levelID: string) {
+		// pass values
+		super(scene, levelID);
 
 		// init chunk map
 		this.chunks = {
@@ -206,7 +438,7 @@ export class Level {
 // generates and handles individual chunks within a level
 class Chunk {
 	scene: Game;
-	level: Level;
+	level: InfiniteLevel;
 	x: number;
 	y: number;
 	worldX: number;
@@ -214,7 +446,7 @@ class Chunk {
 	tiles: Phaser.GameObjects.Group;
 	isLoaded: boolean = false;
 
-	constructor(scene: Game, level: Level, x: number, y: number) {
+	constructor(scene: Game, level: InfiniteLevel, x: number, y: number) {
 		// save values
 		this.scene = scene;
 		this.level = level;
@@ -327,7 +559,7 @@ class Chunk {
 
 					// spawn
 					if (properties.type === "spawn") {
-						this.scene.spawnpoint = {
+						this.level.spawnpoint = {
 							x: object.x,
 							y: object.y,
 						};
@@ -335,7 +567,7 @@ class Chunk {
 
 					// enemy
 					if (properties.type === "enemy") {
-						this.scene.spawnEnemy(
+						this.level.spawnEnemy(
 							(properties as gameObjectProperties).id,
 							object.x,
 							object.y
@@ -344,7 +576,7 @@ class Chunk {
 
 					// teleporter
 					if (properties.type === "teleporter") {
-						this.scene.spawnTeleporter(
+						this.level.spawnTeleporter(
 							(properties as gameObjectProperties).id,
 							(object as any).x,
 							(object as any).y
@@ -353,7 +585,7 @@ class Chunk {
 
 					// lootable
 					if (properties.type === "lootable") {
-						this.scene.spawnLootable(
+						this.level.spawnLootable(
 							(properties as gameObjectProperties).id,
 							(object as any).x,
 							(object as any).y

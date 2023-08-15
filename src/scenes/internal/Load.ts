@@ -135,7 +135,10 @@ export class Load extends Phaser.Scene {
 		// load world levels and structures
 		const world = this.cache.json.get("world");
 		for (const level in world.level) {
-			this.load.tilemapTiledJSON(level, world.level[level]);
+			// tilemap
+			if (world.level[level].type === "tilemap")
+				this.load.tilemapTiledJSON(level, world.level[level].file);
+			// infinite
 		}
 		for (const structure in world.structure) {
 			this.load.tilemapTiledJSON(structure, world.structure[structure]);
