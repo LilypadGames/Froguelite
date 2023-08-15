@@ -140,9 +140,9 @@ export class Game extends Core {
 		this.events.on("resume", this.onResume, this);
 
 		// play music
-		if (this.cache.json.get("game").music.room[this.levelID])
+		if (this.cache.json.get("game").music.level[this.levelID])
 			super.playMusic(
-				this.cache.json.get("game").music.room[this.levelID]
+				this.cache.json.get("game").music.level[this.levelID]
 			);
 	}
 

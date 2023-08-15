@@ -2,9 +2,9 @@
     "start": "riverside",
     "music": {
         "mainmenu": "under_her_spell_8_bit_loop",
-        "room": {
+        "level": {
             "riverside": "riverside",
-            "dungeon": "the_bauws"
+            "frog_caves": "the_bauws"
         }
     },
     "player": {
