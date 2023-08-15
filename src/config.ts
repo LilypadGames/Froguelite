@@ -11,16 +11,15 @@ import MergedInput from "phaser3-merged-input";
 import Utility from "./scripts/utility/Utility";
 import ColorScheme from "./scripts/utility/ColorScheme";
 
-//
-// These are the settings for the game canvas and game itself.
-//
-
 // constants
 const gameScale = {
 	width: 1920,
 	height: 1080,
 };
 
+/**
+ * Settings for the game and canvas.
+ */
 export default {
 	title: "Froguelike",
 	version: "InDev v0.0.1",

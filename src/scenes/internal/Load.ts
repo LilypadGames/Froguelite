@@ -6,10 +6,9 @@ import store from "storejs";
 // config
 import config from "../../config";
 
-//
-// This is meant for loading in any data, such as a save game state, prior to entering the main menu.
-//
-
+/** 
+ * Loads textures, sounds, and other data that will be used by the game.
+*/
 export class Load extends Phaser.Scene {
 	animQueue: {
 		texture: string;

@@ -4,10 +4,9 @@ import Phaser from "phaser";
 // internal
 import { Head } from "./Head";
 
-//
-// These are overall mechanics that are common to several different scenes.
-//
-
+/**
+ * General mechanics that are common to overlay scenes.
+ */
 export class CoreOverlay extends Phaser.Scene {
 	sceneHead!: Head;
 	scenePaused!: Phaser.Scene;

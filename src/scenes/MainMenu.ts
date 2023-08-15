@@ -5,10 +5,9 @@ import { Core } from "./internal/Core";
 import ColorScheme from "../scripts/utility/ColorScheme";
 import Utility from "../scripts/utility/Utility";
 
-//
-// This is the Main Menu, what you first see when you open the game.
-//
-
+/**
+ * Main Menu of the game, where the player starts the game.
+ */
 export class MainMenu extends Core {
 	logo!: Phaser.GameObjects.Text;
 	begin!: Phaser.GameObjects.Text;

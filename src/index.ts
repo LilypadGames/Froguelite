@@ -16,10 +16,9 @@ import { Options } from "./scenes/overlay/Options";
 import { Pause } from "./scenes/overlay/Pause";
 import { Head } from "./scenes/internal/Head";
 
-//
-// These are the scenes that are included in the game itself. The game is initialized here, and the config info is brought in from a separate file: config.ts
-//
-
+/**
+ * Initializes the game with a list of its scenes.
+ */
 new Phaser.Game(
 	Object.assign(config, {
 		scene: [

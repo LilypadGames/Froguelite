@@ -7,10 +7,9 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 // internal
 import { Head } from "./Head";
 
-//
-// These are overall mechanics that are common to several different scenes.
-//
-
+/**
+ * General mechanics that are common to main scenes.
+ */
 export class Core extends Phaser.Scene {
 	sceneHead!: Head;
 	music: Phaser.Sound.WebAudioSound | undefined = undefined;

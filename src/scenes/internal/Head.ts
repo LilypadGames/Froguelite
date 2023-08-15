@@ -16,10 +16,9 @@ import { Game } from "../Game";
 // utility
 import Utility from "../../scripts/utility/Utility";
 
-//
-// This scene runs in the background and acts as a manager for all the current scenes and stores useful information that persists between scenes
-//
-
+/**
+ * Main game manager. Runs in the background, has general utility, and stores references that persists between scenes.
+ */
 export class Head extends Phaser.Scene {
 	// scenes
 	sceneMain!: Core;
