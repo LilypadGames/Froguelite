@@ -38,6 +38,9 @@ export class Player extends LivingEntity {
 		torso?: Phaser.GameObjects.Sprite;
 	} = {};
 
+	// animation
+	moveAnimation!: Phaser.Tweens.Tween;
+
 	constructor(scene: Game, x: number, y: number) {
 		// get player data
 		let playerData = scene.cache.json.get("game").player;
@@ -434,6 +437,18 @@ export class Player extends LivingEntity {
 			!this.scene.sceneHead.playerInput.direction.RIGHT
 		) {
 			this.setVelocity(0, 0);
+		} 
+		// moving
+		else {
+			// ppHop animation
+			if (!this.moveAnimation || !this.moveAnimation.isActive())
+				this.moveAnimation = this.scene.tweens.add({
+					targets: [this, this.armor.torso],
+					displayOriginY: 5,
+					duration: 150,
+					yoyo: true,
+					ease: "Sine.easeOut",
+				});
 		}
 	}
 
