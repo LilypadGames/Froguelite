@@ -34,6 +34,9 @@ export class Level {
 			active: [],
 		};
 
+		// generate chunk at 0, 0
+		this.generateChunk(0, 0);
+
 		// update event
 		this.scene.events.on("update", this.update, this);
 
@@ -260,6 +263,104 @@ class Chunk {
 
 				this.tiles.add(tile);
 			}
+		}
+
+		// place structures
+		if (this.x == 0 && this.y == 0) {
+			// create spawnpoint tilemap (grass patch)
+			let map = this.scene.make.tilemap({ key: "grass_patch" });
+
+			// add tileset to tilemap
+			let tileset = map.addTilesetImage("tiles", "world_tiles");
+
+			// init layers
+			map.layers.forEach((layer: Phaser.Tilemaps.LayerData): void => {
+				// add layer
+				map.createLayer(
+					layer.name,
+					tileset as Phaser.Tilemaps.Tileset,
+					0,
+					0
+				);
+
+				// set depth
+				layer.tilemapLayer.setDepth(config.depth.world);
+
+				// fix culling (fixes pop-in when player rotates camera)
+				layer.tilemapLayer.setCullPadding(4, 4);
+			});
+
+			// populate objects in object layer
+			map.objects.forEach((objectLayer) => {
+				// each object
+				objectLayer.objects.forEach((object) => {
+					// cancel if no position provided
+					if (object.x === undefined || object.y === undefined)
+						return;
+
+					// general properties
+					type properties = {
+						type: string;
+					};
+
+					// object properties
+					interface gameObjectProperties extends properties {
+						id: string;
+					}
+
+					// init properties
+					let properties: properties = {
+						type: "",
+					};
+
+					// format properties
+					object.properties.forEach(
+						(property: {
+							name: string;
+							type: string;
+							value: string;
+						}) => {
+							(properties as any)[property.name] = property.value;
+						},
+						this
+					);
+
+					// spawn
+					if (properties.type === "spawn") {
+						this.scene.spawnpoint = {
+							x: object.x,
+							y: object.y,
+						};
+					}
+
+					// enemy
+					if (properties.type === "enemy") {
+						this.scene.spawnEnemy(
+							(properties as gameObjectProperties).id,
+							object.x,
+							object.y
+						);
+					}
+
+					// teleporter
+					if (properties.type === "teleporter") {
+						this.scene.spawnTeleporter(
+							(properties as gameObjectProperties).id,
+							(object as any).x,
+							(object as any).y
+						);
+					}
+
+					// lootable
+					if (properties.type === "lootable") {
+						this.scene.spawnLootable(
+							(properties as gameObjectProperties).id,
+							(object as any).x,
+							(object as any).y
+						);
+					}
+				}, this);
+			}, this);
 		}
 
 		// set as loaded

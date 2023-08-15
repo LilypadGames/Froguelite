@@ -115,7 +115,7 @@
                  "class":"",
                  "height":0,
                  "id":1,
-                 "name":"Spawn Point",
+                 "name":"Spawnpoint",
                  "point":true,
                  "properties":[
                         {
@@ -140,7 +140,7 @@
                          "name":"id",
                          "type":"string",
                          "value":"riverside_cave"
-                        },
+                        }, 
                         {
                          "name":"type",
                          "type":"string",
@@ -163,7 +163,7 @@
                          "name":"id",
                          "type":"string",
                          "value":"riverside_chest"
-                        },
+                        }, 
                         {
                          "name":"type",
                          "type":"string",
@@ -199,7 +199,7 @@
              "orientation":"orthogonal",
              "width":22
             },
-         "image":"tiles.png",
+         "image":"..\/..\/texture\/world\/tiles.png",
          "imageheight":1066,
          "imagewidth":1482,
          "margin":1,

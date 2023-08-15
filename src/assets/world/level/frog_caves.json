@@ -221,12 +221,12 @@
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
- "tileheight":22,
+ "tileheight":24,
  "tilesets":[
         {
          "columns":57,
          "firstgid":1,
-         "image":"tiles.png",
+         "image":"..\/..\/texture\/world\/tiles.png",
          "imageheight":1066,
          "imagewidth":1482,
          "margin":1,
@@ -245,7 +245,7 @@
                 }],
          "tilewidth":24
         }],
- "tilewidth":22,
+ "tilewidth":24,
  "type":"map",
  "version":"1.9",
  "width":20

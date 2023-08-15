@@ -117,9 +117,8 @@ export class Game extends Core {
 		this.bossGroup = this.add.group();
 
 		// create world and add objects/enemies within it
-		if (this.levelID == "frogCaves") {
+		if (this.levelID == "frog_caves") {
 			this.level = new Level(this, this.levelID);
-			this.spawnpoint = { x: 0, y: 0 };
 		} else this.createWorld();
 
 		// add player to world

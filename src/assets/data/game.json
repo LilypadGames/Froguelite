@@ -150,7 +150,7 @@
     "teleporters": {
         "riverside_cave": {
             "type": "cave_entrance",
-            "destination": "frogCaves",
+            "destination": "frog_caves",
             "tip": "Enter the Frog Caves"
         }
     },

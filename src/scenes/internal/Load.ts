@@ -42,8 +42,8 @@ export class Load extends Phaser.Scene {
 					},
 					{
 						type: "json",
-						key: "tilemaps",
-						url: "data/tilemaps.json",
+						key: "world",
+						url: "data/world.json",
 					},
 					{
 						type: "json",
@@ -83,7 +83,7 @@ export class Load extends Phaser.Scene {
 			store.set("settings.options.audio.sfx.volume", 1);
 
 		// load textures/spritesheets
-		let textures = this.cache.json.get("textures");
+		const textures = this.cache.json.get("textures");
 		for (const key in textures) {
 			// image
 			if (typeof textures[key] === "string")
@@ -112,7 +112,7 @@ export class Load extends Phaser.Scene {
 		}
 
 		// load audio
-		let audio = this.cache.json.get("audio");
+		const audio = this.cache.json.get("audio");
 		for (const key in audio) {
 			// single audio files
 			if (typeof audio[key] === "string")
@@ -132,10 +132,13 @@ export class Load extends Phaser.Scene {
 			}
 		}
 
-		// load tilemaps
-		let tilemaps = this.cache.json.get("tilemaps");
-		for (const key in tilemaps) {
-			this.load.tilemapTiledJSON(key, tilemaps[key]);
+		// load world levels and structures
+		const world = this.cache.json.get("world");
+		for (const level in world.level) {
+			this.load.tilemapTiledJSON(level, world.level[level]);
+		}
+		for (const structure in world.structure) {
+			this.load.tilemapTiledJSON(structure, world.structure[structure]);
 		}
 
 		// set up collision groups
