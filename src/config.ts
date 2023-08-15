@@ -2,7 +2,7 @@
 import Phaser from "phaser";
 
 // plugins
-import AnimatedTiles from "phaser-animated-tiles";
+import AnimatedTiles from "phaser-animated-tiles/dist/AnimatedTiles.js";
 import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 import GlowFilterPipelinePlugin from "phaser3-rex-plugins/plugins/glowfilter2pipeline-plugin.js";
 import MergedInput from "phaser3-merged-input";
@@ -71,9 +71,9 @@ export default {
 		],
 		scene: [
 			{
-				key: "AnimatedTiles",
+				key: "animatedTiles",
 				plugin: AnimatedTiles,
-				mapping: "AnimatedTiles",
+				mapping: "animatedTiles",
 			},
 			{
 				key: "mergedInput",

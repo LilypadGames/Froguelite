@@ -1,6 +1,9 @@
 // imports
 import store from "storejs";
 
+// plugins
+import AnimatedTiles from "phaser-animated-tiles/dist/AnimatedTiles.js";
+
 // internal
 import { Core } from "./internal/Core";
 
@@ -24,6 +27,9 @@ import config from "../config";
 //
 
 export class Game extends Core {
+	// plugins
+	private animatedTiles!: AnimatedTiles;
+
 	// HUD
 	HUD!: HUD;
 
@@ -253,6 +259,11 @@ export class Game extends Core {
 				}
 			});
 		});
+
+		// animate tiles
+		this.animatedTiles.init(map);
+		console.log(this.animatedTiles.getAnimatedTiles(map)[0]);
+		console.log(this.animatedTiles.getAnimatedTiles(map)[1]);
 
 		// populate objects in object layer
 		map.objects.forEach((objectLayer) => {
