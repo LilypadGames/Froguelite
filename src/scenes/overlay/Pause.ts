@@ -1,5 +1,4 @@
 // internal
-import { Head } from "../internal/Head";
 import { CoreOverlay } from "../internal/CoreOverlay";
 
 // plugins
