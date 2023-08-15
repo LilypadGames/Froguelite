@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import store from "storejs";
 
 // plugins
-import MergedInput, { Player } from "phaser3-merged-input";
+import MergedInput, { PlayerTyped } from "phaser3-merged-input";
 
 // internal
 import { Core } from "./Core";
@@ -27,7 +27,7 @@ export class Head extends Phaser.Scene {
 
 	// inputs
 	private mergedInput!: MergedInput;
-	playerInput!: Player;
+	playerInput!: PlayerTyped;
 
 	constructor() {
 		super({ key: "Head" });
@@ -40,7 +40,7 @@ export class Head extends Phaser.Scene {
 		).disableContextMenu();
 
 		// set up input
-		this.playerInput = this.mergedInput.addPlayer(0);
+		this.playerInput = this.mergedInput.addPlayer(0) as PlayerTyped;
 		this.mergedInput
 			.defineKey(0, "UP", "W") // move up
 			.defineKey(0, "DOWN", "S") // move down
