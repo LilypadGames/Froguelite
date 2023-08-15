@@ -107,7 +107,7 @@ export class Camera extends Phaser.Cameras.Scene2D.Camera {
 
 		// rotate objects counter to cameras rotation
 		this.scene.children.list.forEach((object: any) => {
-			if (object instanceof Entity || Spell)
+			if (object instanceof Entity || object instanceof Spell)
 				(object as any).rotation = -(this as any).rotation;
 		});
 	}
