@@ -1,5 +1,3 @@
-import "phaser3-merged-input";
-
 declare module "phaser3-merged-input" {
 	export interface Player {
 		buttons_mapped: {
