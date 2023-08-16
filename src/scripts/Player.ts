@@ -166,35 +166,64 @@ export class Player extends LivingEntity {
 
 	// kill player
 	kill() {
-		// remove entity if not already dead
-		if (!this.isDead) {
-			// hide health bar
-			if (this.healthbar !== undefined) this.healthbar.hide();
+		// not alive
+		if (this.isDead) return Error("Player is not alive.");
 
-			// hide entity
-			this.isDead = true;
+		// hide health bar
+		if (this.healthbar !== undefined) this.healthbar.hide();
 
-			// death animation
-			this.scene.tweens.add({
-				targets: this,
-				scale: 0.01,
-				duration: 800,
-				ease: "Sine.easeOut",
-				onComplete: () => {
-					// ppPoof animation
-					const poof = this.scene.add
-						.sprite(this.x, this.y, "poof")
-						.setOrigin(0.5)
-						.setScale(0.2)
-						.setDepth(config.depth.particle)
-						.on("animationcomplete", () => poof.destroy())
-						.play("poof_run");
+		// hide entity
+		this.isDead = true;
 
-					// hide player sprite
-					this.hide();
-				},
-			});
-		}
+		// death animation
+		this.scene.tweens.add({
+			targets: this,
+			scale: 0.01,
+			duration: 800,
+			ease: "Sine.easeOut",
+			onComplete: () => {
+				// ppPoof animation
+				const poof = this.scene.add
+					.sprite(this.x, this.y, "poof")
+					.setOrigin(0.5)
+					.setScale(0.2)
+					.setDepth(config.depth.particle)
+					.on("animationcomplete", () => poof.destroy())
+					.play("poof_run");
+
+				// hide player sprite
+				this.hide();
+			},
+		});
+
+		return;
+	}
+
+	// revive player
+	revive() {
+		// not dead
+		if (!this.isDead) return Error("Player is not dead.");
+
+		// un-deadify
+		this.isDead = false;
+
+		// reset health
+		this.setHealth(this.stats.healthMax);
+
+		// show
+		this.show();
+
+		// ppPoof animation
+		const poof = this.scene.add
+			.sprite(this.x, this.y, "poof")
+			.setOrigin(0.5)
+			.setScale(0.2)
+			.setDepth(config.depth.particle)
+			.on("animationcomplete", () => poof.destroy())
+			.play("poof_run");
+
+		// success
+		return;
 	}
 
 	playAnim(key: string) {
@@ -437,7 +466,7 @@ export class Player extends LivingEntity {
 			!this.scene.sceneHead.playerInput.direction.RIGHT
 		) {
 			this.setVelocity(0, 0);
-		} 
+		}
 		// moving
 		else {
 			// ppHop animation

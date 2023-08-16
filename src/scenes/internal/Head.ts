@@ -61,6 +61,9 @@ export class Head extends Phaser.Scene {
 		// init volume
 		this.audio.update();
 
+		// create console commands
+		this.createCommands();
+
 		// start menu scene
 		this.scene.launch("MainMenu", { sceneHead: this });
 	}
@@ -84,28 +87,6 @@ export class Head extends Phaser.Scene {
 			this.input.setDefaultCursor(
 				"url(/texture/input/cursors/cursor_large.cur) 16 16, pointer"
 			);
-
-			// // change cursor on click
-			// this.input.on(
-			// 	"pointerdown",
-			// 	() => {
-			// 		this.input.setDefaultCursor(
-			// 			"url(/texture/input/cursors/cursor_small.cur) 16 16, pointer"
-			// 		);
-			// 	},
-			// 	this
-			// );
-
-			// // change cursor back when click released
-			// this.input.on(
-			// 	"pointerup",
-			// 	() => {
-			// 		this.input.setDefaultCursor(
-			// 			"url(/texture/input/cursors/cursor_large.cur) 16 16, pointer"
-			// 		);
-			// 	},
-			// 	this
-			// );
 		},
 	};
 
@@ -295,6 +276,124 @@ export class Head extends Phaser.Scene {
 			});
 		},
 	};
+
+	// create custom console commands for debugging
+	createCommands() {
+		// spawn enemy command
+		const spawnEnemyAtCursor = (enemyType: string) => {
+			try {
+				// not game scene
+				if (!(this.sceneMain instanceof Game)) {
+					console.log(
+						"%cThis command must only be ran during the Game scene.",
+						"background-color:red; font-size:14px; color:white; font-weight:bold;"
+					);
+					return "";
+				}
+
+				// get world point of cursor
+				this.input.activePointer.updateWorldPoint(
+					this.sceneMain.camera
+				);
+
+				// spawn enemy
+				this.sceneMain.level.spawnEnemy(
+					enemyType,
+					this.input.activePointer.worldX,
+					this.input.activePointer.worldY
+				);
+
+				// success
+				console.log(
+					"%cSuccessfully Spawned Enemy at " +
+						this.input.activePointer.x +
+						" " +
+						this.input.activePointer.y,
+					"font-size:14px; background-color:green; color:white; font-weight:bold;"
+				);
+				return "";
+			} catch (error: any) {
+				// fail
+				return error;
+			}
+		};
+
+		// kill player command
+		const kill = () => {
+			try {
+				// not game scene
+				if (!(this.sceneMain instanceof Game)) {
+					console.log(
+						"%cThis command must only be ran during the Game scene.",
+						"background-color:red; font-size:14px; color:white; font-weight:bold;"
+					);
+					return "";
+				}
+
+				// kill
+				const output = this.sceneMain.player.kill();
+				if (output instanceof Error) {
+					console.log(
+						"%c" + output.message,
+						"background-color:red; font-size:14px; color:white; font-weight:bold;"
+					);
+					return "";
+				}
+
+				// success
+				console.log(
+					"%cSuccessfully Killed Player",
+					"font-size:14px; background-color:green; color:white; font-weight:bold;"
+				);
+				return "";
+			} catch (error: any) {
+				// fail
+				return error;
+			}
+		};
+
+		// revive player command
+		const revive = () => {
+			try {
+				// not game scene
+				if (!(this.sceneMain instanceof Game)) {
+					console.log(
+						"%cThis command must only be ran during the Game scene.",
+						"background-color:red; font-size:14px; color:white; font-weight:bold;"
+					);
+					return "";
+				}
+
+				// revive
+				const output = this.sceneMain.player.revive();
+				if (output instanceof Error) {
+					console.log(
+						"%c" + output.message,
+						"background-color:red; font-size:14px; color:white; font-weight:bold;"
+					);
+					return "";
+				}
+
+				// success
+				console.log(
+					"%cSuccessfully Revived Player",
+					"font-size:14px; background-color:green; color:white; font-weight:bold;"
+				);
+				return "";
+			} catch (error: any) {
+				// fail
+				return error;
+			}
+		};
+
+		// apply commands to window (browser) and global (node or other server) console
+		[
+			(window as any).spawnEnemyAtCursor,
+			(globalThis as any).spawnEnemyAtCursor,
+		] = [spawnEnemyAtCursor, spawnEnemyAtCursor];
+		[(window as any).kill, (globalThis as any).kill] = [kill, kill];
+		[(window as any).revive, (globalThis as any).revive] = [revive, revive];
+	}
 
 	// restart game
 	restart() {

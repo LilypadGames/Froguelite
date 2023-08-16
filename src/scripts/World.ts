@@ -1,4 +1,4 @@
-// imports
+// scenes
 import { Game } from "../scenes/Game";
 
 // components
@@ -25,10 +25,6 @@ class Level {
 		// save values
 		this.scene = scene;
 		this.levelID = levelID;
-
-		// TODO: move console commands to head scene so they only get created once, with reference to currently active level
-		// // create console commands
-		// this.createCommands();
 	}
 
 	// spawn enemy
@@ -50,42 +46,6 @@ class Level {
 		// create lootable
 		new Lootable(this.scene, x, y, id);
 	}
-
-	// // create custom console commands for debugging
-	// createCommands() {
-	// 	// spawn enemy command
-	// 	const spawnEnemyAtCursor = (enemyType: string) => {
-	// 		try {
-	// 			// get world point of cursor
-	// 			this.input.activePointer.updateWorldPoint(this.camera);
-
-	// 			// spawn enemy
-	// 			new Enemy(
-	// 				this,
-	// 				this.input.activePointer.worldX,
-	// 				this.input.activePointer.worldY,
-	// 				enemyType
-	// 			);
-
-	// 			// success
-	// 			return (
-	// 				"Successfully Spawned Enemy at " +
-	// 				this.input.activePointer.x +
-	// 				" " +
-	// 				this.input.activePointer.y
-	// 			);
-	// 		} catch (error: any) {
-	// 			// fail
-	// 			return error;
-	// 		}
-	// 	};
-
-	// 	// apply command to window (browser) and global (node or other server) console
-	// 	[
-	// 		(window as any).spawnEnemyAtCursor,
-	// 		(globalThis as any).spawnEnemyAtCursor,
-	// 	] = [spawnEnemyAtCursor, spawnEnemyAtCursor];
-	// }
 }
 
 // handles each tiled level
