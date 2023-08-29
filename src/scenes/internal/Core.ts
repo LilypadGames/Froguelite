@@ -33,26 +33,36 @@ export class Core extends Phaser.Scene {
 		// reset average fps
 		this.game.loop.resetDelta();
 
-		// update event
-		this.events.on("update", this.detectMenu, this);
-
-		// shutdown event
+		// events
+		this.events.on("pause", this.pause, this);
+		this.events.on("resume", this.resume, this);
 		this.events.once("shutdown", this.shutdown, this);
+
+		// register inputs
+		this.registerInputs();
 	}
 
-	detectMenu() {
-		// open pause menu
-		if (
-			this.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"SELECT"
-			)
-		)
-			this.launchMenuOverlay();
+	registerInputs() {
+		// detect pause menu input
+		this.sceneHead.events.once("input_back", this.launchMenuOverlay, this);
+	}
+
+	pause() {
+		// remove listeners
+		this.sceneHead.events.off("input_back", this.launchMenuOverlay, this);
+	}
+
+	resume() {
+		// re-register inputs on scene resume
+		this.registerInputs();
 	}
 
 	shutdown() {
 		// remove listeners
-		this.events.removeListener("update", this.detectMenu, this);
+		this.events.off("pause", this.pause, this);
+		this.events.off("resume", this.resume, this);
+		this.sceneHead.events.off("input_back", this.launchMenuOverlay, this);
+		this.events.off("shutdown", this.shutdown, this);
 
 		// fade out music
 		if (this.music) SoundFade.fadeOut(this.music, 500);

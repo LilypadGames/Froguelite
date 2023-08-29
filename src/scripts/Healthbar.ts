@@ -92,7 +92,7 @@ export class Healthbar {
 
 	destroy() {
 		// remove listeners
-		this.scene.events.removeListener("postupdate", this.postupdate, this);
+		this.scene.events.off("postupdate", this.postupdate, this);
 
 		// destroy
 		this.bar.destroy();

@@ -71,12 +71,12 @@ export class Traversable extends Phaser.Physics.Matter.Sprite {
 
 	onDestroy() {
 		// end event listeners
-		this.scene.matter.world.removeListener(
+		this.scene.matter.world.off(
 			"beforeupdate",
 			this.beforeupdate,
 			this
 		);
-		this.scene.events.removeListener("preupdate", this.preupdate, this);
+		this.scene.events.off("preupdate", this.preupdate, this);
 	}
 
 	// handle collision

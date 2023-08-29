@@ -11,19 +11,9 @@ import Utility from "../scripts/utility/Utility";
 export class MainMenu extends Core {
 	logo!: Phaser.GameObjects.Text;
 	begin!: Phaser.GameObjects.Text;
-	entering: boolean = false;
 
 	constructor() {
 		super({ key: "MainMenu" });
-	}
-
-	init(data: sceneData) {
-		super.init(data);
-	}
-
-	preload() {
-		// preload core mechanics
-		super.preload();
 	}
 
 	create() {
@@ -71,41 +61,38 @@ export class MainMenu extends Core {
 			repeat: -1,
 		});
 
-		// // on click, go to game
-		// this.input.on("pointerdown", this.enterGame, this);
-
-		// execute when game is paused/resumed
-		this.events.on("pause", this.onPause, this);
-		this.events.on("resume", this.onResume, this);
-
 		// set camera size and position
 		this.cameras.main.setPosition(0, 0);
-		this.resizeCamera(this.scale.gameSize);
-		this.scale.on("resize", this.resizeCamera, this);
 
 		// play music
 		if (this.cache.json.get("game").music.mainmenu)
 			super.playMusic(this.cache.json.get("game").music.mainmenu);
+
+		// detect any input to start game
+		// TODO: check if input is NOT the back input (pause menu button)
+		this.input.keyboard?.once("keydown", this.enterGame, this);
+		this.input.once("pointerdown", this.enterGame, this);
 	}
 
-	update() {
-		if (
-			(this.input.activePointer.isDown ||
-				this.sceneHead.playerInput.interaction.pressed.length > 0) &&
-			!this.entering
-		)
-			this.enterGame();
+	pause() {
+		// hide
+		this.hide();
+
+		// core pause
+		super.pause();
+	}
+
+	resume() {
+		// show
+		this.show();
+
+		// core resume
+		super.resume();
 	}
 
 	enterGame() {
-		// TODO - replace with a legitimate way, not a weird workaround. this was due to checking for click in update and not in a once event, after implementing controller inputs.
-		// prevent multi clicking
-		this.entering = true;
-
 		// sfx
-		this.sound.play("ui_select", {
-			volume: this.sceneHead.audio.sfx.volume.value,
-		});
+		this.sceneHead.play.sound("ui_select");
 
 		// tween logo out
 		this.tweens.add({
@@ -132,27 +119,6 @@ export class MainMenu extends Core {
 		});
 	}
 
-	onPause() {
-		// hide
-		this.hide();
-	}
-
-	onResume() {
-		// show
-		this.show();
-	}
-
-	shutdown() {
-		// remove listeners
-		this.events.removeListener("pause", this.onPause, this);
-		this.events.removeListener("resume", this.onResume, this);
-		this.scale.removeListener("resize", this.resizeCamera, this);
-		// this.input.removeListener("pointerdown");
-
-		// base class shutdown
-		super.shutdown();
-	}
-
 	launchMenuOverlay() {
 		// pause main menu
 		this.scene.pause();
@@ -167,11 +133,6 @@ export class MainMenu extends Core {
 			sceneHead: this.sceneHead,
 			scenePaused: this,
 		});
-	}
-
-	resizeCamera(gameSize: Phaser.Structs.Size) {
-		// resize
-		this.cameras.main.setSize(gameSize.width, gameSize.height);
 	}
 
 	show() {

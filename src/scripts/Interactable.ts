@@ -112,7 +112,7 @@ export class Interactable extends Entity {
 		this.scene.HUD.setTip("");
 
 		// remove last contact
-		if (player.lastContact == this) player.lastContact = undefined;
+		if (player.lastContact == this) player.lastContact = null;
 	}
 
 	// player interacted

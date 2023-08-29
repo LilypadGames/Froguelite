@@ -120,7 +120,7 @@ export class Spell extends Phaser.Physics.Matter.Sprite {
 
 	onDestroy() {
 		// remove listeners
-		this.scene.matter.world.removeListener(
+		this.scene.matter.world.off(
 			"afterupdate",
 			this.afterupdate,
 			this

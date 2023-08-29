@@ -2,9 +2,6 @@
 import Phaser from "phaser";
 import store from "storejs";
 
-// plugins
-import MergedInput, { PlayerTyped } from "phaser3-merged-input";
-
 // internal
 import { Core } from "./Core";
 import { CoreOverlay } from "./CoreOverlay";
@@ -26,8 +23,16 @@ export class Head extends Phaser.Scene {
 	sceneHUD!: HUD;
 
 	// inputs
-	private mergedInput!: MergedInput;
-	playerInput!: PlayerTyped;
+	keys: { [key: string]: Phaser.Input.Keyboard.Key } = {};
+	inputs: {
+		[input: string]: (() => boolean)[];
+	} = {};
+	inputReleased: {
+		[key: string]: {
+			released: boolean;
+			pressed: boolean;
+		};
+	} = {};
 
 	constructor() {
 		super({ key: "Head" });
@@ -39,21 +44,74 @@ export class Head extends Phaser.Scene {
 			this.input.mouse as Phaser.Input.Mouse.MouseManager
 		).disableContextMenu();
 
-		// set up input
-		this.playerInput = this.mergedInput.addPlayer(0) as PlayerTyped;
-		this.mergedInput
-			.defineKey(0, "UP", "W") // move up
-			.defineKey(0, "DOWN", "S") // move down
-			.defineKey(0, "LEFT", "A") // move left
-			.defineKey(0, "RIGHT", "D") // move right
-			.defineKey(0, "START", "TAB") // inventory
-			.defineKey(0, "SELECT", "ESC") // back/pause
-			.defineKey(0, "RC_W", "F") // interact
-			.defineKey(0, "LB", "Q") // rotate left/pagination left
-			.defineKey(0, "RB", "E") // rotate right/pagination right
-			.defineKey(0, "LC_N", "PAGE_UP") // zoom in
-			.defineKey(0, "LC_S", "PAGE_DOWN"); // zoom out
-		// .defineKey(0, "RT", "M1") // attack
+		// register input keys
+		this.keys = {
+			UP: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.UP),
+			W: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.W),
+			DOWN: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+			S: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.S),
+			LEFT: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+			A: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.A),
+			RIGHT: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+			D: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.D),
+			TAB: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.TAB),
+			ESC: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
+			F: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.F),
+			Q: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.Q),
+			E: (
+				this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin
+			).addKey(Phaser.Input.Keyboard.KeyCodes.E),
+		};
+
+		// register input checks (positive return value triggers input)
+		this.inputs = {
+			// directional keys (allows for holding key down)
+			up: [() => this.keys.UP.isDown, () => this.keys.W.isDown],
+			down: [() => this.keys.DOWN.isDown, () => this.keys.S.isDown],
+			left: [() => this.keys.LEFT.isDown, () => this.keys.A.isDown],
+			right: [() => this.keys.RIGHT.isDown, () => this.keys.D.isDown],
+			// inventory button
+			inventory: [() => this.isReleased("TAB")],
+			// back or pause button
+			back: [() => this.isReleased("ESC")],
+			// interact button
+			interact: [
+				() => this.isReleased("F"),
+				() => this.input.activePointer?.middleButtonDown(),
+			],
+			// abilities
+			ability_1: [() => this.input.activePointer?.leftButtonDown()],
+			ability_2: [() => this.input.activePointer?.rightButtonDown()],
+			ability_3: [() => this.isReleased("Q")],
+			ability_4: [() => this.isReleased("E")],
+			// pagination
+			page_left: [() => this.input.activePointer.deltaX > 0],
+			page_right: [() => this.input.activePointer.deltaX < 0],
+		};
 
 		// init cursor
 		this.cursor.init();
@@ -69,6 +127,22 @@ export class Head extends Phaser.Scene {
 	}
 
 	update() {
+		// handle inputs
+		inputLoop: for (const [input, checks] of Object.entries(this.inputs)) {
+			// run checks
+			checkLoop: for (const check of checks) {
+				// check passed, now check next input
+				if (check()) {
+					this.events.emit("onInput", input);
+					this.events.emit("input_" + input);
+					continue inputLoop;
+				}
+			}
+		}
+
+		// check for released state of specific keys
+		this.checkReleased();
+
 		// handle cursor
 		if (this.input.activePointer.isDown)
 			this.input.setDefaultCursor(
@@ -78,6 +152,40 @@ export class Head extends Phaser.Scene {
 			this.input.setDefaultCursor(
 				"url(/texture/input/cursors/cursor_large.cur) 16 16, pointer"
 			);
+	}
+
+	// check if input has been released this update (or initialize it)
+	isReleased(key: string) {
+		// register key in input released object
+		if (!this.inputReleased[key]) {
+			this.inputReleased[key] = {
+				released: false,
+				pressed: false,
+			};
+		}
+
+		return this.inputReleased[key].released;
+	}
+
+	// check for state of key every update
+	checkReleased() {
+		// loop through reference of keys that check for releasing
+		for (const key in this.inputReleased) {
+			// reset released state
+			this.inputReleased[key].released = false;
+
+			// key no longer being pressed, and has just been released
+			if (this.inputReleased[key].pressed && !this.keys[key].isDown) {
+				this.inputReleased[key] = {
+					released: true,
+					pressed: false,
+				};
+			}
+
+			// key is being pressed
+			else if (this.keys[key].isDown)
+				this.inputReleased[key].pressed = true;
+		}
 	}
 
 	// cursor

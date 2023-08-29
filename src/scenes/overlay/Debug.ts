@@ -9,6 +9,7 @@ export class Debug extends Phaser.Scene {
 	player!: Player;
 	camera!: Phaser.Cameras.Scene2D.Camera;
 	debugText!: Phaser.GameObjects.Text;
+	activeInputs: Array<string> = [];
 
 	constructor() {
 		super({ key: "Debug" });
@@ -25,8 +26,6 @@ export class Debug extends Phaser.Scene {
 		this.camera = sceneGame.cameras.main;
 	}
 
-	preload() {}
-
 	create() {
 		// init debug info text
 		this.debugText = this.add
@@ -37,6 +36,16 @@ export class Debug extends Phaser.Scene {
 
 		// enable debug lines
 		this.sceneGame.matter.world.drawDebug = true;
+
+		// detect inputs
+		this.sceneGame.sceneHead.events.on(
+			"onInput",
+			this.updateActiveInputs,
+			this
+		);
+
+		// events
+		this.events.once("shutdown", this.shutdown, this);
 	}
 
 	update() {
@@ -48,35 +57,6 @@ export class Debug extends Phaser.Scene {
 
 		// get relative positions
 		let relativePosCamera = this.player.getRelativePosition(this.camera);
-
-		// init pressed keys
-		let pressedKeys: Array<string> = [];
-
-		// populate pressed keys
-		if (this.sceneGame.sceneHead.playerInput.direction.UP)
-			pressedKeys.push("UP");
-		if (this.sceneGame.sceneHead.playerInput.direction.DOWN)
-			pressedKeys.push("DOWN");
-		if (this.sceneGame.sceneHead.playerInput.direction.LEFT)
-			pressedKeys.push("LEFT");
-		if (this.sceneGame.sceneHead.playerInput.direction.RIGHT)
-			pressedKeys.push("RIGHT");
-		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.START > 0)
-			pressedKeys.push("START");
-		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.SELECT > 0)
-			pressedKeys.push("SELECT");
-		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.RC_E > 0)
-			pressedKeys.push("RC_E");
-		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.RC_W > 0)
-			pressedKeys.push("RC_W");
-		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.LB > 0)
-			pressedKeys.push("LB");
-		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.RB > 0)
-			pressedKeys.push("RB");
-		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.LC_N > 0)
-			pressedKeys.push("LC_N");
-		if (this.sceneGame.sceneHead.playerInput.buttons_mapped.LC_S > 0)
-			pressedKeys.push("LC_S");
 
 		// update debug
 		this.debugText.setText([
@@ -110,7 +90,24 @@ export class Debug extends Phaser.Scene {
 				", " +
 				(this.player.body as MatterJS.BodyType).velocity.y +
 				")",
-			"Pressed Keys: " + pressedKeys.join(", "),
+			"Active Inputs: " + this.activeInputs.join(", "),
 		]);
+
+		// refresh pressed keys
+		this.activeInputs = [];
+	}
+
+	// update the list of currently pressed inputs
+	updateActiveInputs(input: string) {
+		this.activeInputs.push(input);
+	}
+
+	shutdown() {
+		// remove listeners
+		this.sceneGame.sceneHead.events.off(
+			"onInput",
+			this.updateActiveInputs,
+			this
+		);
 	}
 }

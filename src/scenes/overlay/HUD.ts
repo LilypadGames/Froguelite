@@ -95,16 +95,6 @@ export class HUD extends Phaser.Scene {
 	update() {
 		// if there are bosses, detect if any nearby the player
 		if (this.sceneGame.bossGroup.getLength() > 0) this.detectBosses();
-
-		// close item display
-		if (
-			this.itemDisplay &&
-			(this.sceneGame.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"RC_W"
-			) ||
-				this.input.activePointer.isDown)
-		)
-			this.itemDisplay.close();
 	}
 
 	// set tip above player
@@ -274,10 +264,6 @@ export class HUD extends Phaser.Scene {
 			.layout();
 
 		let close = () => {
-			// remove input listener
-			// this.input.removeListener("pointerdown");
-			if (this.itemDisplay) delete this.itemDisplay;
-
 			// sfx
 			this.sound.play("ui_select", {
 				volume: this.sceneGame.sceneHead.audio.sfx.volume.value,
@@ -309,6 +295,13 @@ export class HUD extends Phaser.Scene {
 					this.scene.resume("Game");
 				},
 			});
+
+			// remove reference
+			if (this.itemDisplay) delete this.itemDisplay;
+
+			// remove event listeners
+			this.input.keyboard?.off("keydown", close, this);
+			this.input.off("pointerdown", close, this);
 		};
 
 		// create display
@@ -341,10 +334,11 @@ export class HUD extends Phaser.Scene {
 					// displayed item callback
 					displayedCallback();
 				},
-				// onComplete: () => {
-				// 	// allow closing
-				// 	this.input.on("pointerdown", close);
-				// },
+				onComplete: () => {
+					// allow closing
+					this.input.keyboard?.once("keydown", close, this);
+					this.input.once("pointerdown", close, this);
+				},
 			});
 		}, 1300);
 	}

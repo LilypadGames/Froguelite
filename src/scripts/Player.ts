@@ -16,12 +16,13 @@ import config from "../config";
 
 export class Player extends LivingEntity {
 	// interaction
-	lastContact!: undefined | Interactable | Teleporter;
+	lastContact!: undefined | null | Interactable | Teleporter;
 
 	// visuals
 	animKey!: string;
 
 	// movement
+	currentMoveInputs: Array<string> = [];
 	turnThreshold: number = 20;
 	speedDampening: number = 2;
 
@@ -109,13 +110,27 @@ export class Player extends LivingEntity {
 
 		// events
 		scene.events.on("postupdate", this.postupdate, this);
+
+		// input events
+		scene.sceneHead.events.on("input_up", () => {
+			this.currentMoveInputs.push("UP");
+		});
+		scene.sceneHead.events.on("input_down", () => {
+			this.currentMoveInputs.push("DOWN");
+		});
+		scene.sceneHead.events.on("input_left", () => {
+			this.currentMoveInputs.push("LEFT");
+		});
+		scene.sceneHead.events.on("input_right", () => {
+			this.currentMoveInputs.push("RIGHT");
+		});
 	}
 
 	onDestroy() {
 		super.onDestroy();
 
 		// remove listeners
-		this.scene.events.removeListener("postupdate", this.postupdate, this);
+		this.scene.events.off("postupdate", this.postupdate, this);
 
 		// save player data
 		store.set(
@@ -135,22 +150,6 @@ export class Player extends LivingEntity {
 
 		// still alive
 		if (!this.isDead) {
-			// open inventory
-			if (
-				this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
-					"START"
-				)
-			)
-				this.toggleInventory();
-
-			// interact
-			if (
-				this.scene.sceneHead.playerInput.interaction_mapped.pressed.includes(
-					"RC_W"
-				)
-			)
-				this.checkInteract();
-
 			// handle attacking
 			if (this.scene.time.now > 2000) this.handleAttack();
 
@@ -275,7 +274,7 @@ export class Player extends LivingEntity {
 
 	// check if player is interacting
 	checkInteract() {
-		if (this.lastContact !== undefined) {
+		if (this.lastContact != null) {
 			this.lastContact.interact();
 		}
 	}
@@ -374,7 +373,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving up
-		if (this.scene.sceneHead.playerInput.direction.UP) {
+		if (this.currentMoveInputs.includes("UP")) {
 			// determine direction
 			if (directionY === "") directionY = "up";
 
@@ -392,7 +391,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving down
-		else if (this.scene.sceneHead.playerInput.direction.DOWN) {
+		else if (this.currentMoveInputs.includes("DOWN")) {
 			// determine direction
 			if (directionY === "") directionY = "down";
 
@@ -410,7 +409,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving left
-		if (this.scene.sceneHead.playerInput.direction.LEFT) {
+		if (this.currentMoveInputs.includes("LEFT")) {
 			// determine direction
 			if (directionX === "") directionX = "left";
 
@@ -428,7 +427,7 @@ export class Player extends LivingEntity {
 		}
 
 		// moving right
-		else if (this.scene.sceneHead.playerInput.direction.RIGHT) {
+		else if (this.currentMoveInputs.includes("RIGHT")) {
 			// determine direction
 			if (directionX === "") directionX = "right";
 
@@ -459,12 +458,7 @@ export class Player extends LivingEntity {
 		this.applyForce(rotatedVector);
 
 		// not moving
-		if (
-			!this.scene.sceneHead.playerInput.direction.UP &&
-			!this.scene.sceneHead.playerInput.direction.DOWN &&
-			!this.scene.sceneHead.playerInput.direction.LEFT &&
-			!this.scene.sceneHead.playerInput.direction.RIGHT
-		) {
+		if (this.currentMoveInputs.length == 0) {
 			this.setVelocity(0, 0);
 		}
 		// moving
@@ -479,6 +473,9 @@ export class Player extends LivingEntity {
 					ease: "Sine.easeOut",
 				});
 		}
+
+		// reset movement inputs
+		this.currentMoveInputs = [];
 	}
 
 	equip(inventoryType: "armor" | "spell", item: string) {
@@ -521,22 +518,6 @@ export class Player extends LivingEntity {
 			// set armor layer
 			this.armor.torso?.destroy();
 		}
-	}
-
-	toggleInventory() {
-		// pause current scene
-		this.scene.scene.pause();
-
-		// sfx
-		this.scene.sound.play("ui_open", {
-			volume: this.scene.sceneHead.audio.sfx.volume.value,
-		});
-
-		// launch inventory menu
-		this.scene.scene.launch("Inventory", {
-			sceneHead: this.scene.sceneHead,
-			scenePaused: this.scene,
-		});
 	}
 
 	collideEnemy(enemy: MatterJS.BodyType) {

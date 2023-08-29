@@ -42,11 +42,6 @@ export class Inventory extends CoreOverlay {
 			: "spells";
 	}
 
-	preload() {
-		// set up ESC key
-		super.preload();
-	}
-
 	create() {
 		// create transparent background overlay
 		this.background = this.add.rectangle(
@@ -158,19 +153,18 @@ export class Inventory extends CoreOverlay {
 
 		// selection description
 		this.selectionDescription = this.createSelectionDescription();
-
-		// show menu when resumed
-		this.events.on("resume", this.show, this);
 	}
 
-	update() {
-		// close inventory
-		if (
-			this.sceneHead.playerInput.interaction_mapped.pressed.includes(
-				"START"
-			)
-		)
-			super.resumePreviousScene();
+	registerInputs() {
+		// detect input
+		this.sceneHead.events.once(
+			"input_inventory",
+			this.resumePreviousScene,
+			this
+		);
+
+		// core inputs
+		super.registerInputs();
 	}
 
 	createCharacterRepresentation() {
@@ -641,10 +635,33 @@ export class Inventory extends CoreOverlay {
 			.layout();
 	}
 
+	pause() {
+		// remove listeners
+		this.sceneHead.events.off(
+			"input_inventory",
+			this.resumePreviousScene,
+			this
+		);
+
+		// core pause
+		super.pause();
+	}
+
+	resume() {
+		// show on resume
+		this.show();
+
+		// core resume
+		super.resume();
+	}
+
 	shutdown() {
 		// remove listeners
-		this.events.removeListener("resume", this.show, this);
-		// this.keyTAB.removeListener("down", super.resumePreviousScene, this);
+		this.sceneHead.events.off(
+			"input_inventory",
+			this.resumePreviousScene,
+			this
+		);
 
 		// base class shutdown
 		super.shutdown();

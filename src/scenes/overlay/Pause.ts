@@ -31,11 +31,6 @@ export class Pause extends CoreOverlay {
 		super({ key: "Pause" });
 	}
 
-	preload() {
-		// set up ESC key
-		super.preload();
-	}
-
 	create() {
 		// create transparent background overlay
 		this.background = this.add.rectangle(
@@ -163,17 +158,14 @@ export class Pause extends CoreOverlay {
 				{ align: "center" }
 			)
 			.layout();
-
-		// show menu when resumed
-		this.events.on("resume", this.show, this);
 	}
 
-	shutdown() {
-		//remove listeners
-		this.events.removeListener("resume", this.show, this);
+	resume() {
+		// show pause menu again
+		this.show();
 
-		// base class shutdown
-		super.shutdown();
+		// core resume
+		super.resume();
 	}
 
 	button(text: string, id: string) {

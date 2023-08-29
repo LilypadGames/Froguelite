@@ -135,15 +135,30 @@ export class Game extends Core {
 		// start HUD
 		this.scene.launch("HUD", this);
 
-		// execute when game is paused/resumed
-		this.events.on("pause", this.onPause, this);
-		this.events.on("resume", this.onResume, this);
-
 		// play music
 		if (this.cache.json.get("game").music.level[this.levelID])
 			super.playMusic(
 				this.cache.json.get("game").music.level[this.levelID]
 			);
+
+		// interact button
+		this.sceneHead.events.on(
+			"input_interact",
+			this.player.checkInteract,
+			this.player
+		);
+	}
+
+	registerInputs() {
+		// open inventory menu
+		this.sceneHead.events.once(
+			"input_inventory",
+			this.toggleInventory,
+			this
+		);
+
+		// core inputs
+		super.registerInputs();
 	}
 
 	update() {
@@ -157,10 +172,44 @@ export class Game extends Core {
 		}
 	}
 
+	pause(data: { pauseHUD: boolean } = { pauseHUD: true }) {
+		// remove event listeners
+		this.sceneHead.events.off(
+			"input_inventory",
+			this.toggleInventory,
+			this
+		);
+
+		// pause HUD
+		if (data.pauseHUD) this.HUD.scene.pause();
+
+		// core pause
+		super.pause();
+	}
+
+	resume() {
+		// resume HUD
+		this.HUD.scene.resume();
+
+		// reload graphics
+		this.reloadGraphics();
+
+		// core resume
+		super.resume();
+	}
+
 	shutdown() {
 		// remove listeners
-		this.events.removeListener("pause", this.onPause, this);
-		this.events.removeListener("resume", this.onResume, this);
+		this.sceneHead.events.off(
+			"input_inventory",
+			this.toggleInventory,
+			this
+		);
+		this.sceneHead.events.off(
+			"input_interact",
+			this.player.checkInteract,
+			this.player
+		);
 
 		// destroy player
 		this.player.destroy();
@@ -175,23 +224,24 @@ export class Game extends Core {
 		super.shutdown();
 	}
 
-	onPause(data: { pauseHUD: boolean } = { pauseHUD: true }) {
-		// pause HUD
-		if (data.pauseHUD) this.HUD.scene.pause();
-	}
-
-	onResume() {
-		// resume HUD
-		this.HUD.scene.resume();
-
-		// reload graphics
-		this.reloadGraphics();
-	}
-
 	reloadGraphics() {
 		this.children.list.forEach((object: any) => {
 			if (object instanceof Entity)
 				object.applyShaders(this.sceneHead.highPerformanceMode.get());
+		});
+	}
+
+	toggleInventory() {
+		// pause current scene
+		this.scene.pause();
+
+		// sfx
+		this.sceneHead.play.sound("ui_open");
+
+		// launch inventory menu
+		this.scene.launch("Inventory", {
+			sceneHead: this.sceneHead,
+			scenePaused: this,
 		});
 	}
 }

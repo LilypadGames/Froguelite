@@ -391,7 +391,7 @@ export class InfiniteLevel extends Level {
 
 	shutdown() {
 		// remove listeners
-		this.scene.events.removeListener("update", this.update, this);
+		this.scene.events.off("update", this.update, this);
 	}
 }
 

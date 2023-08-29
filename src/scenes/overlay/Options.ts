@@ -25,11 +25,6 @@ export class Options extends CoreOverlay {
 		super({ key: "Options" });
 	}
 
-	preload() {
-		// set up ESC key
-		super.preload();
-	}
-
 	create() {
 		// create transparent background overlay
 		this.background = this.add.rectangle(
@@ -192,8 +187,8 @@ export class Options extends CoreOverlay {
 
 	shutdown() {
 		// remove listeners
-		this.events.removeListener("toggleChanged");
-		this.events.removeListener("sliderChanged");
+		this.events.off("toggleChanged");
+		this.events.off("sliderChanged");
 
 		// base class shutdown
 		super.shutdown();

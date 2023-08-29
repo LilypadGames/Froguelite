@@ -115,13 +115,13 @@ export class Entity extends Phaser.Physics.Matter.Sprite {
 
 	onDestroy() {
 		// remove listeners
-		this.scene.matter.world.removeListener(
+		this.scene.matter.world.off(
 			"beforeupdate",
 			this.beforeupdate,
 			this
 		);
-		this.scene.events.removeListener("preupdate", this.preupdate, this);
-		this.scene.events.removeListener("update", this.update, this);
+		this.scene.events.off("preupdate", this.preupdate, this);
+		this.scene.events.off("update", this.update, this);
 	}
 
 	applyCachedForces() {
