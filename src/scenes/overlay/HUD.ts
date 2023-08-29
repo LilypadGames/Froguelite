@@ -265,9 +265,7 @@ export class HUD extends Phaser.Scene {
 
 		let close = () => {
 			// sfx
-			this.sound.play("ui_select", {
-				volume: this.sceneGame.sceneHead.audio.sfx.volume.value,
-			});
+			this.sceneGame.sceneHead.play.sound("ui_select");
 
 			// fade out background
 			this.tweens.add({

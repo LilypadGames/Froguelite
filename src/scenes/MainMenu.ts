@@ -124,9 +124,7 @@ export class MainMenu extends Core {
 		this.scene.pause();
 
 		// sfx
-		this.sound.play("ui_open", {
-			volume: this.sceneHead.audio.sfx.volume.value,
-		});
+		this.sceneHead.play.sound("ui_open");
 
 		// launch options menu
 		this.scene.launch("Options", {

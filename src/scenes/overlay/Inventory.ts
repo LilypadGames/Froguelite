@@ -281,9 +281,7 @@ export class Inventory extends CoreOverlay {
 					return;
 
 				// sfx
-				this.sound.play("ui_select", {
-					volume: this.sceneHead.audio.sfx.volume.value,
-				});
+				this.sceneHead.play.sound("ui_select");
 
 				// unequip
 				if (getEquippedItem() === getItemInSlot(Number(slot.name))) {
@@ -317,9 +315,7 @@ export class Inventory extends CoreOverlay {
 					if (!getItemInSlot(Number(slot.name))) return;
 
 					// sfx
-					this.sound.play("ui_hover", {
-						volume: this.sceneHead.audio.sfx.volume.value,
-					});
+					this.sceneHead.play.sound("ui_hover");
 
 					// show selection information
 					this.updateSelectionDescription(
@@ -588,9 +584,7 @@ export class Inventory extends CoreOverlay {
 				"button.click",
 				(button: Label) => {
 					// sfx
-					this.sound.play("ui_select", {
-						volume: this.sceneHead.audio.sfx.volume.value,
-					});
+					this.sceneHead.play.sound("ui_select");
 
 					// click callback
 					tabs[button.name].clickCallback();
@@ -601,9 +595,7 @@ export class Inventory extends CoreOverlay {
 				"button.over",
 				(button: Label) => {
 					// sfx
-					this.sound.play("ui_hover", {
-						volume: this.sceneHead.audio.sfx.volume.value,
-					});
+					this.sceneHead.play.sound("ui_hover");
 
 					// darker background opacity and stroke
 					(button.getElement("background") as RoundRectangle)
