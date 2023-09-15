@@ -18,7 +18,7 @@ export class Core extends Phaser.Scene {
 		super(config);
 	}
 
-	init(data: sceneData | gameSceneData) {
+	init(data: ISceneData | ISceneDataGame) {
 		// save head scene
 		this.sceneHead = data.sceneHead;
 
@@ -101,7 +101,7 @@ export class Core extends Phaser.Scene {
 
 	changeScene(
 		scene: string,
-		data?: sceneData | gameSceneData | overlaySceneData
+		data?: ISceneData | ISceneDataGame | ISceneDataOverlay
 	) {
 		// stop scene
 		this.scene.stop();

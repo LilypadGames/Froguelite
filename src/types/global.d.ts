@@ -1,41 +1,44 @@
-// scenes
 import { Head } from "../scenes/internal/Head";
 
 declare global {
-	interface sceneData {
+	/** Data passed between Scenes */
+	interface ISceneData {
 		sceneHead: Head;
 	}
 
-	// overlays
-	interface overlaySceneData extends sceneData {
+	/** Data passed to Overlay Scenes */
+	interface ISceneDataOverlay extends ISceneData {
 		scenePaused: Phaser.Scene;
 	}
 
-	interface inventorySceneData extends overlaySceneData {
+	/** Data passed to the Inventory Scene */
+	interface ISceneDataInventory extends ISceneDataOverlay {
 		inventory?: string;
 	}
 
-	// main scenes
-	interface gameSceneData extends sceneData {
+	/** Data passed to the Game Scene */
+	interface ISceneDataGame extends ISceneData {
 		level: string;
 	}
 
-	// player
-	interface playerStats {
+	/** Player Stats */
+	interface IPlayerStats {
 		health: number;
 		healthMax: number;
 		speed: number;
 		fireRate: number;
 	}
 
-	interface enemyStats {
+	/** Enemy Stats */
+	interface IEnemyStats {
 		health: number;
 		healthMax: number;
 		speed: number;
 		strength: number;
 	}
 
-	interface playerDetails {
+	/** Player Details */
+	interface IPlayerDetails {
 		healthbar?: {
 			scale: number;
 			width: number;
@@ -43,13 +46,37 @@ declare global {
 		boss?: boolean;
 	}
 
-	interface playerEquipped {
+	/** Player's Equipped Items  */
+	interface IPlayerEquippedItems {
 		spell: string;
 		armor?: string;
 	}
 
-	interface playerInventory {
+	/** Player's Inventory */
+	interface IPlayerInventory {
 		spells: string[];
 		armors: string[];
+	}
+
+	/** Tileset's Tile Data */
+	interface ITilesetTiledata {
+		[key: number]: ITiledata;
+	}
+
+	/** Tile Data */
+	interface ITiledata {
+		animation?: ITiledAnimationFrameData[];
+	}
+
+	/** Animation Frame Data from Tiled Tileset */
+	interface ITiledAnimationFrameData {
+		duration: number;
+		tileid: number;
+	}
+
+	/** Properties of Tiles within a Tileset */
+	interface ITilesetTileProperties {
+		/** Whether or not the initial animation frame of this tile should be randomized */
+		animationRandom?: boolean;
 	}
 }

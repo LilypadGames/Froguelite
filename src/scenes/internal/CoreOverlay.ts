@@ -15,7 +15,7 @@ export class CoreOverlay extends Phaser.Scene {
 		super(config);
 	}
 
-	init(data: overlaySceneData) {
+	init(data: ISceneDataOverlay) {
 		// save head scene
 		this.sceneHead = data.sceneHead;
 

@@ -8,6 +8,7 @@ import { Lootable } from "../scripts/interactable/Lootable";
 
 // config
 import config from "../config";
+import Utility from "./utility/Utility";
 
 // general level setup
 class Level {
@@ -56,6 +57,20 @@ export class TilemapLevel extends Level {
 	// collision layers
 	collisionLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
 
+	// animations of tiles in tileset
+	tilesetAnimations: {
+		[key: number]: ITiledAnimationFrameData[];
+	} = {};
+
+	// tiles with animations
+	animatedTiles: {
+		[key: number]: {
+			tile: Phaser.Tilemaps.Tile;
+			currentFrame: number;
+			nextFrameTime: number;
+		}[];
+	} = {};
+
 	constructor(scene: Game, levelID: string) {
 		// pass values
 		super(scene, levelID);
@@ -63,10 +78,25 @@ export class TilemapLevel extends Level {
 		// create tile map
 		this.tilemap = this.scene.make.tilemap({ key: levelID });
 
+		// create layers of tilemap
+		this.initLayers();
+
+		// get animated tiles in tileset
+		this.getAnimatedTiles();
+
+		// populate objects in object layer of tilemap
+		this.populateTilemap();
+
+		// events
+		this.scene.events.on("postupdate", this.postUpdate, this);
+		this.scene.events.once("shutdown", this.shutdown, this);
+	}
+
+	initLayers() {
 		// add tileset to map
 		const tileset = this.tilemap.addTilesetImage("tiles", "world_tiles");
 
-		// init layers
+		// loop through layers
 		this.tilemap.layers.forEach(
 			(layer: Phaser.Tilemaps.LayerData): void => {
 				// add layer
@@ -121,11 +151,9 @@ export class TilemapLevel extends Level {
 				});
 			}
 		);
+	}
 
-		// animate tiles
-		this.scene.animatedTiles.init(this.tilemap);
-
-		// populate objects in object layer
+	populateTilemap() {
 		this.tilemap.objects.forEach((objectLayer) => {
 			// each object
 			objectLayer.objects.forEach((object) => {
@@ -195,6 +223,129 @@ export class TilemapLevel extends Level {
 				}
 			}, this);
 		}, this);
+	}
+
+	// get animated tiles
+	getAnimatedTiles() {
+		// loop through tilesets
+		this.tilemap.tilesets.forEach((tileset) => {
+			// get data of all tiles in tileset
+			let tileData = tileset.tileData as ITilesetTiledata;
+
+			// loop through tiles in tileset's tiledata
+			Object.keys(tileData).forEach((index) => {
+				// tile does not have animation data
+				if (!tileData[parseInt(index)].hasOwnProperty("animation"))
+					return;
+
+				// save animation data for this tile in tileset
+				this.tilesetAnimations[parseInt(index)] = tileData[
+					parseInt(index)
+				].animation as ITiledAnimationFrameData[];
+
+				// offset tile ID
+				this.tilesetAnimations[parseInt(index)].forEach(
+					(tilesetAnimation) => {
+						tilesetAnimation.tileid =
+							tilesetAnimation.tileid + tileset.firstgid;
+					}
+				);
+			});
+		});
+
+		// loop through tilemap layers
+		this.tilemap.layers.forEach((layer) => {
+			// layer has no animated tiles
+			if (layer.tilemapLayer.type === "StaticTilemapLayer") {
+				return;
+			}
+
+			// loop through rows of tiles
+			layer.data.forEach((tileRow: Phaser.Tilemaps.Tile[]) => {
+				// loop through tiles in row
+				tileRow.forEach((tile: Phaser.Tilemaps.Tile) => {
+					// tile does not have a matching animation
+					if (!this.tilesetAnimations[tile.index - 1]) return;
+
+					// initialize list of animated tiles for this tileset tile, if not already
+					if (!this.animatedTiles[tile.index - 1])
+						this.animatedTiles[tile.index - 1] = [];
+
+					// animation frame randomized
+					if (
+						(tile.properties as ITilesetTileProperties)
+							.animationRandom
+					) {
+						// get random frame
+						const randomFrame = Utility.random.int(
+							0,
+							this.tilesetAnimations[tile.index - 1].length - 1
+						);
+
+						// add tile to list of animated tiles at random frame
+						this.animatedTiles[tile.index - 1].push({
+							tile,
+							currentFrame: randomFrame,
+							nextFrameTime:
+								this.tilesetAnimations[tile.index - 1][
+									randomFrame
+								].duration,
+						});
+					}
+					// start at frame 0
+					else {
+						// add tile to list of animated tiles at first frame
+						this.animatedTiles[tile.index - 1].push({
+							tile,
+							currentFrame: 0,
+							nextFrameTime:
+								this.tilesetAnimations[tile.index - 1][0]
+									.duration,
+						});
+					}
+				});
+			});
+		});
+	}
+
+	// update animated tiles
+	postUpdate(_time: number, delta: number) {
+		// loop through animated tile in tileset
+		for (const tilesetAnimation in this.animatedTiles) {
+			// loop through animated tiles
+			this.animatedTiles[tilesetAnimation].forEach((animatedTileData) => {
+				// countdown
+				animatedTileData.nextFrameTime -= delta;
+
+				// next frame
+				if (animatedTileData.nextFrameTime <= 0) {
+					// get next frame index (wrap around if over length of frames in animation)
+					const nextFrameIndex =
+						this.tilesetAnimations[tilesetAnimation].length - 1 <
+						animatedTileData.currentFrame + 1
+							? 0
+							: animatedTileData.currentFrame + 1;
+
+					// get next frame data
+					const nextFrame =
+						this.tilesetAnimations[tilesetAnimation][
+							nextFrameIndex
+						];
+
+					// apply frame to tile
+					animatedTileData.tile.index = nextFrame.tileid;
+
+					// update tile's frame data
+					animatedTileData.currentFrame = nextFrameIndex;
+					animatedTileData.nextFrameTime = nextFrame.duration;
+				}
+			});
+		}
+	}
+
+	shutdown() {
+		// unregister events
+		this.scene.events.off("postupdate", this.postUpdate);
 	}
 }
 

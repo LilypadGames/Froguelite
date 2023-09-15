@@ -246,7 +246,13 @@
                          "duration":300,
                          "tileid":1829
                         }],
-                 "id":1772
+                 "id":1772,
+                 "properties":[
+                        {
+                         "name":"animationRandom",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }],
          "tilewidth":24
         }],

@@ -33,7 +33,7 @@ export class Inventory extends CoreOverlay {
 		super({ key: "Inventory" });
 	}
 
-	init(data: inventorySceneData) {
+	init(data: ISceneDataInventory) {
 		super.init(data);
 
 		// set to provided inventory, or default inventory (spells)

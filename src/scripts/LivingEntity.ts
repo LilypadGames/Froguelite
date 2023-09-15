@@ -13,10 +13,10 @@ export class LivingEntity extends Entity {
 	healthbar!: Healthbar;
 
 	// stats
-	stats: playerStats | enemyStats;
+	stats: IPlayerStats | IEnemyStats;
 
 	// details
-	details: playerDetails | undefined;
+	details: IPlayerDetails | undefined;
 
 	constructor(
 		scene: Game,
@@ -25,8 +25,8 @@ export class LivingEntity extends Entity {
 		textureKey: string,
 		label: string,
 		entityType: string,
-		stats: playerStats | enemyStats,
-		details?: playerDetails
+		stats: IPlayerStats | IEnemyStats,
+		details?: IPlayerDetails
 	) {
 		// pass values
 		super(scene, x, y, textureKey, label, entityType);

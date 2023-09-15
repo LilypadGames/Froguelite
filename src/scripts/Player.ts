@@ -31,8 +31,8 @@ export class Player extends LivingEntity {
 	spells!: Spells;
 
 	// inventory
-	equipped!: playerEquipped;
-	inventory!: playerInventory;
+	equipped!: IPlayerEquippedItems;
+	inventory!: IPlayerInventory;
 
 	// armor
 	armor: {
@@ -48,9 +48,9 @@ export class Player extends LivingEntity {
 
 		// get player save data
 		let saveData: {
-			stats: playerStats;
-			equipped: playerEquipped;
-			inventory: playerInventory;
+			stats: IPlayerStats;
+			equipped: IPlayerEquippedItems;
+			inventory: IPlayerInventory;
 		} =
 			store.get("saveData") && store.get("saveData").player
 				? JSON.parse(store.get("saveData").player)
@@ -526,7 +526,7 @@ export class Player extends LivingEntity {
 
 		// apply damage
 		this.changeHealth(
-			-((enemy.gameObject as Enemy).stats as enemyStats).strength
+			-((enemy.gameObject as Enemy).stats as IEnemyStats).strength
 		);
 
 		// sfx

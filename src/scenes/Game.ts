@@ -1,9 +1,6 @@
 // imports
 import store from "storejs";
 
-// plugins
-import AnimatedTiles from "phaser-animated-tiles/dist/AnimatedTiles.js";
-
 // internal
 import { Core } from "./internal/Core";
 
@@ -20,10 +17,6 @@ import { Entity } from "../scripts/Entity";
  * Handles meta mechanics of the game such as the camera and connections between the level, player, and HUD. It is provided level data and creates a new Level instance.
  */
 export class Game extends Core {
-	// TODO: create my own animated tile handling system, so that an individual tile's animations can be controlled and changed.
-	// plugins
-	animatedTiles!: AnimatedTiles;
-
 	// HUD
 	HUD!: HUD;
 
@@ -47,7 +40,7 @@ export class Game extends Core {
 		super({ key: "Game" });
 	}
 
-	init(data: gameSceneData) {
+	init(data: ISceneDataGame) {
 		// save scene references
 		super.init(data);
 
