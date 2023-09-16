@@ -69,9 +69,7 @@ export class MainMenu extends Core {
 			super.playMusic(this.cache.json.get("game").music.mainmenu);
 
 		// detect any input to start game
-		// TODO: check if input is NOT the back input (pause menu button)
-		this.input.keyboard?.once("keydown", this.enterGame, this);
-		this.input.once("pointerdown", this.enterGame, this);
+		this.initStartDetection();
 	}
 
 	pause() {
@@ -90,7 +88,25 @@ export class MainMenu extends Core {
 		super.resume();
 	}
 
-	enterGame() {
+	initStartDetection() {
+		// remove events
+		this.input.keyboard?.off("keydown", this.enterGame, this);
+		this.input.off("pointerdown", this.enterGame, this);
+
+		// add events
+		this.input.keyboard?.once("keydown", this.enterGame, this);
+		this.input.once("pointerdown", this.enterGame, this);
+	}
+
+	enterGame(key: KeyboardEvent) {
+		// make sure pressed key wasn't the option key button
+		// HACK: Not really the preferred way, as it only checks for the ESC key and not any input that could represent "back", as declared by this.sceneHead.inputs.back[]
+		if (this.sceneHead.keys.ESC.keyCode === key.keyCode) {
+			// re-register event
+			this.initStartDetection();
+			return;
+		}
+
 		// sfx
 		this.sceneHead.play.sound("ui_select");
 
