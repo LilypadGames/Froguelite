@@ -44,6 +44,7 @@
             }
         }
     },
+    "death_particle": "texture/particle/death_particle.png",
     "lsf": "texture/enemy/lsf.png",
     "entrance_cave": "texture/interactable/teleporter/cave.png",
     "snot_bubble": {

@@ -2,25 +2,20 @@
 import Phaser from "phaser";
 import WebFont from "webfontloader";
 import store from "storejs";
+import { extractColors } from "extract-colors";
 
 // config
 import config from "../../config";
 
-/** 
+/**
  * Loads textures, sounds, and other data that will be used by the game.
-*/
+ */
 export class Load extends Phaser.Scene {
+	// animations extracted from texture data, queued to be added to the game
 	animQueue: {
 		texture: string;
 		anims: {
-			[key: string]: {
-				auto?: boolean;
-				frameRate?: number;
-				frames: {
-					start: number;
-					end?: number;
-				};
-			};
+			[key: string]: ITextureCacheDataAnim;
 		};
 	}[] = [];
 
@@ -89,23 +84,23 @@ export class Load extends Phaser.Scene {
 				this.load.image(key, textures[key]);
 			// spritesheet
 			else {
-				this.load.spritesheet(key, textures[key].spritesheet, {
-					frameWidth: textures[key].frameWidth
-						? textures[key].frameWidth
-						: undefined,
-					frameHeight: textures[key].frameHeight
-						? textures[key].frameHeight
-						: undefined,
-					spacing: textures[key].spacing
-						? textures[key].spacing
+				// get texture data of sprite
+				const textureData = textures[key] as ITextureCacheData;
+
+				// load spritesheet
+				this.load.spritesheet(key, textureData.spritesheet, {
+					frameWidth: textureData.frameWidth,
+					frameHeight: textureData.frameHeight,
+					spacing: textureData.spacing
+						? textureData.spacing
 						: undefined,
 				});
 
 				// queue anims for loading
-				if (textures[key])
+				if (textureData)
 					this.animQueue.push({
 						texture: key,
-						anims: textures[key].anims,
+						anims: textureData.anims,
 					});
 			}
 		}
@@ -147,6 +142,36 @@ export class Load extends Phaser.Scene {
 		for (const [group, _value] of Object.entries(config.collisionGroup)) {
 			config.collisionGroup[group as keyof typeof config.collisionGroup] =
 				this.matter.world.nextCategory();
+		}
+
+		// setup death animations
+		for (const enemy in (this.cache.json.get("game") as IGameCacheData)
+			.enemies) {
+			// get texture key
+			const textureKey = (this.cache.json.get("game") as IGameCacheData)
+				.enemies[enemy].texture;
+
+			// get texture source
+			const textureSource =
+				typeof this.cache.json.get("textures")[textureKey] === "string"
+					? (this.cache.json.get("textures")[textureKey] as string)
+					: (
+							this.cache.json.get("textures")[
+								textureKey
+							] as ITextureCacheData
+					  ).spritesheet;
+
+			// extract colors from texture
+			this.cache.addCustom("colorData");
+			extractColors(textureSource, {
+				// accept everything except transparent pixels
+				colorValidator: (_red, _green, _blue, alpha = 255) => alpha > 0,
+			})
+				.then((value) => {
+					// add texture's color data to list of color data
+					this.cache.custom.colorData.add(textureKey, value);
+				})
+				.catch(console.error);
 		}
 
 		// load fonts

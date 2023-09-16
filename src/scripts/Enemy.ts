@@ -8,6 +8,9 @@ import { Spell } from "./Spell";
 // config
 import config from "../config";
 
+// utility
+import Utility from "./utility/Utility";
+
 export class Enemy extends LivingEntity {
 	// id
 	id: string;
@@ -77,6 +80,42 @@ export class Enemy extends LivingEntity {
 			this.updateDirection();
 			this.updateMovement();
 		}
+	}
+
+	kill() {
+		// get extracted colors
+		const colors = (
+			this.scene.cache.custom.colorData.entries
+				.entries as IExtractedColors
+		)[this.textureKey];
+
+		// colors detected
+		if (colors.length > 0) {
+			// detect quantity depending on colors
+			const particleQuantity = 50 / colors.length;
+
+			// play particles for each color
+			for (const color in colors) {
+				this.scene.add
+					.particles(this.x, this.y, "death_particle", {
+						quantity: particleQuantity,
+						tint: Utility.hex.toDecimal(
+							colors[color].hex.replace("#", "")
+						),
+						tintFill: true,
+						lifespan: 1000,
+						speed: { min: 2, max: 15 },
+						alpha: { start: 1, end: 0 },
+						scale: 1.5,
+						emitting: false,
+					})
+					.setDepth(this.depth)
+					.explode();
+			}
+		}
+
+		// run super class's kill method
+		super.kill();
 	}
 
 	updateDirection() {
