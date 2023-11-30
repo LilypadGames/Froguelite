@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://c0f7gukj5eqb5"]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_c12yc"]
+[ext_resource type="PackedScene" uid="uid://d00vibmf4lv6g" path="res://objects/Player.tscn" id="2_0sumi"]
+[ext_resource type="PackedScene" uid="uid://cseavl1h2m7oe" path="res://data/world/level/riverside.tmj" id="2_mb68b"]
+
+[node name="level" type="Node2D" node_paths=PackedStringArray("level", "player", "camera")]
+script = ExtResource("1_c12yc")
+level = NodePath("riverside")
+player = NodePath("Player")
+camera = NodePath("Camera2D")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("2_0sumi")]
+z_index = 1
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="Objects" type="Node" parent="."]
+
+[node name="riverside" parent="." instance=ExtResource("2_mb68b")]
