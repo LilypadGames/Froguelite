@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://scripts/level.gd" id="1_c12yc"]
 [ext_resource type="PackedScene" uid="uid://d00vibmf4lv6g" path="res://objects/Player.tscn" id="2_0sumi"]
-[ext_resource type="PackedScene" uid="uid://c2lmkqy8a4ig2" path="res://data/world/level/dungeon.tmj" id="2_b11ay"]
+[ext_resource type="PackedScene" uid="uid://dq3fkprxutcg" path="res://scenes/riverside.tscn" id="2_5puvk"]
 
 [node name="level" type="Node2D"]
 script = ExtResource("1_c12yc")
-tilemap = ExtResource("2_b11ay")
+tilemap = ExtResource("2_5puvk")
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true

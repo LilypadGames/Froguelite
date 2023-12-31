@@ -15,6 +15,7 @@ dest_files=["res://.godot/imported/frog_caves.tmj-c014810a7feed57056c65c43133b43
 use_tilemap_layers=false
 use_default_filter=false
 add_class_as_metadata=false
+add_id_as_metadata=false
 map_wangset_to_terrain=false
 tiled_project_file=""
 post_processor=""

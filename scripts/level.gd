@@ -9,6 +9,7 @@ extends Node2D
 
 # internal
 var level: Node2D
+var layers: Array[TileMap]
 var objects: Node2D
 
 func _ready() -> void:
@@ -16,6 +17,17 @@ func _ready() -> void:
 	level = tilemap.instantiate()
 	add_child(level)
 	objects = level.get_node("Objects")
+
+	# set up collisions
+	for child in level.get_children():
+		if child is TileMap:
+			# add layer
+			layers.push_back(child)
+
+			# add collider
+			if child.has_meta("wall") and child.get_meta("wall"):
+				child.tile_set.add_physics_layer()
+				child.tile_set
 
 	# set up objects
 	for object in objects.get_children():
