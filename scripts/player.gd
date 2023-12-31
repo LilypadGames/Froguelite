@@ -1,23 +1,26 @@
+class_name Player
 extends CharacterBody2D
 
-class_name Player
-
-# settings
-@export_category("Settings")
+# properties
+@export_category("Properties")
 @export var movement_speed: float = 5000
 
 # references
 @export_category("References")
-@export var sprite_group: Node2D
-@export var directional_sprites: Array[AnimatedSprite2D]
-@export var animation: AnimationPlayer
+@onready var sprite_group: Node2D = %SpriteGroup
+@onready var anim_player: AnimationPlayer = %AnimationPlayer
+
+# internal
+var sprites: Array[AnimatedSprite2D]
 
 # internal
 var input_vector: Vector2 = Vector2.ZERO
 var direction: String = "right"
 
 func _ready() -> void:
-	pass
+	# get sprites
+	for index in sprite_group.get_child_count():
+		sprites.push_back(sprite_group.get_child(index))
 
 func _physics_process(delta: float) -> void:
 	# input
@@ -38,10 +41,10 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	# animation
-	for sprite: AnimatedSprite2D in directional_sprites:
+	for sprite: AnimatedSprite2D in sprites:
 		# direction
 		sprite.play(direction)
 
 	# hop (when moving)
 	if (velocity != Vector2.ZERO):
-		animation.play("hop")
+		anim_player.play("hop")
