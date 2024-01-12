@@ -12,6 +12,9 @@ var level: Node2D
 var layers: Array[TileMap]
 var objects: Node2D
 
+# constants
+const teleporter_path := "res://objects/Teleporter.tscn"
+
 func _ready() -> void:
 	# set up level
 	level = tilemap.instantiate()
@@ -37,6 +40,13 @@ func _ready() -> void:
 			# spawnpoint
 			if type == "spawn":
 				player.position = object.position
+
+			# teleporter
+			elif type == "teleporter":
+				var teleporter: Teleporter = preload(teleporter_path).instantiate() as Teleporter
+				teleporter.texture = Cache.data["game"]["interactables"][Cache.data["game"]["teleporters"][object.get_meta("id")]["type"]]["texture"]
+				add_child(teleporter)
+				teleporter.position = object.position
 
 func _process(_delta: float) -> void:
 	# handle camera
