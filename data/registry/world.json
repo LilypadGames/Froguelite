@@ -1,18 +1,18 @@
 {
-    "level": {
-        "riverside": {
-            "type": "tilemap",
-            "file": "world/level/riverside.json"
-        },
-        "dungeon": {
-            "type": "tilemap",
-            "file": "world/level/dungeon.json"
-        },
-        "frog_caves": {
-            "type": "infinite"
-        }
-    },
-    "structure": {
-        "grass_patch": "world/structure/grass_patch.json"
-    }
+	"level": {
+		"riverside": {
+			"type": "tilemap",
+			"file": "world/level/riverside.json"
+		},
+		"dungeon": {
+			"type": "tilemap",
+			"file": "world/level/dungeon.json"
+		},
+		"frog_caves": {
+			"type": "infinite"
+		}
+	},
+	"structure": {
+		"grass_patch": "world/structure/grass_patch.json"
+	}
 }

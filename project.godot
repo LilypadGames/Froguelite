@@ -15,6 +15,10 @@ run/main_scene="res://scenes/title_screen.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Cache="*res://scripts/cache.gd"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/YATI/plugin.cfg")

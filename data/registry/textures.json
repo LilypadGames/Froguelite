@@ -1,9 +1,9 @@
 {
-	"world_tiles": "texture/world/tiles.png",
-	"dirt": "texture/world/dirt.png",
-	"dirt_noisy": "texture/world/dirt_noisy.png",
+	"world_tiles": "res://assets/texture/world/tiles.png",
+	"dirt": "res://assets/texture/world/dirt.png",
+	"dirt_noisy": "res://assets/texture/world/dirt_noisy.png",
 	"pp": {
-		"spritesheet": "texture/character/pp.png",
+		"spritesheet": "res://assets/texture/character/pp.png",
 		"frameWidth": 9,
 		"frameHeight": 7,
 		"spacing": 1,
@@ -31,7 +31,7 @@
 		}
 	},
 	"poof": {
-		"spritesheet": "texture/particle/poof.png",
+		"spritesheet": "res://assets/texture/particle/poof.png",
 		"frameWidth": 128,
 		"frameHeight": 128,
 		"anims": {
@@ -44,11 +44,11 @@
 			}
 		}
 	},
-	"death_particle": "texture/particle/death_particle.png",
-	"lsf": "texture/enemy/lsf.png",
-	"entrance_cave": "texture/interactable/teleporter/cave.png",
+	"death_particle": "res://assets/texture/particle/death_particle.png",
+	"lsf": "res://assets/texture/enemy/lsf.png",
+	"entrance_cave": "res://assets/texture/interactable/teleporter/cave.png",
 	"snot_bubble": {
-		"spritesheet": "texture/spell/snot_bubble.png",
+		"spritesheet": "res://assets/texture/spell/snot_bubble.png",
 		"frameWidth": 13,
 		"frameHeight": 13,
 		"anims": {
@@ -60,14 +60,14 @@
 			}
 		}
 	},
-	"healthbar_full_left": "texture/gui/healthbar/full_left.png",
-	"healthbar_full_middle": "texture/gui/healthbar/full_middle.png",
-	"healthbar_full_right": "texture/gui/healthbar/full_right.png",
-	"healthbar_empty_left": "texture/gui/healthbar/empty.png",
-	"healthbar_empty_middle": "texture/gui/healthbar/empty.png",
-	"healthbar_empty_right": "texture/gui/healthbar/empty.png",
+	"healthbar_full_left": "res://assets/texture/gui/healthbar/full_left.png",
+	"healthbar_full_middle": "res://assets/texture/gui/healthbar/full_middle.png",
+	"healthbar_full_right": "res://assets/texture/gui/healthbar/full_right.png",
+	"healthbar_empty_left": "res://assets/texture/gui/healthbar/empty.png",
+	"healthbar_empty_middle": "res://assets/texture/gui/healthbar/empty.png",
+	"healthbar_empty_right": "res://assets/texture/gui/healthbar/empty.png",
 	"slime_small": {
-		"spritesheet": "texture/enemy/slime_small.png",
+		"spritesheet": "res://assets/texture/enemy/slime_small.png",
 		"frameWidth": 20,
 		"frameHeight": 16,
 		"spacing": 1,
@@ -83,7 +83,7 @@
 		}
 	},
 	"fly": {
-		"spritesheet": "texture/enemy/fly.png",
+		"spritesheet": "res://assets/texture/enemy/fly.png",
 		"frameWidth": 32,
 		"frameHeight": 27,
 		"anims": {
@@ -98,7 +98,7 @@
 		}
 	},
 	"slime": {
-		"spritesheet": "texture/enemy/slime.png",
+		"spritesheet": "res://assets/texture/enemy/slime.png",
 		"frameWidth": 22,
 		"frameHeight": 21,
 		"anims": {
@@ -113,7 +113,7 @@
 		}
 	},
 	"slime_electric_small": {
-		"spritesheet": "texture/enemy/slime_electric_small.png",
+		"spritesheet": "res://assets/texture/enemy/slime_electric_small.png",
 		"frameWidth": 20,
 		"frameHeight": 16,
 		"spacing": 1,
@@ -129,7 +129,7 @@
 		}
 	},
 	"slime_electric": {
-		"spritesheet": "texture/enemy/slime_electric.png",
+		"spritesheet": "res://assets/texture/enemy/slime_electric.png",
 		"frameWidth": 22,
 		"frameHeight": 21,
 		"anims": {
@@ -144,7 +144,7 @@
 		}
 	},
 	"slime_fire_small": {
-		"spritesheet": "texture/enemy/slime_fire_small.png",
+		"spritesheet": "res://assets/texture/enemy/slime_fire_small.png",
 		"frameWidth": 20,
 		"frameHeight": 16,
 		"spacing": 1,
@@ -160,7 +160,7 @@
 		}
 	},
 	"slime_fire": {
-		"spritesheet": "texture/enemy/slime_fire.png",
+		"spritesheet": "res://assets/texture/enemy/slime_fire.png",
 		"frameWidth": 22,
 		"frameHeight": 21,
 		"anims": {
@@ -175,7 +175,7 @@
 		}
 	},
 	"slime_ice_small": {
-		"spritesheet": "texture/enemy/slime_ice_small.png",
+		"spritesheet": "res://assets/texture/enemy/slime_ice_small.png",
 		"frameWidth": 20,
 		"frameHeight": 16,
 		"spacing": 1,
@@ -191,7 +191,7 @@
 		}
 	},
 	"slime_ice": {
-		"spritesheet": "texture/enemy/slime_ice.png",
+		"spritesheet": "res://assets/texture/enemy/slime_ice.png",
 		"frameWidth": 22,
 		"frameHeight": 21,
 		"anims": {
@@ -206,7 +206,7 @@
 		}
 	},
 	"slime_wind_small": {
-		"spritesheet": "texture/enemy/slime_wind_small.png",
+		"spritesheet": "res://assets/texture/enemy/slime_wind_small.png",
 		"frameWidth": 20,
 		"frameHeight": 16,
 		"spacing": 1,
@@ -222,7 +222,7 @@
 		}
 	},
 	"slime_wind": {
-		"spritesheet": "texture/enemy/slime_electric.png",
+		"spritesheet": "res://assets/texture/enemy/slime_electric.png",
 		"frameWidth": 22,
 		"frameHeight": 21,
 		"anims": {
@@ -237,7 +237,7 @@
 		}
 	},
 	"blue_garbs": {
-		"spritesheet": "texture/armor/blue_garbs.png",
+		"spritesheet": "res://assets/texture/armor/blue_garbs.png",
 		"frameWidth": 9,
 		"frameHeight": 7,
 		"spacing": 1,
@@ -264,12 +264,12 @@
 			}
 		}
 	},
-	"gui_blue_garbs": "texture/gui/inventory/armor/blue_garbs.png",
-	"gui_snot_bubble": "texture/gui/inventory/spell/snot_bubble.png",
-	"gui_tab_spell": "texture/gui/inventory/tab/spell.png",
-	"gui_tab_armor": "texture/gui/inventory/tab/armor.png",
+	"gui_blue_garbs": "res://assets/texture/gui/inventory/armor/blue_garbs.png",
+	"gui_snot_bubble": "res://assets/texture/gui/inventory/spell/snot_bubble.png",
+	"gui_tab_spell": "res://assets/texture/gui/inventory/tab/spell.png",
+	"gui_tab_armor": "res://assets/texture/gui/inventory/tab/armor.png",
 	"chest_gold": {
-		"spritesheet": "texture/interactable/lootable/chest_gold.png",
+		"spritesheet": "res://assets/texture/interactable/lootable/chest_gold.png",
 		"frameWidth": 23,
 		"frameHeight": 21,
 		"anims": {
@@ -287,7 +287,7 @@
 		"scale": 0.7
 	},
 	"chest_silver": {
-		"spritesheet": "texture/interactable/lootable/chest_silver.png",
+		"spritesheet": "res://assets/texture/interactable/lootable/chest_silver.png",
 		"frameWidth": 23,
 		"frameHeight": 21,
 		"anims": {
@@ -305,7 +305,7 @@
 		"scale": 0.7
 	},
 	"chest_wood": {
-		"spritesheet": "texture/interactable/lootable/chest_wood.png",
+		"spritesheet": "res://assets/texture/interactable/lootable/chest_wood.png",
 		"frameWidth": 23,
 		"frameHeight": 21,
 		"anims": {
