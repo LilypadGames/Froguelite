@@ -27,7 +27,6 @@ func _ready() -> void:
 			# add collider
 			if child.has_meta("wall") and child.get_meta("wall"):
 				child.tile_set.add_physics_layer()
-				child.tile_set
 
 	# set up objects
 	for object in objects.get_children():
