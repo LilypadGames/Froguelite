@@ -4,6 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://c0f7gukj5eqb5" path="res://scenes/level.tscn" id="2_5s0xw"]
 [ext_resource type="FontFile" uid="uid://cet58ddfu4y8a" path="res://assets/font/Pix.woff2" id="2_mu8y2"]
 
+[sub_resource type="Animation" id="Animation_dbwbw"]
+length = 0.001
+
 [sub_resource type="Animation" id="Animation_mm53s"]
 resource_name = "hint_bounce"
 length = 0.8
@@ -20,9 +23,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
 }
-
-[sub_resource type="Animation" id="Animation_dbwbw"]
-length = 0.001
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_o23bd"]
 _data = {

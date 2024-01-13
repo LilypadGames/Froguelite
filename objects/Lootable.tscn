@@ -1,18 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://nq5yxtyek6f2"]
+[gd_scene load_steps=5 format=3 uid="uid://ddin82kqpucq6"]
 
-[ext_resource type="Script" path="res://scripts/interactable.gd" id="1_s3d0e"]
-[ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_0iqm3"]
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="1_spcla"]
+[ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_udjba"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2hddu"]
 size = Vector2(0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ub0k"]
-shader = ExtResource("2_0iqm3")
+shader = ExtResource("2_udjba")
 shader_parameter/line_color = Color(0, 0, 0, 1)
 shader_parameter/line_thickness = 2.0
 
-[node name="Teleporter" type="Area2D" groups=["Teleporter"]]
-script = ExtResource("1_s3d0e")
+[node name="Lootable" type="Area2D" groups=["Teleporter"]]
+script = ExtResource("1_spcla")
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true
