@@ -18,12 +18,12 @@
 					"start": 1
 				}
 			},
-			"front": {
+			"down": {
 				"frames": {
 					"start": 2
 				}
 			},
-			"back": {
+			"up": {
 				"frames": {
 					"start": 3
 				}
@@ -252,12 +252,12 @@
 					"start": 1
 				}
 			},
-			"front": {
+			"down": {
 				"frames": {
 					"start": 2
 				}
 			},
-			"back": {
+			"up": {
 				"frames": {
 					"start": 3
 				}

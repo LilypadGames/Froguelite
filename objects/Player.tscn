@@ -1,116 +1,12 @@
-[gd_scene load_steps=20 format=3 uid="uid://d00vibmf4lv6g"]
+[gd_scene load_steps=8 format=3 uid="uid://d00vibmf4lv6g"]
 
-[ext_resource type="Texture2D" uid="uid://b2bcs2r1otb07" path="res://assets/texture/character/pp.png" id="1_8jch5"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ab6d8"]
-[ext_resource type="Texture2D" uid="uid://cpi1kjbucms5n" path="res://assets/texture/armor/blue_garbs.png" id="2_60gwj"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_hud5r"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g1x5g"]
 shader = ExtResource("2_hud5r")
 shader_parameter/line_color = Color(0, 0, 0, 1)
 shader_parameter/line_thickness = 0.5
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_34rn4"]
-atlas = ExtResource("1_8jch5")
-region = Rect2(20, 0, 9, 7)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qa2yd"]
-atlas = ExtResource("1_8jch5")
-region = Rect2(0, 0, 9, 7)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_usc04"]
-atlas = ExtResource("1_8jch5")
-region = Rect2(10, 0, 9, 7)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wka0u"]
-atlas = ExtResource("1_8jch5")
-region = Rect2(30, 0, 9, 7)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_t2tu6"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_34rn4")
-}],
-"loop": false,
-"name": &"down",
-"speed": 0.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qa2yd")
-}],
-"loop": false,
-"name": &"left",
-"speed": 0.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_usc04")
-}],
-"loop": false,
-"name": &"right",
-"speed": 0.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wka0u")
-}],
-"loop": false,
-"name": &"up",
-"speed": 0.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5nf3u"]
-atlas = ExtResource("2_60gwj")
-region = Rect2(30, 0, 9, 7)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_43d33"]
-atlas = ExtResource("2_60gwj")
-region = Rect2(0, 0, 9, 7)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mqojq"]
-atlas = ExtResource("2_60gwj")
-region = Rect2(10, 0, 9, 7)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_h0x8q"]
-atlas = ExtResource("2_60gwj")
-region = Rect2(20, 0, 9, 7)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_w5xok"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5nf3u")
-}],
-"loop": false,
-"name": &"down",
-"speed": 0.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_43d33")
-}],
-"loop": false,
-"name": &"left",
-"speed": 0.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mqojq")
-}],
-"loop": false,
-"name": &"right",
-"speed": 0.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_h0x8q")
-}],
-"loop": false,
-"name": &"up",
-"speed": 0.0
-}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dgjml"]
 size = Vector2(8, 8)
@@ -158,16 +54,6 @@ script = ExtResource("1_ab6d8")
 [node name="SpriteGroup" type="CanvasGroup" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_g1x5g")
-
-[node name="Character" type="AnimatedSprite2D" parent="SpriteGroup"]
-sprite_frames = SubResource("SpriteFrames_t2tu6")
-animation = &"right"
-autoplay = "right"
-
-[node name="Armor" type="AnimatedSprite2D" parent="SpriteGroup"]
-sprite_frames = SubResource("SpriteFrames_w5xok")
-animation = &"right"
-autoplay = "right"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_dgjml")

@@ -56,7 +56,6 @@ func _ready() -> void:
 			elif type == "lootable":
 				var lootable: Interactable = preload(lootable_path).instantiate() as Interactable
 				lootable.texture = Cache.data["game"]["interactables"][Cache.data["game"]["lootables"][object_data.get_meta("id")]["type"]]["texture"]
-				prints(lootable.texture)
 				objects.add_child(lootable)
 				lootable.position = object_data.position
 
