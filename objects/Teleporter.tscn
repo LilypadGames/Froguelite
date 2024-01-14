@@ -3,24 +3,24 @@
 [ext_resource type="Script" path="res://scripts/interactable.gd" id="1_s3d0e"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_0iqm3"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2hddu"]
-size = Vector2(0, 0)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ub0k"]
 shader = ExtResource("2_0iqm3")
 shader_parameter/line_color = Color(0, 0, 0, 1)
 shader_parameter/line_thickness = 2.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2hddu"]
+size = Vector2(0, 0)
+
 [node name="Teleporter" type="Area2D" groups=["Teleporter"]]
 script = ExtResource("1_s3d0e")
+
+[node name="Sprites" type="CanvasGroup" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_0ub0k")
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true
 shape = SubResource("RectangleShape2D_2hddu")
-
-[node name="CanvasGroup" type="CanvasGroup" parent="."]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_0ub0k")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

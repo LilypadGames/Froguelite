@@ -16,7 +16,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteGroup:position")
+tracks/0/path = NodePath("Sprites:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -32,7 +32,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteGroup:position")
+tracks/0/path = NodePath("Sprites:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -51,7 +51,7 @@ _data = {
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 script = ExtResource("1_ab6d8")
 
-[node name="SpriteGroup" type="CanvasGroup" parent="."]
+[node name="Sprites" type="CanvasGroup" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_g1x5g")
 
