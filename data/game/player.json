@@ -1,0 +1,26 @@
+{
+	"texture": "pp",
+	"type": "player",
+	"stats": {
+		"health": 25,
+		"speed": 0.35
+	},
+	"details": {
+		"healthbar": {
+			"scale": 6,
+			"width": 160
+		}
+	},
+	"equipped": {
+		"spell": "snot_bubble"
+	},
+	"inventory": {
+		"spells": [
+			"snot_bubble"
+		],
+		"armors": []
+	},
+	"sounds": {
+		"hit": "sfx_hit"
+	}
+}

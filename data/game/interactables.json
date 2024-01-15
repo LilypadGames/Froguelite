@@ -1,0 +1,23 @@
+{
+	"cave_entrance": {
+		"texture": "entrance_cave"
+	},
+	"wooden_chest": {
+		"texture": "chest_wood",
+		"sounds": {
+			"hit": "sfx_hit"
+		}
+	},
+	"silver_chest": {
+		"texture": "chest_silver",
+		"sounds": {
+			"hit": "sfx_hit_metal"
+		}
+	},
+	"golden_chest": {
+		"texture": "chest_gold",
+		"sounds": {
+			"hit": "sfx_hit_metal"
+		}
+	}
+}

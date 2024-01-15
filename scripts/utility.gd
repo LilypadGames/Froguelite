@@ -3,7 +3,7 @@ extends Node
 # create sprite
 func create_sprite(texture: String, sprite_name: String, sprite_group: CanvasGroup):
 	# get sprite data
-	var sprite_data = Cache.data["textures"][texture]
+	var sprite_data = Cache.registry["textures"][texture]
 
 	# singular sprite
 	if typeof(sprite_data) == 4: # 4 means that the type is a String

@@ -48,14 +48,14 @@ func _ready() -> void:
 			# teleporter
 			elif type == "teleporter":
 				var teleporter: Interactable = preload(teleporter_path).instantiate() as Interactable
-				teleporter.texture = Cache.data["game"]["interactables"][Cache.data["game"]["teleporters"][object_data.get_meta("id")]["type"]]["texture"]
+				teleporter.texture = Cache.data["interactables"][Cache.data["teleporters"][object_data.get_meta("id")]["type"]]["texture"]
 				objects.add_child(teleporter)
 				teleporter.position = object_data.position
 
 			# lootable
 			elif type == "lootable":
 				var lootable: Interactable = preload(lootable_path).instantiate() as Interactable
-				lootable.texture = Cache.data["game"]["interactables"][Cache.data["game"]["lootables"][object_data.get_meta("id")]["type"]]["texture"]
+				lootable.texture = Cache.data["interactables"][Cache.data["lootables"][object_data.get_meta("id")]["type"]]["texture"]
 				objects.add_child(lootable)
 				lootable.position = object_data.position
 

@@ -9,7 +9,7 @@ extends CharacterBody2D
 @export_category("References")
 @onready var sprite_group: CanvasGroup = %Sprites
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
-@onready var character_texture: String = Cache.data["game"]["player"]["texture"]
+@onready var character_texture: String = Cache.data["player"]["texture"]
 
 # internal
 var sprites: Array[AnimatedSprite2D]

@@ -1,0 +1,12 @@
+{
+	"blue_garbs": {
+		"type": "torso",
+		"texture": "blue_garbs",
+		"scale": 0.5,
+		"defense": 0,
+		"inventory": {
+			"texture": "gui_blue_garbs",
+			"scale": 5
+		}
+	}
+}

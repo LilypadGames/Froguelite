@@ -1,0 +1,59 @@
+{
+	"lsf": {
+		"texture": "lsf",
+		"type": "boss",
+		"scale": 0.25,
+		"stats": {
+			"health": 100,
+			"speed": 0.5,
+			"strength": 15
+		},
+		"details": {
+			"healthbar": {
+				"scale": 6,
+				"width": 500
+			}
+		}
+	},
+	"slime": {
+		"texture": "slime",
+		"type": "splitter",
+		"scale": 0.75,
+		"stats": {
+			"health": 15,
+			"speed": 0.25,
+			"strength": 8
+		},
+		"details": {
+			"healthbar": {
+				"scale": 6,
+				"width": 160
+			},
+			"splitTo": "slime_small",
+			"splitAmount": 2
+		},
+		"sounds": {
+			"hit": "sfx_hit"
+		}
+	},
+	"fly": {
+		"texture": "fly",
+		"type": "spitter",
+		"scale": 0.75,
+		"stats": {
+			"health": 40,
+			"speed": 0.35,
+			"strength": 3
+		},
+		"details": {
+			"healthbar": {
+				"scale": 6,
+				"width": 160
+			},
+			"spit": "slime_ball"
+		},
+		"sounds": {
+			"hit": "sfx_hit"
+		}
+	}
+}
