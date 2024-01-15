@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://nq5yxtyek6f2"]
 
-[ext_resource type="Script" path="res://scripts/interactable.gd" id="1_s3d0e"]
+[ext_resource type="Script" path="res://scripts/teleporter.gd" id="1_m15y5"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_0iqm3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ub0k"]
@@ -12,7 +12,9 @@ shader_parameter/line_thickness = 2.0
 size = Vector2(0, 0)
 
 [node name="Teleporter" type="Area2D" groups=["Teleporter"]]
-script = ExtResource("1_s3d0e")
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_m15y5")
 
 [node name="Sprites" type="CanvasGroup" parent="."]
 unique_name_in_owner = true

@@ -6,6 +6,7 @@ extends Node2D
 @export var tilemap: PackedScene
 @onready var player: Node2D = %Player
 @onready var camera: Camera2D = %Camera
+@onready var hud: HUD = %HUD
 @onready var enemies: Node = %Enemies
 @onready var objects: Node = %Objects
 
@@ -48,14 +49,18 @@ func _ready() -> void:
 			# teleporter
 			elif type == "teleporter":
 				var teleporter: Interactable = preload(teleporter_path).instantiate() as Interactable
+				teleporter.id = object_data.get_meta("id")
 				teleporter.texture = Cache.data["interactables"][Cache.data["teleporters"][object_data.get_meta("id")]["type"]]["texture"]
+				teleporter.hud = hud
 				objects.add_child(teleporter)
 				teleporter.position = object_data.position
 
 			# lootable
 			elif type == "lootable":
 				var lootable: Interactable = preload(lootable_path).instantiate() as Interactable
+				lootable.id = object_data.get_meta("id")
 				lootable.texture = Cache.data["interactables"][Cache.data["lootables"][object_data.get_meta("id")]["type"]]["texture"]
+				lootable.hud = hud
 				objects.add_child(lootable)
 				lootable.position = object_data.position
 

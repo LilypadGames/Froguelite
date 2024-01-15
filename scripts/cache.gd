@@ -4,8 +4,10 @@ extends Node
 var path: String = "res://data"
 var registry: Dictionary = {}
 var data: Dictionary = {}
+var lang: Dictionary = {}
 var registry_files: Array[String] = ["audio", "textures", "world"]
 var data_files: Array[String] = ["player", "enemy", "spells", "armors", "interactables", "lootables", "teleporters"]
+var lang_files: Array[String] = ["en_us"]
 
 # cache registry and data
 func _ready():
@@ -13,9 +15,13 @@ func _ready():
 	for file in registry_files:
 		registry[file] = parse_json(path + "/registry/" + file + ".json")
 
-	# data
+	# game data
 	for file in data_files:
 		data[file] = parse_json(path + "/game/" + file + ".json")
+
+	# language
+	for file in lang_files:
+		lang[file] = parse_json(path + "/lang/" + file + ".json")
 
 # parse data from specified json file
 func parse_json(file_path: String):

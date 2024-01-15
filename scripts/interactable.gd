@@ -3,12 +3,17 @@ extends Area2D
 
 # references
 @export_category("References")
+@export var id: String
 @export var texture: String
 @onready var sprite_group: CanvasGroup = %Sprites
 @onready var collider: CollisionShape2D = %Collider
+var hud: HUD
 
 # set up interactable
 func _ready() -> void:
+	# rename
+	name = id
+
 	# create sprite
 	var sprite = Utility.create_sprite(texture, "Sprite", sprite_group)
 
@@ -21,8 +26,15 @@ func _ready() -> void:
 # collisions
 func _on_body_entered(body) -> void:
 	if body is CharacterBody2D and body.is_in_group("Player"):
-		pass
+		start_interact_hint()
 
 func _on_body_exited(body) -> void:
 	if body is CharacterBody2D and body.is_in_group("Player"):
-		pass
+		end_interact_hint()
+
+# hints
+func start_interact_hint() -> void:
+	pass
+func end_interact_hint() -> void:
+	if hud.current_interactable == id:
+		hud.end_interact_hint()

@@ -2,22 +2,36 @@
 	"game_title": "Froguelite",
 	"opening_hint": "Press Any Key To Begin",
 	"player": "Pp",
-	"enemy": {
+	"enemies": {
 		"lsf": "LSF",
 		"slime": "Slime",
 		"slime_small": "Small Slime",
 		"fly": "Fly"
 	},
-	"armor": {
+	"armors": {
 		"blue_garbs": {
 			"name": "Blue Garbs",
 			"description": "Has a hot sauce stain on it, with an aroma of Popcorn."
 		}
 	},
-	"spell": {
+	"spells": {
 		"snot_bubble": {
 			"name": "Snot Bubble",
 			"description": "Nothing very magical about it. Its a floating boogie."
+		}
+	},
+	"interactables": {
+		"teleporters": {
+			"riverside_cave": "The Frog Caves"
+		},
+		"lootables": {
+			"riverside_chest": "Chest"
+		}
+	},
+	"hud": {
+		"hint": {
+			"lootable": "Open",
+			"teleporter": "Enter"
 		}
 	}
 }
