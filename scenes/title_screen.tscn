@@ -43,6 +43,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Title" type="Label" parent="Control"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -58,10 +59,10 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 38
 theme_override_fonts/font = ExtResource("2_mu8y2")
 theme_override_font_sizes/font_size = 100
-text = "Froguelite"
 horizontal_alignment = 1
 
 [node name="Hint" type="Label" parent="Control"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -78,7 +79,6 @@ scale = Vector2(1.04436, 1.04436)
 pivot_offset = Vector2(180.55, 20.51)
 theme_override_fonts/font = ExtResource("2_mu8y2")
 theme_override_font_sizes/font_size = 32
-text = "Press Any Key To Begin"
 horizontal_alignment = 1
 vertical_alignment = 1
 
