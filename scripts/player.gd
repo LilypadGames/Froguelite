@@ -10,6 +10,7 @@ extends CharacterBody2D
 @onready var sprite_group: CanvasGroup = %Sprites
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var character_texture: String = Cache.data["player"]["texture"]
+var hud: HUD
 
 # internal
 var sprites: Array[AnimatedSprite2D]
@@ -48,3 +49,8 @@ func _physics_process(delta: float) -> void:
 	# hop (when moving)
 	if (velocity != Vector2.ZERO):
 		anim_player.play("hop")
+
+# handle inputs
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("interact"):
+		hud.current_interactable.interact()

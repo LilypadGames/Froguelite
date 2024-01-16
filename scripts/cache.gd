@@ -8,6 +8,7 @@ var lang: Dictionary = {}
 var registry_files: Array[String] = ["audio", "textures", "world"]
 var data_files: Array[String] = ["level", "player", "enemy", "spells", "armors", "interactables", "lootables", "teleporters"]
 var lang_files: Array[String] = ["en_us"]
+var temp: Dictionary = {}
 
 # cache registry and data
 func _ready():

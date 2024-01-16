@@ -19,8 +19,16 @@ const teleporter_path := "res://objects/Teleporter.tscn"
 const lootable_path := "res://objects/Lootable.tscn"
 
 func _ready() -> void:
+	# give player HUD reference
+	player.hud = hud
+
+	# instantiate level
+	if not Cache.temp.has("next_level_path"):
+		level = load(Cache.registry["world"]["level"][Cache.data["level"]["starting_level"]]["file"]).instantiate()
+	else:
+		level = load(Cache.temp["next_level_path"]).instantiate()
+
 	# set up level
-	level = load(Cache.registry["world"]["level"][Cache.data["level"]["starting_level"]]["file"]).instantiate()
 	level.name = "level_data"
 	add_child(level)
 	level_object_data = level.get_node("Objects")

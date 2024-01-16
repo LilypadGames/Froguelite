@@ -26,6 +26,10 @@ func _ready() -> void:
 	elif sprite.get_class() == "AnimatedSprite2D":
 		collider.shape.extents = (sprite.sprite_frames.get_frame_texture(sprite.animation, 0).get_size() / 2) * sprite.scale.x
 
+# methods
+func interact() -> void:
+	pass
+
 # collisions
 func _on_body_entered(body) -> void:
 	if body is CharacterBody2D and body.is_in_group("Player"):
@@ -39,5 +43,5 @@ func _on_body_exited(body) -> void:
 func start_interact_hint() -> void:
 	pass
 func end_interact_hint() -> void:
-	if hud.current_interactable == id:
+	if hud.current_interactable == self:
 		hud.end_interact_hint()

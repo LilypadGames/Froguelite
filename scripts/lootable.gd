@@ -25,4 +25,4 @@ func setup(new_id: String, hud_reference: HUD) -> Lootable:
 
 # hints
 func start_interact_hint() -> void:
-	hud.update_interact_hint(id, Cache.lang["en_us"]["hud"]["hint"]["lootable"] + " " + Cache.lang["en_us"]["interactables"]["lootables"][id])
+	hud.update_interact_hint(self, Cache.lang["en_us"]["hud"]["hint"]["lootable"] + " " + Cache.lang["en_us"]["interactables"]["lootables"][id])

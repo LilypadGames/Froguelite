@@ -23,6 +23,14 @@ func setup(new_id: String, hud_reference: HUD) -> Teleporter:
 
 	return self
 
+# methods
+func interact() -> void:
+	# save next level to temp cache
+	Cache.temp["next_level_path"] = Cache.registry["world"]["level"][destination]["file"]
+
+	# change scene to destination level
+	get_tree().change_scene_to_packed(load("res://scenes/level.tscn"))
+
 # hints
 func start_interact_hint() -> void:
-	hud.update_interact_hint(id, Cache.lang["en_us"]["hud"]["hint"]["teleporter"] + " " + Cache.lang["en_us"]["interactables"]["teleporters"][id])
+	hud.update_interact_hint(self, Cache.lang["en_us"]["hud"]["hint"]["teleporter"] + " " + Cache.lang["en_us"]["interactables"]["teleporters"][id])
