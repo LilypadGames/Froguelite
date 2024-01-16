@@ -3,7 +3,6 @@ extends Node2D
 
 # references
 @export_category("References")
-@export var tilemap: PackedScene
 @onready var player: Node2D = %Player
 @onready var camera: Camera2D = %Camera
 @onready var hud: HUD = %HUD
@@ -21,7 +20,7 @@ const lootable_path := "res://objects/Lootable.tscn"
 
 func _ready() -> void:
 	# set up level
-	level = tilemap.instantiate()
+	level = load(Cache.registry["world"]["level"][Cache.data["level"]["starting_level"]]["file"]).instantiate()
 	level.name = "level_data"
 	add_child(level)
 	level_object_data = level.get_node("Objects")
