@@ -1,7 +1,6 @@
 {
 	"riverside_cave": {
 		"type": "cave_entrance",
-		"destination": "frog_caves",
-		"tip": "Enter the Frog Caves"
+		"destination": "frog_caves"
 	}
 }

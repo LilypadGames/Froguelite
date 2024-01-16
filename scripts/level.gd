@@ -47,20 +47,26 @@ func _ready() -> void:
 
 			# teleporter
 			elif type == "teleporter":
-				var teleporter: Interactable = preload(teleporter_path).instantiate() as Interactable
-				teleporter.id = object_data.get_meta("id")
-				teleporter.texture = Cache.data["interactables"][Cache.data["teleporters"][object_data.get_meta("id")]["type"]]["texture"]
-				teleporter.hud = hud
+				# create teleporter
+				var teleporter: Interactable = preload(teleporter_path).instantiate().setup(object_data.get_meta("id"), hud) as Teleporter
+
+				# add to objects group
 				objects.add_child(teleporter)
+
+				# set position
 				teleporter.position = object_data.position
 
 			# lootable
 			elif type == "lootable":
-				var lootable: Interactable = preload(lootable_path).instantiate() as Interactable
-				lootable.id = object_data.get_meta("id")
-				lootable.texture = Cache.data["interactables"][Cache.data["lootables"][object_data.get_meta("id")]["type"]]["texture"]
+				var lootable: Interactable = preload(lootable_path).instantiate().setup(object_data.get_meta("id"), hud) as Lootable
+
+				# give HUD reference
 				lootable.hud = hud
+
+				# add to objects group
 				objects.add_child(lootable)
+
+				# set position
 				lootable.position = object_data.position
 
 func _process(_delta: float) -> void:

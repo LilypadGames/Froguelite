@@ -3,15 +3,18 @@ extends Area2D
 
 # references
 @export_category("References")
-@export var id: String
-@export var texture: String
 @onready var sprite_group: CanvasGroup = %Sprites
 @onready var collider: CollisionShape2D = %Collider
 var hud: HUD
 
+# properties
+var id: String
+var type: String
+var texture: String
+
 # set up interactable
 func _ready() -> void:
-	# rename
+	# rename node to this object's ID for better debugging
 	name = id
 
 	# create sprite
