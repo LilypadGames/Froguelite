@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://dim2nj2clq4fh"]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_dk435"]
+[ext_resource type="FontFile" uid="uid://cet58ddfu4y8a" path="res://assets/font/Pix.woff2" id="2_563he"]
+[ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="3_1iwb1"]
+[ext_resource type="Texture2D" uid="uid://b35ixtbv7ndkq" path="res://assets/texture/gui/tilemap_white.png" id="4_ttk1v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u6or2"]
+shader = ExtResource("3_1iwb1")
+shader_parameter/line_color = Color(0, 0, 0, 0.466667)
+shader_parameter/line_thickness = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d0310"]
+atlas = ExtResource("4_ttk1v")
+region = Rect2(356, 50, 17, 18)
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_dk435")
+
+[node name="InteractHint" type="Label" parent="."]
+visible = false
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -12.5
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.466667)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_563he")
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+
+[node name="CanvasGroup" type="CanvasGroup" parent="InteractHint"]
+material = SubResource("ShaderMaterial_u6or2")
+
+[node name="InteractKey" type="Sprite2D" parent="InteractHint/CanvasGroup"]
+position = Vector2(-20, 14)
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_d0310")

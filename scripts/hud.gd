@@ -1,5 +1,5 @@
 class_name HUD
-extends Control
+extends CanvasLayer
 
 # references
 @export_group("References")

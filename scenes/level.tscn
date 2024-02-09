@@ -1,20 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://c0f7gukj5eqb5"]
+[gd_scene load_steps=4 format=3 uid="uid://c0f7gukj5eqb5"]
 
 [ext_resource type="Script" path="res://scripts/level.gd" id="1_c12yc"]
 [ext_resource type="PackedScene" uid="uid://d00vibmf4lv6g" path="res://objects/Player.tscn" id="2_0sumi"]
-[ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="4_1ewqt"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="4_65rkj"]
-[ext_resource type="Texture2D" uid="uid://b35ixtbv7ndkq" path="res://assets/texture/gui/tilemap_white.png" id="4_wm2hy"]
-[ext_resource type="FontFile" uid="uid://cet58ddfu4y8a" path="res://assets/font/Pix.woff2" id="5_63vvl"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u6or2"]
-shader = ExtResource("4_1ewqt")
-shader_parameter/line_color = Color(0, 0, 0, 0.466667)
-shader_parameter/line_thickness = 2.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d0310"]
-atlas = ExtResource("4_wm2hy")
-region = Rect2(356, 50, 17, 18)
+[ext_resource type="PackedScene" uid="uid://dim2nj2clq4fh" path="res://internal/hud.tscn" id="3_62ccf"]
 
 [node name="level" type="Node2D"]
 script = ExtResource("1_c12yc")
@@ -33,42 +21,5 @@ unique_name_in_owner = true
 [node name="Objects" type="Node" parent="."]
 unique_name_in_owner = true
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="HUD" type="Control" parent="CanvasLayer"]
+[node name="HUD" parent="." instance=ExtResource("3_62ccf")]
 unique_name_in_owner = true
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("4_65rkj")
-
-[node name="InteractHint" type="Label" parent="CanvasLayer/HUD"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 62.0
-offset_top = -14.0
-offset_right = 562.0
-offset_bottom = 11.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.466667)
-theme_override_constants/outline_size = 6
-theme_override_fonts/font = ExtResource("5_63vvl")
-theme_override_font_sizes/font_size = 20
-vertical_alignment = 1
-
-[node name="CanvasGroup" type="CanvasGroup" parent="CanvasLayer/HUD/InteractHint"]
-material = SubResource("ShaderMaterial_u6or2")
-
-[node name="InteractKey" type="Sprite2D" parent="CanvasLayer/HUD/InteractHint/CanvasGroup"]
-position = Vector2(-20, 14)
-scale = Vector2(2, 2)
-texture = SubResource("AtlasTexture_d0310")
