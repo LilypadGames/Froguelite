@@ -52,5 +52,5 @@ func _physics_process(delta: float) -> void:
 
 # handle inputs
 func _input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("interact"):
+	if Input.is_action_just_pressed("interact") and hud.current_interactable:
 		hud.current_interactable.interact()
