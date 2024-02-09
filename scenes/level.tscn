@@ -9,7 +9,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u6or2"]
 shader = ExtResource("4_1ewqt")
-shader_parameter/line_color = null
+shader_parameter/line_color = Color(0, 0, 0, 0.466667)
 shader_parameter/line_thickness = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d0310"]
@@ -59,7 +59,7 @@ offset_right = 562.0
 offset_bottom = 11.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.466667)
 theme_override_constants/outline_size = 6
 theme_override_fonts/font = ExtResource("5_63vvl")
 theme_override_font_sizes/font_size = 20
