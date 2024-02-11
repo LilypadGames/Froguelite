@@ -12,6 +12,13 @@ extends Node2D
 # procedural level properties
 @export_category("Procedural Level Properties")
 @export var noise: FastNoiseLite
+@export var chunk_size: int = 16
+@export var chunk_distance: int = 2
+var infinite_tilemap: TileMap
+var tileset_tiles: Dictionary = {"texture": {}, "weight": {}, "weight_total": {}, "source_id": {}}
+var tile_size: int
+var loaded_chunks: Array[Vector2] = []
+@onready var tile_rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # internal
 var level_name: String
@@ -46,9 +53,16 @@ func _ready() -> void:
 	elif level_type == "procedural":
 		_init_procedural_level()
 
+	# tile RNG
+	tile_rng.randomize()
+
 func _process(_delta: float) -> void:
 	# handle camera
 	camera.position = player.position
+
+	# procedural
+	if level_type == "procedural":
+		_handle_procedural_level()
 
 func _init_static_level() -> void:
 	# set up level
@@ -101,7 +115,8 @@ func _init_static_level() -> void:
 				lootable.position = object_data.position
 
 func _init_procedural_level() -> void:
-	# generate seed
+	# get tile size
+	tile_size = Cache.registry["world"]["level"][level_name]["tile_size"]
 
 	# set noise properties
 	var noise_type_config = Cache.registry["world"]["level"][level_name]["noise"]["type"]
@@ -124,34 +139,120 @@ func _init_procedural_level() -> void:
 	noise.fractal_octaves = Cache.registry["world"]["level"][level_name]["noise"]["octaves"]
 	noise.fractal_gain = Cache.registry["world"]["level"][level_name]["noise"]["gain"]
 
+	# generate seed
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	noise.seed = rng.randi_range(-2147483647, 2147483647)
+
 	# create level parent node
 	level = Node2D.new()
 	level.name = "level_data"
 	add_child(level)
 
-	# get ground sprite
-	var ground_texture: Texture2D = load(Cache.registry["world"]["level"][level_name]["tiles"]["ground"]) as Texture2D
-
 	# create tilemap
-	var tilemap = TileMap.new()
-	tilemap.rendering_quadrant_size = 24
-	level.add_child(tilemap)
+	infinite_tilemap = TileMap.new()
+	infinite_tilemap.rendering_quadrant_size = tile_size
+	level.add_child(infinite_tilemap)
 
 	# create tileset
 	var tile_set = TileSet.new()
-	tile_set.tile_size = Vector2(24, 24)
-	tilemap.tile_set = tile_set
+	tile_set.tile_size = Vector2(tile_size, tile_size)
+	infinite_tilemap.tile_set = tile_set
 
-	# add texture to tileset
-	var atlas_source = TileSetAtlasSource.new()
-	atlas_source.texture = ground_texture
-	atlas_source.texture_region_size = Vector2i(24, 24)
-	atlas_source.create_tile(Vector2i(0, 0))
-	tile_set.add_source(atlas_source, 0)
+	# get tiles
+	var tile_data: Dictionary = Cache.registry["world"]["level"][level_name]["tiles"]
+	for tile in tile_data:
+		# create arrays
+		tileset_tiles["texture"][tile] = [] as Array[Texture2D]
+		tileset_tiles["weight"][tile] = [] as Array[int]
+		tileset_tiles["weight_total"][tile] = [] as Array[int]
+		tileset_tiles["source_id"][tile] = [] as Array[int]
 
-	# generate level
-	for x in range(-100, 100):
-		for y in range(-100, 100):
-			# ground tile
-			if floor(abs(noise.get_noise_2d(x,y) * 2)) == 0:
-				tilemap.set_cell(0, Vector2i(x, y), 0, Vector2i(0, 0))
+		# get textures
+		var textures = tile_data[tile]
+
+		# add texture data to tileset_tiles dict
+		var weight_total: int = 0
+		for texture_path in textures.keys():
+			tileset_tiles["texture"][tile].push_back(load(texture_path))
+			tileset_tiles["weight"][tile].push_back(textures[texture_path] as int)
+			weight_total += textures[texture_path] as int
+		tileset_tiles["weight_total"][tile] = weight_total
+
+		# create tiles and add to tile set
+		for texture_index in tileset_tiles["texture"][tile].size():
+			var atlas_source = TileSetAtlasSource.new()
+			atlas_source.texture = tileset_tiles["texture"]["ground"][texture_index]
+			atlas_source.texture_region_size = Vector2i(tile_size, tile_size)
+			atlas_source.create_tile(Vector2i(0, 0))
+			tile_set.add_source(atlas_source, texture_index)
+
+			# save source ID
+			tileset_tiles["source_id"][tile].push_back(texture_index)
+
+func _handle_procedural_level() -> void:
+	# get player's current chunk
+	var current_chunk: Vector2 = _get_player_chunk_position()
+
+	# unload chunks
+	for chunk_index in range(loaded_chunks.size() - 1, -1, -1):
+		if floor(current_chunk.distance_to(loaded_chunks[chunk_index])) > chunk_distance:
+			_unload_chunk(loaded_chunks[chunk_index])
+			loaded_chunks.remove_at(chunk_index)
+
+	# load chunks
+	for x in range(current_chunk.x - chunk_distance, current_chunk.x + chunk_distance):
+		for y in range(current_chunk.y - chunk_distance, current_chunk.y + chunk_distance):
+			if not loaded_chunks.has(Vector2(x, y)):
+				_load_chunk(Vector2(x, y))
+				loaded_chunks.push_back(Vector2(x, y))
+
+func _get_player_chunk_position() -> Vector2:
+	return Vector2(floor((player.global_position.x / tile_size) / chunk_size), floor((player.global_position.y / tile_size) / chunk_size))
+
+func _load_chunk(chunk_position: Vector2) -> void:
+	# add tiles
+	for x in range(chunk_size):
+		for y in range(chunk_size):
+			# tile's world position
+			var tile_position = _get_tile_tilemap_position(chunk_position, Vector2(x, y))
+
+			# is there a tile at this noise position?
+			if floor(abs(noise.get_noise_2d(tile_position.x, tile_position.y) * 2)) == 0:
+				# determine tile to use
+				var tile_id := 0
+				var rand: int = tile_rng.randi_range(1, tileset_tiles["weight_total"]["ground"])
+				var weights: Array[int] = tileset_tiles["weight"]["ground"]
+				if weights.size() > 1:
+					# keep track of accumulating weight
+					var weight_sum := 0
+
+					# compare weight to random value
+					for weight_index in weights.size():
+						weight_sum += weights[weight_index]
+
+						# last tile
+						if weight_index == weights.size() - 1:
+							tile_id = tileset_tiles["source_id"]["ground"][weight_index]
+							break
+
+						# passed the correct tile
+						elif rand <= weight_sum:
+							tile_id = tileset_tiles["source_id"]["ground"][weight_index]
+							break
+
+				# add tile
+				infinite_tilemap.set_cell(0, Vector2i(tile_position.x, tile_position.y), tile_id, Vector2i(0, 0))
+
+func _unload_chunk(chunk_position: Vector2) -> void:
+	# remove tiles
+	for x in range(chunk_size):
+		for y in range(chunk_size):
+			# tile's world position
+			var tile_position = _get_tile_tilemap_position(chunk_position, Vector2(x, y))
+
+			# remove tile
+			infinite_tilemap.erase_cell(0, Vector2i(tile_position.x, tile_position.y))
+
+func _get_tile_tilemap_position(chunk_position: Vector2, tile_index: Vector2) -> Vector2:
+	return chunk_position * chunk_size + tile_index

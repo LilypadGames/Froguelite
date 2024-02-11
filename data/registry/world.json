@@ -16,8 +16,12 @@
 				"octaves": 4,
 				"gain": 0
 			},
+			"tile_size": 24,
 			"tiles": {
-				"ground": "res://assets/texture/world/dirt_noisy.png"
+				"ground": {
+					"res://assets/texture/world/dirt.png": 100,
+					"res://assets/texture/world/dirt_noisy.png": 20
+				}
 			}
 		},
 		"frog_caves_old": {
