@@ -14,11 +14,11 @@ extends Node2D
 @export var noise: FastNoiseLite
 @export var chunk_size: int = 16
 @export var chunk_distance: int = 2
+var level_seed: int
 var infinite_tilemap: TileMap
 var tileset_tiles: Dictionary = {"texture": {}, "weight": {}, "weight_total": {}, "source_id": {}}
 var tile_size: int
-var loaded_chunks: Array[Vector2] = []
-@onready var tile_rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var loaded_chunks: Array[Vector2i] = []
 
 # internal
 var level_name: String
@@ -52,9 +52,6 @@ func _ready() -> void:
 	# instantiate procedural level
 	elif level_type == "procedural":
 		_init_procedural_level()
-
-	# tile RNG
-	tile_rng.randomize()
 
 func _process(_delta: float) -> void:
 	# handle camera
@@ -115,6 +112,11 @@ func _init_static_level() -> void:
 				lootable.position = object_data.position
 
 func _init_procedural_level() -> void:
+	# generate level seed
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	level_seed = rng.randi_range(-2147483647, 2147483647)
+	
 	# get tile size
 	tile_size = Cache.registry["world"]["level"][level_name]["tile_size"]
 
@@ -138,11 +140,7 @@ func _init_procedural_level() -> void:
 	noise.frequency = Cache.registry["world"]["level"][level_name]["noise"]["frequency"]
 	noise.fractal_octaves = Cache.registry["world"]["level"][level_name]["noise"]["octaves"]
 	noise.fractal_gain = Cache.registry["world"]["level"][level_name]["noise"]["gain"]
-
-	# generate seed
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	noise.seed = rng.randi_range(-2147483647, 2147483647)
+	noise.seed = level_seed
 
 	# create level parent node
 	level = Node2D.new()
@@ -156,7 +154,7 @@ func _init_procedural_level() -> void:
 
 	# create tileset
 	var tile_set = TileSet.new()
-	tile_set.tile_size = Vector2(tile_size, tile_size)
+	tile_set.tile_size = Vector2i(tile_size, tile_size)
 	infinite_tilemap.tile_set = tile_set
 
 	# get tiles
@@ -192,30 +190,34 @@ func _init_procedural_level() -> void:
 
 func _handle_procedural_level() -> void:
 	# get player's current chunk
-	var current_chunk: Vector2 = _get_player_chunk_position()
+	var current_chunk: Vector2i = _get_player_chunk_position()
 
 	# unload chunks
 	for chunk_index in range(loaded_chunks.size() - 1, -1, -1):
-		if floor(current_chunk.distance_to(loaded_chunks[chunk_index])) > chunk_distance:
+		if floor((loaded_chunks[chunk_index] - current_chunk).length()) > chunk_distance:
 			_unload_chunk(loaded_chunks[chunk_index])
 			loaded_chunks.remove_at(chunk_index)
 
 	# load chunks
 	for x in range(current_chunk.x - chunk_distance, current_chunk.x + chunk_distance):
 		for y in range(current_chunk.y - chunk_distance, current_chunk.y + chunk_distance):
-			if not loaded_chunks.has(Vector2(x, y)):
-				_load_chunk(Vector2(x, y))
-				loaded_chunks.push_back(Vector2(x, y))
+			if not loaded_chunks.has(Vector2i(x, y)):
+				_load_chunk(Vector2i(x, y))
+				loaded_chunks.push_back(Vector2i(x, y))
 
-func _get_player_chunk_position() -> Vector2:
-	return Vector2(floor((player.global_position.x / tile_size) / chunk_size), floor((player.global_position.y / tile_size) / chunk_size))
+func _get_player_chunk_position() -> Vector2i:
+	return Vector2i(floor((player.global_position.x / tile_size) / chunk_size), floor((player.global_position.y / tile_size) / chunk_size))
 
-func _load_chunk(chunk_position: Vector2) -> void:
+func _load_chunk(chunk_position: Vector2i) -> void:
+	# set tile RNG to chunk's seed
+	var tile_rng = RandomNumberGenerator.new()
+	tile_rng.seed = _get_chunk_seed(chunk_position)
+
 	# add tiles
 	for x in range(chunk_size):
 		for y in range(chunk_size):
 			# tile's world position
-			var tile_position = _get_tile_tilemap_position(chunk_position, Vector2(x, y))
+			var tile_position = _get_tile_tilemap_position(chunk_position, Vector2i(x, y))
 
 			# is there a tile at this noise position?
 			if floor(abs(noise.get_noise_2d(tile_position.x, tile_position.y) * 2)) == 0:
@@ -244,15 +246,18 @@ func _load_chunk(chunk_position: Vector2) -> void:
 				# add tile
 				infinite_tilemap.set_cell(0, Vector2i(tile_position.x, tile_position.y), tile_id, Vector2i(0, 0))
 
-func _unload_chunk(chunk_position: Vector2) -> void:
+func _unload_chunk(chunk_position: Vector2i) -> void:
 	# remove tiles
 	for x in range(chunk_size):
 		for y in range(chunk_size):
 			# tile's world position
-			var tile_position = _get_tile_tilemap_position(chunk_position, Vector2(x, y))
+			var tile_position = _get_tile_tilemap_position(chunk_position, Vector2i(x, y))
 
 			# remove tile
 			infinite_tilemap.erase_cell(0, Vector2i(tile_position.x, tile_position.y))
 
-func _get_tile_tilemap_position(chunk_position: Vector2, tile_index: Vector2) -> Vector2:
+func _get_tile_tilemap_position(chunk_position: Vector2i, tile_index: Vector2i) -> Vector2i:
 	return chunk_position * chunk_size + tile_index
+
+func _get_chunk_seed(chunk_position: Vector2i) -> int:
+	return (chunk_position.x * 73856093) ^ (chunk_position.y * 19349663) ^ level_seed
