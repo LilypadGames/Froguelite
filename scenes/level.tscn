@@ -1,11 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://c0f7gukj5eqb5"]
+[gd_scene load_steps=5 format=3 uid="uid://c0f7gukj5eqb5"]
 
 [ext_resource type="Script" path="res://scripts/level.gd" id="1_c12yc"]
 [ext_resource type="PackedScene" uid="uid://d00vibmf4lv6g" path="res://objects/Player.tscn" id="2_0sumi"]
 [ext_resource type="PackedScene" uid="uid://dim2nj2clq4fh" path="res://internal/hud.tscn" id="3_62ccf"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7t52d"]
+frequency = 0.02
+
 [node name="level" type="Node2D"]
 script = ExtResource("1_c12yc")
+noise = SubResource("FastNoiseLite_7t52d")
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true

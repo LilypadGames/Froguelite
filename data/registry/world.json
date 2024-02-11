@@ -9,6 +9,18 @@
 			"file": "res://data/world/level/dungeon.tmj"
 		},
 		"frog_caves": {
+			"type": "procedural",
+			"noise": {
+				"type": "simplex",
+				"frequency": 0.02,
+				"octaves": 4,
+				"gain": 0
+			},
+			"tiles": {
+				"ground": "res://assets/texture/world/dirt_noisy.png"
+			}
+		},
+		"frog_caves_old": {
 			"type": "tilemap",
 			"file": "res://data/world/level/frog_caves.tmj"
 		}

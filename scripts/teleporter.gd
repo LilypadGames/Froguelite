@@ -26,7 +26,7 @@ func setup(new_id: String, hud_reference: HUD) -> Teleporter:
 # methods
 func interact() -> void:
 	# save next level to temp cache
-	Cache.temp["next_level_path"] = Cache.registry["world"]["level"][destination]["file"]
+	Cache.temp["next_level"] = destination
 
 	# change scene to destination level
 	get_tree().change_scene_to_packed(load("res://scenes/level.tscn"))
