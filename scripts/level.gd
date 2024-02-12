@@ -1,6 +1,13 @@
 class_name Level
 extends Node2D
 
+# constants
+const surrounding_tile_offsets = [
+	Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1),
+	Vector2i(-1, 0), Vector2i(1, 0),
+	Vector2i(-1, 1), Vector2i(0, 1), Vector2i(1, 1)
+]
+
 # references
 @export_category("References")
 @onready var player: Node2D = %Player
@@ -24,6 +31,7 @@ var loaded_chunks: Array[Vector2i] = []
 var level_name: String
 var level_type: String
 var level: Node2D
+var colliders: Node2D
 var layers: Array[TileMap]
 var level_object_data: Node2D
 
@@ -67,27 +75,22 @@ func _init_static_level() -> void:
 	add_child(level)
 	level_object_data = level.get_node("Objects")
 
+	# get tile size
+	tile_size = Cache.registry["world"]["level"][level_name]["tile_size"]
+
 	# set up collisions
-	for child in level.get_children():
-		if child is TileMap:
+	colliders = Node2D.new()
+	colliders.name = "Colliders"
+	level.add_child(colliders)
+	for tilemap in level.get_children():
+		if tilemap is TileMap:
 			# add layer
-			layers.push_back(child)
+			layers.push_back(tilemap)
 
 			# add collider
-			if child.has_meta("wall") and child.get_meta("wall"):
-				for tile in (child as TileMap).get_used_cells(0):
-					var collider = StaticBody2D.new()
-					collider.position = child.map_to_local(tile)
-					level.add_child(collider)
-
-					var collider_body: CollisionShape2D = CollisionShape2D.new()
-
-					var collider_shape: RectangleShape2D = RectangleShape2D.new()
-					collider_shape.size = Vector2i(22, 22)
-
-					collider_body.shape = collider_shape
-
-					collider.add_child(collider_body)
+			if tilemap.has_meta("wall") and tilemap.get_meta("wall"):
+				for tile in (tilemap as TileMap).get_used_cells(0):
+					colliders.add_child(_create_tile_collider(tilemap.map_to_local(tile)))
 
 	# set up objects
 	for object_data in level_object_data.get_children():
@@ -159,10 +162,16 @@ func _init_procedural_level() -> void:
 	level.name = "level_data"
 	add_child(level)
 
+	# create collider group
+	colliders = Node2D.new()
+	colliders.name = "Colliders"
+	level.add_child(colliders)
+
 	# create tilemap
 	infinite_tilemap = TileMap.new()
 	infinite_tilemap.rendering_quadrant_size = tile_size
-	infinite_tilemap.add_layer(-1)
+	for layer in Cache.registry["world"]["level"][level_name]["tiles"].size() - 1:
+		infinite_tilemap.add_layer(-1)
 	level.add_child(infinite_tilemap)
 
 	# create tileset
@@ -238,11 +247,15 @@ func _load_chunk(chunk_position: Vector2i) -> void:
 	var tile_rng = RandomNumberGenerator.new()
 	tile_rng.seed = _get_chunk_seed(chunk_position)
 
-	# ground tiles
-	_generate_tiles(chunk_position, "ground", 0, tile_rng)
+	# create collider group
+	var collider_group = Node.new()
+	collider_group.name = str(chunk_position)
+	colliders.add_child(collider_group)
 
-	# decoration tiles
-	_generate_tiles(chunk_position, "decoration", 1, tile_rng)
+	# add tiles in each layer
+	var layer_names: Array = Cache.registry["world"]["level"][level_name]["tiles"].keys()
+	for layer_index in layer_names.size():
+		_generate_tiles(chunk_position, layer_names[layer_index], layer_index, tile_rng)
 
 func _unload_chunk(chunk_position: Vector2i) -> void:
 	# remove tiles
@@ -251,8 +264,12 @@ func _unload_chunk(chunk_position: Vector2i) -> void:
 			# tile's world position
 			var tile_position = _get_tile_tilemap_position(chunk_position, Vector2i(x, y))
 
-			# remove tile
-			infinite_tilemap.erase_cell(0, Vector2i(tile_position.x, tile_position.y))
+			# remove tile in layers
+			for layer_index in infinite_tilemap.get_layers_count():
+				infinite_tilemap.erase_cell(layer_index, Vector2i(tile_position.x, tile_position.y))
+
+	# remove colliders
+	colliders.get_node(str(chunk_position)).queue_free()
 
 func _generate_tiles(chunk_position: Vector2i, tile_type: String, layer: int, tile_rng: RandomNumberGenerator) -> void:
 	# add tiles
@@ -292,6 +309,35 @@ func _generate_tiles(chunk_position: Vector2i, tile_type: String, layer: int, ti
 
 					# add tile
 					infinite_tilemap.set_cell(layer, Vector2i(tile_position.x, tile_position.y), tile_id, Vector2i(0, 0))
+			else:
+				# add colliders to empty tiles
+				for offset in surrounding_tile_offsets:
+					# get neighboring tile position
+					var neighbor_pos = tile_position + offset
+
+					# add collider to empty space if theres a filled tile near it
+					if _is_filled_at_noise_position(neighbor_pos):
+						colliders.get_node(str(chunk_position)).add_child(_create_tile_collider(infinite_tilemap.map_to_local(tile_position)))
+						break
+
+func _create_tile_collider(tile_position: Vector2) -> StaticBody2D:
+	# create collider
+	var collider = StaticBody2D.new()
+	collider.position = tile_position
+
+	# create collider body
+	var collider_body: CollisionShape2D = CollisionShape2D.new()
+
+	# create collider shape
+	var collider_shape: RectangleShape2D = RectangleShape2D.new()
+	collider_shape.size = Vector2i(tile_size, tile_size)
+	collider_body.shape = collider_shape
+
+	# add collider to scene
+	collider.add_child(collider_body)
+
+	# return collider for handling
+	return collider
 
 func _get_chunk_seed(chunk_position: Vector2i) -> int:
 	return (chunk_position.x * 73856093) ^ (chunk_position.y * 19349663) ^ level_seed

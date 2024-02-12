@@ -2,6 +2,7 @@
 	"level": {
 		"riverside": {
 			"type": "tilemap",
+			"tile_size": 22,
 			"file": "res://data/world/level/riverside.tmj"
 		},
 		"dungeon": {
