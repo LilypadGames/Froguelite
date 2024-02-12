@@ -21,6 +21,12 @@
 				"ground": {
 					"res://assets/texture/world/dirt.png": 100,
 					"res://assets/texture/world/dirt_noisy.png": 20
+				},
+				"decoration": {
+					"*": 3000,
+					"res://assets/texture/world/flower_1.png": 50,
+					"res://assets/texture/world/flower_2.png": 20,
+					"res://assets/texture/world/flower_3.png": 1
 				}
 			}
 		},

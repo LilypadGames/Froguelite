@@ -54,6 +54,7 @@ script = ExtResource("1_ab6d8")
 
 [node name="Sprites" type="CanvasGroup" parent="."]
 unique_name_in_owner = true
+z_index = 100
 material = SubResource("ShaderMaterial_g1x5g")
 
 [node name="Collider" type="CollisionShape2D" parent="."]
