@@ -75,7 +75,19 @@ func _init_static_level() -> void:
 
 			# add collider
 			if child.has_meta("wall") and child.get_meta("wall"):
-				child.tile_set.add_physics_layer()
+				for tile in (child as TileMap).get_used_cells(0):
+					var collider = StaticBody2D.new()
+					collider.position = child.map_to_local(tile)
+					level.add_child(collider)
+
+					var collider_body: CollisionShape2D = CollisionShape2D.new()
+
+					var collider_shape: RectangleShape2D = RectangleShape2D.new()
+					collider_shape.size = Vector2i(22, 22)
+
+					collider_body.shape = collider_shape
+
+					collider.add_child(collider_body)
 
 	# set up objects
 	for object_data in level_object_data.get_children():
