@@ -3,9 +3,9 @@ extends Node2D
 
 # constants
 const surrounding_tile_offsets = [
-	Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1),
+	Vector2i(0, -1),
 	Vector2i(-1, 0), Vector2i(1, 0),
-	Vector2i(-1, 1), Vector2i(0, 1), Vector2i(1, 1)
+	Vector2i(0, 1)
 ]
 
 # references
@@ -26,6 +26,7 @@ var infinite_tilemap: TileMap
 var tileset_tiles: Dictionary = {"texture": {}, "weight": {}, "weight_padding": {}, "weight_total": {}, "source_id": {}}
 var tile_size: int
 var loaded_chunks: Array[Vector2i] = []
+var wall_tile_source: int
 
 # internal
 var level_name: String
@@ -170,7 +171,7 @@ func _init_procedural_level() -> void:
 	# create tilemap
 	infinite_tilemap = TileMap.new()
 	infinite_tilemap.rendering_quadrant_size = tile_size
-	for layer in Cache.registry["world"]["level"][level_name]["tiles"].size() - 1:
+	for layer in Cache.registry["world"]["level"][level_name]["tiles"].size():
 		infinite_tilemap.add_layer(-1)
 	level.add_child(infinite_tilemap)
 
@@ -224,6 +225,13 @@ func _init_procedural_level() -> void:
 
 			# next source ID
 			source_count += 1
+
+	var wall_atlas_source = TileSetAtlasSource.new()
+	wall_atlas_source.texture = load(Cache.registry["world"]["level"][level_name]["wall"])
+	wall_atlas_source.texture_region_size = Vector2i(tile_size, tile_size)
+	wall_atlas_source.create_tile(Vector2i(0, 0))
+	tile_set.add_source(wall_atlas_source, source_count)
+	wall_tile_source = source_count
 
 func _handle_procedural_level() -> void:
 	# get player's current chunk
@@ -314,6 +322,10 @@ func _generate_tiles(chunk_position: Vector2i, tile_type: String, layer: int, ti
 				for offset in surrounding_tile_offsets:
 					# get neighboring tile position
 					var neighbor_pos = tile_position + offset
+
+					# add wall tile
+					if _is_filled_at_noise_position(tile_position + Vector2i(0, 1)):
+						infinite_tilemap.set_cell(2, Vector2i(tile_position.x, tile_position.y), wall_tile_source, Vector2i(0, 0))
 
 					# add collider to empty space if theres a filled tile near it
 					if _is_filled_at_noise_position(neighbor_pos):

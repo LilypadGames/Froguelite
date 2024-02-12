@@ -18,6 +18,7 @@
 				"gain": 0
 			},
 			"tile_size": 24,
+			"wall": "res://assets/texture/world/cave_wall.png",
 			"tiles": {
 				"ground": {
 					"res://assets/texture/world/dirt.png": 100,
