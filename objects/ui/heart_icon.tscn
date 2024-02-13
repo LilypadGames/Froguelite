@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dphpuyveu5sfg"]
+
+[ext_resource type="Texture2D" uid="uid://ocltcybkts3r" path="res://assets/texture/ui/heart_empty.png" id="1_rd7s0"]
+[ext_resource type="Texture2D" uid="uid://7symso17xhl4" path="res://assets/texture/ui/heart_full.png" id="2_fg60s"]
+
+[node name="HeartIcon" type="TextureProgressBar"]
+max_value = 2.0
+value = 2.0
+texture_under = ExtResource("1_rd7s0")
+texture_progress = ExtResource("2_fg60s")

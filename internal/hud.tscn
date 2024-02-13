@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dim2nj2clq4fh"]
+[gd_scene load_steps=8 format=3 uid="uid://dim2nj2clq4fh"]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_dk435"]
 [ext_resource type="FontFile" uid="uid://cet58ddfu4y8a" path="res://assets/font/Pix.woff2" id="2_563he"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="3_1iwb1"]
 [ext_resource type="Texture2D" uid="uid://b35ixtbv7ndkq" path="res://assets/texture/gui/tilemap_white.png" id="4_ttk1v"]
+[ext_resource type="PackedScene" uid="uid://dphpuyveu5sfg" path="res://objects/ui/heart_icon.tscn" id="5_fosyb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u6or2"]
 shader = ExtResource("3_1iwb1")
@@ -16,8 +17,10 @@ region = Rect2(356, 50, 17, 18)
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_dk435")
+heart_icon = ExtResource("5_fosyb")
 
 [node name="InteractHint" type="Label" parent="."]
+unique_name_in_owner = true
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -43,3 +46,12 @@ material = SubResource("ShaderMaterial_u6or2")
 position = Vector2(-20, 14)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_d0310")
+
+[node name="HeartDisplay" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+offset_left = 8.0
+offset_top = -2.0
+offset_right = 40.0
+offset_bottom = 14.0
+scale = Vector2(5, 5)
+theme_override_constants/separation = 0
