@@ -7,6 +7,7 @@
 		},
 		"dungeon": {
 			"type": "tilemap",
+			"tile_size": 22,
 			"file": "res://data/world/level/dungeon.tmj"
 		},
 		"frog_caves": {
@@ -34,10 +35,13 @@
 		},
 		"frog_caves_old": {
 			"type": "tilemap",
+			"tile_size": 22,
 			"file": "res://data/world/level/frog_caves.tmj"
 		}
 	},
 	"structure": {
+		"type": "tilemap",
+		"tile_size": 22,
 		"grass_patch": "res://data/world/structure/grass_patch.tmj"
 	}
 }
