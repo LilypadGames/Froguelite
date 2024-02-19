@@ -13,9 +13,9 @@ var current_interactable: Interactable
 
 func _ready() -> void:
 	# init heart display
-	_update_hearts()
+	update_hearts()
 
-func _update_hearts() -> void:
+func update_hearts() -> void:
 	# reset hearts
 	for heart in heart_display.get_children():
 		heart_display.remove_child(heart)

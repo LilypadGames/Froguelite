@@ -7,8 +7,20 @@ const MOUSE_DOWN_TURN_THRESHOLD := 10
 # properties
 @export_category("Properties")
 @export var movement_speed: float = 5000
-@export var hearts: int = 1
-@onready var health: int = hearts * 2
+@export var hearts: int = 1 :
+	set (value):
+		# clamp value
+		hearts = clamp(value, 1, INF)
+
+		# update hud
+		hud.update_hearts()
+@export var health: int = hearts * 2 :
+	set (value):
+		# clamp value
+		health = clamp(value, 0, hearts * 2)
+
+		# update hud
+		hud.update_current_health()
 
 # references
 @export_category("References")
