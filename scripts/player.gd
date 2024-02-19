@@ -94,6 +94,11 @@ func _input(_event: InputEvent) -> void:
 		elif mouse_click_direction.y < 0:
 			mouse_down_direction = "up"
 
-	# reset
+	# not clicking
 	else:
-		mouse_down_direction = ""
+		if mouse_down_direction:
+			# keep same direction when letting go of mouse button down
+			input_direction = mouse_down_direction
+
+			# reset click direction
+			mouse_down_direction = ""
