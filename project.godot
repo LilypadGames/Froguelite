@@ -20,10 +20,11 @@ config/icon="res://icon.svg"
 Cache="*res://scripts/cache.gd"
 Utility="*res://scripts/utility.gd"
 MouseCursor="*res://scripts/mouse_cursor.gd"
+Panku="*res://addons/panku_console/console.tscn"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/YATI/plugin.cfg")
+enabled=PackedStringArray("res://addons/YATI/plugin.cfg", "res://addons/panku_console/plugin.cfg")
 
 [filesystem]
 
