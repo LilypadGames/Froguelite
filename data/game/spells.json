@@ -6,8 +6,8 @@
 		},
 		"sounds": {
 			"start": "sfx_shoot",
-			"fail": "sfx_pop_fail",
-			"success": "sfx_pop_success"
+			"success": "sfx_pop_success",
+			"fail": "sfx_pop_fail"
 		},
 		"damage": 2,
 		"speed": 80,

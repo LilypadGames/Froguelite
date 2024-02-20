@@ -48,20 +48,8 @@ func _ready() -> void:
 
 	# create projectiles
 	for spell in Cache.data["player"]["inventory"]["spells"]:
-		# get spell data
-		var spell_data = Cache.data["spells"][spell]
-
 		# create new projectile spawner
-		var projectile_spawner: ProjectileSpawner = projectile_spawner_scene.instantiate() as ProjectileSpawner
-
-		# set up spawner
-		projectile_spawner.name = spell
-		projectile_spawner.fireRate = spell_data["firerate"]
-		projectile_spawner.texture = load(Cache.registry["textures"][spell_data["texture"]["active"]])
-		projectile_spawner.bulletType.initialSpeed = spell_data["speed"]
-		(projectile_spawner.bulletType._shape as CircleShape2D).radius = spell_data["radius"]
-		projectile_spawner.bulletType.scale = spell_data["scale"]
-		projectile_spawner.bulletType.maxLifetime = spell_data["lifespan"]
+		var projectile_spawner: ProjectileSpawner = (projectile_spawner_scene.instantiate() as ProjectileSpawner).setup(spell)
 
 		# add projectile spawner to player's projectile group
 		projectiles_group.add_child(projectile_spawner)
