@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://d00vibmf4lv6g"]
+[gd_scene load_steps=9 format=3 uid="uid://d00vibmf4lv6g"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ab6d8"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_hud5r"]
+[ext_resource type="PackedScene" uid="uid://bv4amvkq6b3sp" path="res://objects/ProjectileSpawner.tscn" id="3_gepeb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g1x5g"]
 shader = ExtResource("2_hud5r")
@@ -49,8 +50,10 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
+collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_ab6d8")
+projectile_spawner_scene = ExtResource("3_gepeb")
 
 [node name="Sprites" type="CanvasGroup" parent="."]
 unique_name_in_owner = true
@@ -65,3 +68,6 @@ unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_k4q3f")
 }
+
+[node name="Projectiles" type="Node2D" parent="."]
+unique_name_in_owner = true

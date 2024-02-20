@@ -1,16 +1,20 @@
 {
 	"snot_bubble": {
-		"texture": "snot_bubble",
+		"texture": {
+			"active": "snot_bubble",
+			"end": "snot_bubble_pop"
+		},
 		"sounds": {
 			"start": "sfx_shoot",
 			"fail": "sfx_pop_fail",
 			"success": "sfx_pop_success"
 		},
-		"scale": 0.5,
 		"damage": 2,
-		"lifespan": 450,
-		"firerate": 600,
-		"speed": 0.15,
+		"speed": 80,
+		"radius": 3,
+		"scale": 0.8,
+		"lifespan": 10,
+		"firerate": 0.4,
 		"inventory": {
 			"texture": "gui_snot_bubble",
 			"scale": 6

@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 # constants
-const MOUSE_DOWN_TURN_THRESHOLD := 10
+const MOUSE_DOWN_TURN_THRESHOLD := 0.5
 
 # properties
 @export_category("Properties")
@@ -27,6 +27,9 @@ const MOUSE_DOWN_TURN_THRESHOLD := 10
 @onready var sprite_group: CanvasGroup = %Sprites
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var character_texture: String = Cache.data["player"]["texture"]
+@onready var projectiles_group: Node2D = %Projectiles
+@export var projectile_spawner_scene: PackedScene
+var projectiles: Dictionary = {}
 var hud: HUD
 
 # internal
@@ -42,6 +45,29 @@ var mouse_down_direction: String
 func _ready() -> void:
 	# create sprites
 	sprites.push_back(Utility.create_sprite(character_texture, "Character", sprite_group))
+
+	# create projectiles
+	for spell in Cache.data["player"]["inventory"]["spells"]:
+		# get spell data
+		var spell_data = Cache.data["spells"][spell]
+
+		# create new projectile spawner
+		var projectile_spawner: ProjectileSpawner = projectile_spawner_scene.instantiate() as ProjectileSpawner
+
+		# set up spawner
+		projectile_spawner.name = spell
+		projectile_spawner.fireRate = spell_data["firerate"]
+		projectile_spawner.texture = load(Cache.registry["textures"][spell_data["texture"]["active"]])
+		projectile_spawner.bulletType.initialSpeed = spell_data["speed"]
+		(projectile_spawner.bulletType._shape as CircleShape2D).radius = spell_data["radius"]
+		projectile_spawner.bulletType.scale = spell_data["scale"]
+		projectile_spawner.bulletType.maxLifetime = spell_data["lifespan"]
+
+		# add projectile spawner to player's projectile group
+		projectiles_group.add_child(projectile_spawner)
+
+		# index projectile
+		projectiles[spell] = projectile_spawner
 
 func _physics_process(delta: float) -> void:
 	# get input direction vector
@@ -85,6 +111,10 @@ func _physics_process(delta: float) -> void:
 	if (velocity != Vector2.ZERO):
 		anim_player.play("hop")
 
+	# fire
+	if Input.is_action_pressed("attack_primary"):
+		(projectiles[Cache.data["player"]["equipped"]["spell"]] as ProjectileSpawner).fire(get_local_mouse_position().normalized())
+
 # handle inputs
 func _input(_event: InputEvent) -> void:
 	# interact
@@ -94,7 +124,7 @@ func _input(_event: InputEvent) -> void:
 	# click
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		# get direction to mouse click location
-		var mouse_click_direction: Vector2 = get_global_mouse_position() - position
+		var mouse_click_direction: Vector2 = get_local_mouse_position().normalized()
 
 		# detect mouse down based direction
 		if mouse_click_direction.x > MOUSE_DOWN_TURN_THRESHOLD:

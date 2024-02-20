@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bv4amvkq6b3sp"]
+
+[ext_resource type="Script" path="res://scripts/projectile_spawner.gd" id="2_ghixp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lyllt"]
+
+[sub_resource type="BulletType" id="BulletType_nrvn3"]
+_shape = SubResource("CircleShape2D_lyllt")
+mask = 11
+numberOfQueries = 2
+collideWithBodies = true
+
+[node name="ProjectileSpawner" type="Spawner"]
+startMode = 2
+spawnerMode = 1
+bulletType = SubResource("BulletType_nrvn3")
+script = ExtResource("2_ghixp")
