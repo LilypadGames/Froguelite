@@ -11,9 +11,9 @@ shader_parameter/line_thickness = 2.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2hddu"]
 size = Vector2(0, 0)
 
-[node name="Teleporter" type="Area2D" groups=["Teleporter"]]
+[node name="Teleporter" type="StaticBody2D"]
 collision_layer = 2
-collision_mask = 7
+collision_mask = 3
 script = ExtResource("1_m15y5")
 
 [node name="Sprites" type="CanvasGroup" parent="."]
@@ -24,5 +24,13 @@ material = SubResource("ShaderMaterial_0ub0k")
 unique_name_in_owner = true
 shape = SubResource("RectangleShape2D_2hddu")
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[node name="InteractSensor" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 4
+
+[node name="Collider" type="CollisionShape2D" parent="InteractSensor"]
+shape = SubResource("RectangleShape2D_2hddu")
+
+[connection signal="body_entered" from="InteractSensor" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="InteractSensor" to="." method="_on_body_exited"]

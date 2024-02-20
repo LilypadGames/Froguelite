@@ -1,10 +1,11 @@
 class_name Interactable
-extends Area2D
+extends PhysicsBody2D
 
 # references
 @export_category("References")
 @onready var sprite_group: CanvasGroup = %Sprites
 @onready var collider: CollisionShape2D = %Collider
+@onready var interact_sensor: Area2D = %InteractSensor
 var hud: HUD
 
 # properties

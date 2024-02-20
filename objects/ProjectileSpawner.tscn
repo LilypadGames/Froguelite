@@ -7,7 +7,6 @@
 [sub_resource type="BulletType" id="BulletType_nrvn3"]
 _shape = SubResource("CircleShape2D_lyllt")
 mask = 11
-numberOfQueries = 2
 collideWithBodies = true
 
 [node name="ProjectileSpawner" type="Spawner"]
@@ -15,3 +14,5 @@ startMode = 2
 spawnerMode = 1
 bulletType = SubResource("BulletType_nrvn3")
 script = ExtResource("2_ghixp")
+
+[connection signal="bullet_hit" from="." to="." method="_on_bullet_hit"]

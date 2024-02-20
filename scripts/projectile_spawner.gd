@@ -1,4 +1,5 @@
-class_name ProjectileSpawner extends Spawner
+class_name ProjectileSpawner
+extends Spawner
 
 # references
 var timer: Timer
@@ -34,3 +35,15 @@ func fire(direction: Vector2) -> void:
 
 		# start fire rate timer
 		timer.start()
+
+func _on_bullet_hit(result: Array, bulletIndex: int, _spawner: Object) -> void:
+	# get collider
+	var collider: Node2D = result[0]["collider"]
+
+	# collided with lootable
+	if collider is Lootable:
+		# get projectile
+		var projectile: BulProps = get_bullet_from_index(bulletIndex)
+
+		# apply force
+		collider.apply_central_impulse(projectile.direction)

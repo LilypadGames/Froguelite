@@ -51,7 +51,6 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 collision_layer = 4
-collision_mask = 3
 script = ExtResource("1_ab6d8")
 projectile_spawner_scene = ExtResource("3_gepeb")
 
