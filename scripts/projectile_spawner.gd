@@ -36,6 +36,9 @@ func fire(direction: Vector2) -> void:
 		# start fire rate timer
 		timer.start()
 
+		# play sound
+		SoundManager.play_sound(Cache.get_stream(Cache.data["spells"][spell_id]["sounds"]["start"]))
+
 func _on_bullet_hit(result: Array, bulletIndex: int, _spawner: Object) -> void:
 	# get collider
 	var collider: Node2D = result[0]["collider"]
@@ -47,3 +50,12 @@ func _on_bullet_hit(result: Array, bulletIndex: int, _spawner: Object) -> void:
 
 		# apply force
 		collider.apply_central_impulse(projectile.direction)
+
+		# play sound
+		#SoundManager.play_sound(Cache.get_stream(Cache.data["spells"][spell_id]["sounds"]["success"]))
+		SoundManager.play_sound(Cache.get_stream(collider.sounds["hit"]))
+
+	# failed to hit a hit-able object
+	else:
+		# play sound
+		SoundManager.play_sound(Cache.get_stream(Cache.data["spells"][spell_id]["sounds"]["fail"]))

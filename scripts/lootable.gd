@@ -2,6 +2,7 @@ class_name Lootable
 extends Interactable
 
 # properties
+var sounds: Dictionary
 var loot: String
 
 # init properties
@@ -17,6 +18,9 @@ func setup(new_id: String, hud_reference: HUD) -> Lootable:
 
 	# get texture
 	texture = Cache.data["interactables"][type]["texture"]
+
+	# get sounds
+	sounds = Cache.data["interactables"][type]["sounds"]
 
 	# get properties
 	loot = Cache.data["lootables"][id]["loot"]

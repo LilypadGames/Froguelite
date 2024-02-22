@@ -1,28 +1,28 @@
 {
-	"under_her_spell_8_bit_loop": "audio/music/under_her_spell_8_bit_loop.ogg",
-	"riverside": "audio/music/riverside.ogg",
-	"the_bauws": "audio/music/the_bauws.ogg",
-	"ui_select": "audio/ui/select.ogg",
-	"ui_back": "audio/ui/back.ogg",
-	"ui_hover": "audio/ui/hover.ogg",
-	"sfx_chest_open": "audio/sfx/chest_open.ogg",
-	"sfx_acquired": "audio/sfx/acquired.ogg",
-	"sfx_shoot": "audio/sfx/shoot.ogg",
-	"sfx_pop_success": "audio/sfx/pop_success.ogg",
-	"sfx_pop_fail": "audio/sfx/pop_fail.ogg",
-	"ui_open": "audio/ui/open.ogg",
+	"under_her_spell_8_bit_loop": "res://assets/audio/music/under_her_spell_8_bit_loop.ogg",
+	"riverside": "res://assets/audio/music/riverside.ogg",
+	"the_bauws": "res://assets/audio/music/the_bauws.ogg",
+	"ui_select": "res://assets/audio/ui/select.ogg",
+	"ui_back": "res://assets/audio/ui/back.ogg",
+	"ui_hover": "res://assets/audio/ui/hover.ogg",
+	"sfx_chest_open": "res://assets/audio/sfx/chest_open.ogg",
+	"sfx_acquired": "res://assets/audio/sfx/acquired.ogg",
+	"sfx_shoot": "res://assets/audio/sfx/shoot.ogg",
+	"sfx_pop_success": "res://assets/audio/sfx/pop_success.ogg",
+	"sfx_pop_fail": "res://assets/audio/sfx/pop_fail.ogg",
+	"ui_open": "res://assets/audio/ui/open.ogg",
 	"sfx_hit": [
-		"audio/sfx/hit_1.ogg",
-		"audio/sfx/hit_2.ogg",
-		"audio/sfx/hit_3.ogg",
-		"audio/sfx/hit_4.ogg",
-		"audio/sfx/hit_5.ogg",
-		"audio/sfx/hit_6.ogg"
+		"res://assets/audio/sfx/hit_1.ogg",
+		"res://assets/audio/sfx/hit_2.ogg",
+		"res://assets/audio/sfx/hit_3.ogg",
+		"res://assets/audio/sfx/hit_4.ogg",
+		"res://assets/audio/sfx/hit_5.ogg",
+		"res://assets/audio/sfx/hit_6.ogg"
 	],
 	"sfx_hit_metal": [
-		"audio/sfx/hit_metal_1.ogg",
-		"audio/sfx/hit_metal_2.ogg",
-		"audio/sfx/hit_metal_3.ogg",
-		"audio/sfx/hit_metal_4.ogg"
+		"res://assets/audio/sfx/hit_metal_1.ogg",
+		"res://assets/audio/sfx/hit_metal_2.ogg",
+		"res://assets/audio/sfx/hit_metal_3.ogg",
+		"res://assets/audio/sfx/hit_metal_4.ogg"
 	]
 }

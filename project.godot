@@ -21,10 +21,11 @@ Cache="*res://scripts/cache.gd"
 Utility="*res://scripts/utility.gd"
 MouseCursor="*res://scripts/mouse_cursor.gd"
 Panku="*res://addons/panku_console/console.tscn"
+SoundManager="*res://addons/sound_manager/sound_manager.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/PerfBullets/plugin.cfg", "res://addons/YATI/plugin.cfg", "res://addons/panku_console/plugin.cfg")
+enabled=PackedStringArray("res://addons/PerfBullets/plugin.cfg", "res://addons/YATI/plugin.cfg", "res://addons/panku_console/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
 
 [filesystem]
 
