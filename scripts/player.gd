@@ -46,16 +46,21 @@ func _ready() -> void:
 	# create sprites
 	sprites.push_back(Utility.create_sprite(character_texture, "Character", sprite_group))
 
-	# create projectiles
-	for spell in Cache.data["player"]["inventory"]["spells"]:
-		# create new projectile spawner
-		var projectile_spawner: ProjectileSpawner = (projectile_spawner_scene.instantiate() as ProjectileSpawner).setup(spell)
+	# FIXME: PerfBullets addon only works on Windows platform, for now.
+	if OS.get_name() == "Windows":
+		# set projectile spawner object
+		load("res://objects/ProjectileSpawner.tscn")
 
-		# add projectile spawner to player's projectile group
-		projectiles_group.add_child(projectile_spawner)
+		# create projectiles
+		for spell in Cache.data["player"]["inventory"]["spells"]:
+			# create new projectile spawner
+			var projectile_spawner = (projectile_spawner_scene.instantiate()).setup(spell)
 
-		# index projectile
-		projectiles[spell] = projectile_spawner
+			# add projectile spawner to player's projectile group
+			projectiles_group.add_child(projectile_spawner)
+
+			# index projectile
+			projectiles[spell] = projectile_spawner
 
 func _physics_process(delta: float) -> void:
 	# get input direction vector
@@ -99,9 +104,11 @@ func _physics_process(delta: float) -> void:
 	if (velocity != Vector2.ZERO):
 		anim_player.play("hop")
 
-	# fire
-	if Input.is_action_pressed("attack_primary"):
-		(projectiles[Cache.data["player"]["equipped"]["spell"]] as ProjectileSpawner).fire(get_local_mouse_position().normalized())
+	# FIXME: PerfBullets addon only works on Windows platform, for now.
+	if OS.get_name() == "Windows":
+		# fire
+		if Input.is_action_pressed("attack_primary"):
+			(projectiles[Cache.data["player"]["equipped"]["spell"]]).fire(get_local_mouse_position().normalized())
 
 # handle inputs
 func _input(_event: InputEvent) -> void:
