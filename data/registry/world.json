@@ -31,6 +31,10 @@
 					"res://assets/texture/world/flower_2.png": 20,
 					"res://assets/texture/world/flower_3.png": 1
 				}
+			},
+			"time": {
+				"advance": false,
+				"initial_hour": 0
 			}
 		},
 		"frog_caves_old": {

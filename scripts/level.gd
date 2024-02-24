@@ -15,6 +15,7 @@ const surrounding_tile_offsets = [
 @onready var hud: HUD = %HUD
 @onready var enemies: Node = %Enemies
 @onready var objects: Node = %Objects
+@onready var diurnal_cycle: DiurnalCycle = %DiurnalCycle
 
 # procedural level properties
 @export_category("Procedural Level Properties")
@@ -132,7 +133,7 @@ func _init_procedural_level() -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	level_seed = rng.randi_range(-2147483647, 2147483647)
-	
+
 	# get tile size
 	tile_size = Cache.registry["world"]["level"][level_name]["tile_size"]
 
@@ -226,12 +227,27 @@ func _init_procedural_level() -> void:
 			# next source ID
 			source_count += 1
 
+	# add wall tile
 	var wall_atlas_source = TileSetAtlasSource.new()
 	wall_atlas_source.texture = load(Cache.registry["world"]["level"][level_name]["wall"])
 	wall_atlas_source.texture_region_size = Vector2i(tile_size, tile_size)
 	wall_atlas_source.create_tile(Vector2i(0, 0))
 	tile_set.add_source(wall_atlas_source, source_count)
 	wall_tile_source = source_count
+
+	# set up diurnal cycle
+	if Cache.registry["world"]["level"][level_name].has("time"):
+		# set state of time advancement
+		if Cache.registry["world"]["level"][level_name]["time"].has("advance"):
+			diurnal_cycle.advance_time = bool(Cache.registry["world"]["level"][level_name]["time"]["advance"])
+
+		# set time speed
+		if Cache.registry["world"]["level"][level_name]["time"].has("speed"):
+			diurnal_cycle.time_speed = float(Cache.registry["world"]["level"][level_name]["time"]["speed"])
+
+		# set initial hour
+		if Cache.registry["world"]["level"][level_name]["time"].has("initial_hour"):
+			diurnal_cycle.initial_hour = int(Cache.registry["world"]["level"][level_name]["time"]["initial_hour"])
 
 func _handle_procedural_level() -> void:
 	# get player's current chunk

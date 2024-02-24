@@ -13,6 +13,7 @@ script = ExtResource("1_c12yc")
 noise = SubResource("FastNoiseLite_7t52d")
 
 [node name="DiurnalCycle" parent="." instance=ExtResource("2_y2uma")]
+unique_name_in_owner = true
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
@@ -21,7 +22,6 @@ zoom = Vector2(4, 4)
 [node name="Player" parent="." instance=ExtResource("2_0sumi")]
 unique_name_in_owner = true
 z_index = 1
-projectile_spawner_scene = null
 
 [node name="Enemies" type="Node" parent="."]
 unique_name_in_owner = true
