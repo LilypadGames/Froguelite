@@ -89,6 +89,8 @@ func _init_static_level() -> void:
 			# add layer
 			layers.push_back(tilemap)
 
+			tilemap.light_mask = 2 # FIXME: Set light mask to display shadows, but not on top of entities/objects.
+
 			# add collider
 			if tilemap.has_meta("wall") and tilemap.get_meta("wall"):
 				for tile in (tilemap as TileMap).get_used_cells(0):
@@ -172,6 +174,7 @@ func _init_procedural_level() -> void:
 	# create tilemap
 	infinite_tilemap = TileMap.new()
 	infinite_tilemap.rendering_quadrant_size = tile_size
+	infinite_tilemap.light_mask = 2 # FIXME: Set light mask to display shadows, but not on top of entities/objects.
 	for layer in Cache.registry["world"]["level"][level_name]["tiles"].size():
 		infinite_tilemap.add_layer(-1)
 	level.add_child(infinite_tilemap)

@@ -28,6 +28,7 @@ const MOUSE_DOWN_TURN_THRESHOLD := 0.5
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var character_texture: String = Cache.data["player"]["texture"]
 @onready var projectiles_group: Node2D = %Projectiles
+@onready var occluders_group: Node2D = %Occluders
 @export var projectile_spawner_scene: PackedScene
 var projectiles: Dictionary = {}
 var hud: HUD
@@ -45,6 +46,10 @@ var mouse_down_direction: String
 func _ready() -> void:
 	# create sprites
 	sprites.push_back(Utility.create_sprite(character_texture, "Character", sprite_group))
+
+	# create occluders
+	for sprite in sprites:
+		Utility.create_occluder_from_sprite(sprite, occluders_group)
 
 	# FIXME: PerfBullets addon only works on Windows platform, for now.
 	if OS.get_name() == "Windows":
@@ -92,13 +97,20 @@ func _physics_process(delta: float) -> void:
 	# determine actual direction
 	if not mouse_down_direction.is_empty():
 		direction = mouse_down_direction
-	else:
+	elif not input_direction.is_empty():
 		direction = input_direction
 
 	# animation
 	for sprite: AnimatedSprite2D in sprites:
 		# direction
 		sprite.play(direction)
+
+		# activate correct occluder
+		for occluder: LightOccluder2D in occluders_group.get_children():
+			if occluder.name == direction:
+				occluder.visible = true
+			else:
+				occluder.visible = false
 
 	# hop (when moving)
 	if (velocity != Vector2.ZERO):

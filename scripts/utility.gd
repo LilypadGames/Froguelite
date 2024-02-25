@@ -6,7 +6,7 @@ func create_sprite(texture: String, sprite_name: String, sprite_group: CanvasGro
 	var sprite_data = Cache.registry["textures"][texture]
 
 	# singular sprite
-	if typeof(sprite_data) == 4: # 4 means that the type is a String
+	if typeof(sprite_data) == TYPE_STRING:
 		# create sprite
 		var sprite: Sprite2D = Sprite2D.new()
 		sprite_group.add_child(sprite)
@@ -69,3 +69,27 @@ func create_sprite(texture: String, sprite_name: String, sprite_group: CanvasGro
 				default_anim_set = true
 
 		return animated_sprite
+
+# create occluder from animated sprite (currently only works with animated sprites where animations only have 1 frame)
+func create_occluder_from_sprite(sprite: AnimatedSprite2D, parent: Node2D) -> void:
+	# generate per animation
+	for animation_name in sprite.sprite_frames.get_animation_names():
+		# get animation frame image
+		var image: Image = sprite.sprite_frames.get_frame_texture(animation_name, 0).get_image()
+
+		# get polygon from bitmap version of image
+		var bitmap = BitMap.new()
+		bitmap.create_from_image_alpha(image)
+		var polys = bitmap.opaque_to_polygons(Rect2(Vector2.ZERO, image.get_size()), 0.0)
+
+		# create occluder
+		var occluder: LightOccluder2D = LightOccluder2D.new()
+		occluder.name = animation_name
+		occluder.visible = false
+		parent.add_child(occluder)
+		occluder.set_owner(get_tree().get_edited_scene_root())
+
+		# create occluder polygon
+		occluder.occluder = OccluderPolygon2D.new()
+		occluder.occluder.polygon = polys[0]
+		occluder.position -= (sprite.sprite_frames.get_frame_texture(animation_name, 0).get_size() / 2)
