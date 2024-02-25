@@ -54,7 +54,7 @@ func _ready() -> void:
 	# FIXME: PerfBullets addon only works on Windows platform, for now.
 	if OS.get_name() == "Windows":
 		# set projectile spawner object
-		load("res://objects/ProjectileSpawner.tscn")
+		projectile_spawner_scene = load("res://objects/ProjectileSpawner.tscn")
 
 		# create projectiles
 		for spell in Cache.data["player"]["inventory"]["spells"]:
