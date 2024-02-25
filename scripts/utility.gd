@@ -41,7 +41,7 @@ func create_sprite(texture: String, sprite_name: String, sprite_group: CanvasGro
 			spacing = sprite_data["spacing"]
 
 		# get animations
-		var animations: Dictionary = sprite_data["anims"]
+		var animations: Dictionary = sprite_data["animations"]
 
 		# create animations with frames
 		var default_anim_set := false
@@ -57,7 +57,7 @@ func create_sprite(texture: String, sprite_name: String, sprite_group: CanvasGro
 				# create frames
 				var atlas_texture = AtlasTexture.new()
 				atlas_texture.atlas = sprite_sheet
-				atlas_texture.region = Rect2((start_frame * sprite_data["frameWidth"]) + (start_frame * spacing), 0, sprite_data["frameWidth"], sprite_data["frameHeight"])
+				atlas_texture.region = Rect2((start_frame * sprite_data["frame_width"]) + (start_frame * spacing), 0, sprite_data["frame_width"], sprite_data["frame_height"])
 				sprite_frames.add_frame(anim, atlas_texture)
 
 			# get default anim

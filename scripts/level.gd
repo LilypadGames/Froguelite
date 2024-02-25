@@ -40,6 +40,7 @@ var level_object_data: Node2D
 # constants
 const teleporter_path := "res://objects/Teleporter.tscn"
 const lootable_path := "res://objects/Lootable.tscn"
+const enemy_path := "res://objects/Enemy.tscn"
 
 func _ready() -> void:
 	# give player HUD reference
@@ -82,6 +83,7 @@ func _init_static_level() -> void:
 
 	# set up collisions
 	colliders = Node2D.new()
+	colliders.position = Vector2(1, -1)
 	colliders.name = "Colliders"
 	level.add_child(colliders)
 	for tilemap in level.get_children():
@@ -129,6 +131,16 @@ func _init_static_level() -> void:
 
 				# set position
 				lootable.position = object_data.position
+
+			# enemy
+			elif type == "enemy":
+				var enemy: Enemy = preload(enemy_path).instantiate().setup(object_data.get_meta("id")) as Enemy
+
+				# add to enemy group
+				enemies.add_child(enemy)
+
+				# set position
+				enemy.position = object_data.position
 
 func _init_procedural_level() -> void:
 	# generate level seed
@@ -335,7 +347,7 @@ func _generate_tiles(chunk_position: Vector2i, tile_type: String, layer: int, ti
 						tile_id = tileset_tiles["source_id"][tile_type][weight_index]
 
 					# add tile
-					infinite_tilemap.set_cell(layer, Vector2i(tile_position.x, tile_position.y), tile_id, Vector2i(0, 0))
+					infinite_tilemap.set_cell(layer, tile_position, tile_id, Vector2i(0, 0))
 			else:
 				# add colliders to empty tiles
 				for offset in surrounding_tile_offsets:
@@ -344,7 +356,7 @@ func _generate_tiles(chunk_position: Vector2i, tile_type: String, layer: int, ti
 
 					# add wall tile
 					if _is_filled_at_noise_position(tile_position + Vector2i(0, 1)):
-						infinite_tilemap.set_cell(2, Vector2i(tile_position.x, tile_position.y), wall_tile_source, Vector2i(0, 0))
+						infinite_tilemap.set_cell(2, tile_position, wall_tile_source, Vector2i(0, 0))
 
 					# add collider to empty space if theres a filled tile near it
 					if _is_filled_at_noise_position(neighbor_pos):

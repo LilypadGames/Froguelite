@@ -1,15 +1,8 @@
 {
 	"texture": "pp",
-	"type": "player",
 	"stats": {
-		"health": 25,
-		"speed": 0.35
-	},
-	"details": {
-		"healthbar": {
-			"scale": 6,
-			"width": 160
-		}
+		"health": 2,
+		"speed_scale": 1.0
 	},
 	"equipped": {
 		"spell": "snot_bubble"

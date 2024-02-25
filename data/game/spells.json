@@ -1,12 +1,8 @@
 {
 	"snot_bubble": {
-		"texture": {
-			"active": "snot_bubble",
-			"end": "snot_bubble_pop"
-		},
+		"texture": "snot_bubble",
 		"sounds": {
 			"start": "sfx_shoot",
-			"success": "sfx_pop_success",
 			"fail": "sfx_pop_fail"
 		},
 		"damage": 2,
@@ -14,10 +10,36 @@
 		"radius": 3,
 		"scale": 0.8,
 		"lifespan": 10,
-		"firerate": 0.4,
+		"fire_buffer": 1,
 		"inventory": {
 			"texture": "gui_snot_bubble",
 			"scale": 6
+		}
+	},
+	"stench_ball": {
+		"texture": "stench_ball",
+		"damage": 1,
+		"speed": 120,
+		"collision_radius": 4,
+		"lifespan": 5,
+		"fire_buffer": 0.2,
+		"quantity": 5,
+		"random_radius": 360
+	},
+	"stench_ball_large": {
+		"texture": "stench_ball",
+		"damage": 1,
+		"speed": 100,
+		"scale": 1.3,
+		"collision_radius": 5,
+		"lifespan": 5,
+		"fire_buffer": 0.1,
+		"quantity": 5,
+		"spin": {
+			"acceleration": 0.35,
+			"min": -1,
+			"max": 1,
+			"restart_on_cycle": true
 		}
 	}
 }

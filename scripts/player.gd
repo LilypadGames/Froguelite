@@ -6,15 +6,15 @@ const MOUSE_DOWN_TURN_THRESHOLD := 0.5
 
 # properties
 @export_category("Properties")
-@export var movement_speed: float = 5000
-@export var hearts: int = 1 :
+@export var movement_scale: float = Cache.data["player"]["stats"]["speed_scale"]
+@export var hearts: int = ceil(Cache.data["player"]["stats"]["health"] / 2):
 	set (value):
 		# clamp value
 		hearts = clamp(value, 1, INF)
 
 		# update hud
 		hud.update_hearts()
-@export var health: int = hearts * 2 :
+@export var health: int = Cache.data["player"]["stats"]["health"]:
 	set (value):
 		# clamp value
 		health = clamp(value, 0, hearts * 2)
@@ -38,7 +38,7 @@ var sprites: Array[AnimatedSprite2D]
 
 # internal
 var input_vector: Vector2 = Vector2.ZERO
-var movement_scale: float = 1.0
+var movement_speed: float = 5000
 var direction: String = "right"
 var input_direction: String
 var mouse_down_direction: String
@@ -72,7 +72,7 @@ func _physics_process(delta: float) -> void:
 	input_vector = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
 	# reset movement scale
-	movement_scale = 1.0
+	var movement_scale_temp = movement_scale
 
 	# detect input based direction
 	if velocity.x > 0:
@@ -86,10 +86,10 @@ func _physics_process(delta: float) -> void:
 
 	# reduce movement scale if input and mouse down direction are not the same
 	if not mouse_down_direction.is_empty() and input_direction != mouse_down_direction:
-		movement_scale *= 0.6
+		movement_scale_temp *= 0.6
 
 	# calculate velocity
-	velocity = (input_vector * (movement_speed * movement_scale) * delta)
+	velocity = (input_vector * (movement_speed * movement_scale_temp) * delta)
 
 	# apply movement
 	move_and_slide()
