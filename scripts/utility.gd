@@ -70,17 +70,32 @@ func create_sprite(texture: String, sprite_name: String, sprite_group: CanvasGro
 
 		return animated_sprite
 
+# get polygons from image
+func get_polygons_from_image(image: Image) -> Array[PackedVector2Array]:
+	# get bitmap from image
+	var bitmap = BitMap.new()
+	bitmap.create_from_image_alpha(image)
+
+	# convert bitmap to polygons
+	var polygons = bitmap.opaque_to_polygons(Rect2(Vector2.ZERO, image.get_size()), 0.0)
+
+	# re-create shifted polygons
+	var new_polygons: Array[PackedVector2Array] = []
+	for polygon: PackedVector2Array in polygons:
+		# shift points in polygon and recreate PackedVector2Array
+		var new_polygon: Array[Vector2] = []
+		for vector: Vector2 in polygon:
+			new_polygon.push_back(vector - ((Vector2(image.get_size())) / 2.0))
+		new_polygons.push_back(PackedVector2Array(new_polygon))
+
+	return new_polygons
+
 # create occluder from animated sprite (currently only works with animated sprites where animations only have 1 frame)
-func create_occluder_from_sprite(sprite: AnimatedSprite2D, parent: Node2D) -> void:
+func create_occluders_from_animated_sprite(sprite: AnimatedSprite2D, parent: Node2D) -> void:
 	# generate per animation
 	for animation_name in sprite.sprite_frames.get_animation_names():
-		# get animation frame image
-		var image: Image = sprite.sprite_frames.get_frame_texture(animation_name, 0).get_image()
-
-		# get polygon from bitmap version of image
-		var bitmap = BitMap.new()
-		bitmap.create_from_image_alpha(image)
-		var polys = bitmap.opaque_to_polygons(Rect2(Vector2.ZERO, image.get_size()), 0.0)
+		# get polygons from image
+		var polys = get_polygons_from_image(sprite.sprite_frames.get_frame_texture(animation_name, 0).get_image())
 
 		# create occluder
 		var occluder: LightOccluder2D = LightOccluder2D.new()

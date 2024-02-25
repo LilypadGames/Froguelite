@@ -24,13 +24,15 @@ const MOUSE_DOWN_TURN_THRESHOLD := 0.5
 
 # references
 @export_category("References")
-@onready var sprite_group: CanvasGroup = %Sprites
 @onready var anim_player: AnimationPlayer = %AnimationPlayer
 @onready var character_texture: String = Cache.data["player"]["texture"]
+@onready var sprite_group: CanvasGroup = %Sprites
 @onready var projectiles_group: Node2D = %Projectiles
 @onready var occluders_group: Node2D = %Occluders
+@onready var collider: CollisionPolygon2D = %Collider
 @export var projectile_spawner_scene: PackedScene
 var projectiles: Dictionary = {}
+var colliders: Dictionary = {}
 var hud: HUD
 
 # internal
@@ -47,9 +49,15 @@ func _ready() -> void:
 	# create sprites
 	sprites.push_back(Utility.create_sprite(character_texture, "Character", sprite_group))
 
+	# create colliders
+	for sprite in sprites:
+		for animation_name in sprite.sprite_frames.get_animation_names():
+			# get polygons from image
+			colliders[animation_name] = Utility.get_polygons_from_image(sprite.sprite_frames.get_frame_texture(animation_name, 0).get_image())[0]
+
 	# create occluders
 	for sprite in sprites:
-		Utility.create_occluder_from_sprite(sprite, occluders_group)
+		Utility.create_occluders_from_animated_sprite(sprite, occluders_group)
 
 	# FIXME: PerfBullets addon only works on Windows platform, for now.
 	if OS.get_name() == "Windows":
@@ -105,12 +113,15 @@ func _physics_process(delta: float) -> void:
 		# direction
 		sprite.play(direction)
 
-		# activate correct occluder
-		for occluder: LightOccluder2D in occluders_group.get_children():
-			if occluder.name == direction:
-				occluder.visible = true
-			else:
-				occluder.visible = false
+	# activate correct occluder
+	for occluder: LightOccluder2D in occluders_group.get_children():
+		if occluder.name == direction:
+			occluder.visible = true
+		else:
+			occluder.visible = false
+
+	# set collider
+	collider.polygon = colliders[direction]
 
 	# hop (when moving)
 	if (velocity != Vector2.ZERO):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://d00vibmf4lv6g"]
+[gd_scene load_steps=7 format=3 uid="uid://d00vibmf4lv6g"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ab6d8"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_hud5r"]
@@ -7,9 +7,6 @@
 shader = ExtResource("2_hud5r")
 shader_parameter/line_color = Color(0, 0, 0, 1)
 shader_parameter/line_thickness = 0.5
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dgjml"]
-size = Vector2(8, 8)
 
 [sub_resource type="Animation" id="Animation_24m32"]
 length = 0.001
@@ -41,6 +38,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_dqfo6"]
 resource_name = "hop"
 length = 0.3
+step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -94,11 +92,11 @@ unique_name_in_owner = true
 [node name="Occluders" type="Node2D" parent="Character"]
 unique_name_in_owner = true
 
-[node name="Collider" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_dgjml")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_k4q3f")
 }
+
+[node name="Collider" type="CollisionPolygon2D" parent="."]
+unique_name_in_owner = true
