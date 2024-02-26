@@ -45,13 +45,19 @@
 				"trigger": "default",
 				"actions": [
 					{
-						"type": "spell",
-						"id": "stench_ball",
+						"type": "spells",
+						"spells": [
+							"stench_ball_spiral",
+							"gravity_well_pulse"
+						],
 						"time": 4.0
 					},
 					{
-						"type": "idle",
-						"time": 1.5
+						"type": "spells",
+						"spells": [
+							"stench_ball_pulse"
+						],
+						"time": 1.0
 					}
 				]
 			},
@@ -62,8 +68,10 @@
 				},
 				"actions": [
 					{
-						"type": "spell",
-						"id": "stench_ball_large",
+						"type": "spells",
+						"spells": [
+							"stench_ball_large_spiral" 
+						],
 						"time": 3.0
 					},
 					{

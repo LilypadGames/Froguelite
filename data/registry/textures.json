@@ -63,6 +63,20 @@
 			}
 		}
 	},
+	"gravity_well": {
+		"spritesheet": "res://assets/texture/spell/gravity_well.png",
+		"frame_width": 96,
+		"frame_height": 80,
+		"animations": {
+			"active": {
+				"frame_rate": 0.1,
+				"frames": {
+					"start": 0,
+					"end": 19
+				}
+			}
+		}
+	},
 	"healthbar_full_left": "res://assets/texture/gui/healthbar/full_left.png",
 	"healthbar_full_middle": "res://assets/texture/gui/healthbar/full_middle.png",
 	"healthbar_full_right": "res://assets/texture/gui/healthbar/full_right.png",

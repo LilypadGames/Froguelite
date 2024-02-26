@@ -83,12 +83,17 @@ func _ready() -> void:
 		# set projectile spawner object
 		projectile_spawner_scene = load("res://objects/ProjectileSpawner.tscn")
 
-		# create spells
+		# loop through phases
 		for phase in enemy_data["phases"]:
+			# loop through phase actions
 			for action in phase["actions"]:
-				# spell not already added
-				if action["type"] == "spell" and not projectiles.has(action["id"]):
-					_create_projectile(action["id"])
+				# spell action
+				if action["type"] == "spells":
+					# loop through spells
+					for spell in action["spells"]:
+						# spell not already added
+						if not projectiles.has(spell):
+							_create_projectile(spell)
 
 	# set up phases
 	if type == "boss":
@@ -144,9 +149,11 @@ func _physics_process(_delta: float) -> void:
 			# get current phase action
 			var action = phase_actions[phase_index][phase_action_index]
 
-			# spell
-			if action["type"] == "spell":
-				(projectiles[action["id"]] as ProjectileSpawner).fire()
+			# spell action
+			if action["type"] == "spells":
+				# play each spell
+				for spell in action["spells"]:
+					(projectiles[spell] as ProjectileSpawner).fire()
 
 func _create_projectile(spell_name: String) -> void:
 	# create new projectile spawner
