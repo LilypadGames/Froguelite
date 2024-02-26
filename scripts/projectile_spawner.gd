@@ -19,8 +19,8 @@ func setup(_spell_id: String) -> ProjectileSpawner:
 	name = spell_id
 	if spell_data.has("speed"):
 		bulletType.initialSpeed = spell_data["speed"]
-	if spell_data.has("collision_radius"):
-		(bulletType._shape as CircleShape2D).radius = spell_data["collision_radius"]
+	#if spell_data.has("collision_radius"):
+		#(bulletType._shape as CircleShape2D).radius = spell_data["collision_radius"]
 	if spell_data.has("scale"):
 		bulletType.scale = spell_data["scale"]
 	if spell_data.has("lifespan"):
@@ -51,13 +51,27 @@ func setup(_spell_id: String) -> ProjectileSpawner:
 	# set up projectile texture
 	var texture_data = Cache.registry["textures"][spell_data["texture"]]
 	if typeof(texture_data) == TYPE_STRING:
+		# load texture
 		texture = load(texture_data)
+
+		# set up collision
+		(bulletType._shape as CircleShape2D).radius = (((texture as Texture2D).get_size().y) / 8) * bulletType.scale
+		prints(spell_id, (bulletType._shape as CircleShape2D).radius)
 	else:
+		# load texture
 		texture = load(texture_data["spritesheet"])
+
+		# set animation data
 		var texture_size = (texture as Texture2D).get_size()
-		rowsInAtlas = texture_size.x / texture_data["frame_width"]
-		columnsInAtlas = texture_size.y / texture_data["frame_height"]
+		var sprite_size = Vector2i(texture_data["frame_width"], texture_data["frame_height"])
+		var atlas_size = Vector2(texture_size.x / sprite_size.x, texture_size.y / sprite_size.y)
+		rowsInAtlas = atlas_size.x
+		columnsInAtlas = atlas_size.y
 		bulletType.animationSpeed = texture_data["animations"]["active"]["frame_rate"]
+
+		# set up collision
+		(bulletType._shape as CircleShape2D).radius = (sprite_size.y / 8) * bulletType.scale
+		prints(spell_id, (bulletType._shape as CircleShape2D).radius, sprite_size, bulletType.scale)
 
 	return self
 

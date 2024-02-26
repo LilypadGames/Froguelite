@@ -7,7 +7,6 @@
 		},
 		"damage": 2,
 		"speed": 80,
-		"collision_radius": 2,
 		"scale": 0.8,
 		"lifespan": 10,
 		"fire_buffer": 1,
@@ -20,7 +19,6 @@
 		"texture": "stench_ball",
 		"damage": 1,
 		"speed": 120,
-		"collision_radius": 3,
 		"lifespan": 5,
 		"fire_buffer": 0.25,
 		"quantity": 3,
@@ -34,7 +32,6 @@
 		"texture": "gravity_well",
 		"damage": 1,
 		"speed": 50,
-		"collision_radius": 3,
 		"scale": 0.4,
 		"lifespan": 5,
 		"fire_buffer": 1.5,
@@ -49,7 +46,6 @@
 		"texture": "stench_ball",
 		"damage": 1,
 		"speed": 160,
-		"collision_radius": 3,
 		"scale": 1.2,
 		"lifespan": 5,
 		"fire_buffer": 0.33,
@@ -63,9 +59,7 @@
 	"stench_ball_large_spiral": {
 		"texture": "stench_ball",
 		"damage": 1,
-		"speed": 100,
 		"scale": 1.3,
-		"collision_radius": 4.5,
 		"lifespan": 5,
 		"fire_buffer": 0.25,
 		"quantity": 4,
@@ -73,6 +67,20 @@
 			"acceleration": 1,
 			"min": -2,
 			"max": 2
+		}
+	},
+	"gravity_well_large_pulse": {
+		"texture": "gravity_well",
+		"damage": 1,
+		"speed": 80,
+		"scale": 0.6,
+		"lifespan": 5,
+		"fire_buffer": 1,
+		"quantity": 6,
+		"spin": {
+			"acceleration": 0.10,
+			"min": 0,
+			"max": 1,
 		}
 	}
 }

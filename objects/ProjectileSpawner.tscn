@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://scripts/projectile_spawner.gd" id="2_ghixp"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_lyllt"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_q3lin"]
 
 [sub_resource type="BulletType" id="BulletType_nrvn3"]
-_shape = SubResource("CircleShape2D_lyllt")
+_shape = SubResource("CircleShape2D_q3lin")
 mask = 11
 collideWithBodies = true
 

@@ -73,6 +73,13 @@
 							"stench_ball_large_spiral"
 						],
 						"time": 3.0
+					},
+					{
+						"type": "spells",
+						"spells": [
+							"gravity_well_large_pulse"
+						],
+						"time": 0.2
 					}
 				]
 			}
