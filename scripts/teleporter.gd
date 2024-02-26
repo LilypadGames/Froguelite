@@ -5,9 +5,9 @@ extends Interactable
 var destination: String
 
 # init properties
-func setup(new_id: String, hud_reference: HUD) -> Teleporter:
+func setup(_id: String, hud_reference: HUD) -> Teleporter:
 	# save ID
-	id = new_id
+	id = _id
 
 	# save hud reference
 	hud = hud_reference
@@ -16,7 +16,7 @@ func setup(new_id: String, hud_reference: HUD) -> Teleporter:
 	type = Cache.data["teleporters"][id]["type"]
 
 	# get texture
-	texture = Cache.data["interactables"][type]["texture"]
+	texture_key = Cache.data["interactables"][type]["texture"]
 
 	# get properties
 	destination = Cache.data["teleporters"][id]["destination"]

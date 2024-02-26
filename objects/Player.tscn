@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d00vibmf4lv6g"]
+[gd_scene load_steps=9 format=3 uid="uid://d00vibmf4lv6g"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ab6d8"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_hud5r"]
@@ -70,6 +70,18 @@ _data = {
 "hop": SubResource("Animation_dqfo6")
 }
 
+[sub_resource type="Gradient" id="Gradient_232yt"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.691667, 0.695833)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_86syo"]
+gradient = SubResource("Gradient_232yt")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 collision_layer = 4
 collision_mask = 9
@@ -100,3 +112,16 @@ libraries = {
 
 [node name="Collider" type="CollisionPolygon2D" parent="."]
 unique_name_in_owner = true
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
+position = Vector2(0, -10)
+blend_mode = 2
+shadow_item_cull_mask = 3
+texture = SubResource("GradientTexture2D_86syo")
+
+[node name="PointLight2D2" type="PointLight2D" parent="PointLight2D"]
+blend_mode = 2
+range_item_cull_mask = 2
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_86syo")

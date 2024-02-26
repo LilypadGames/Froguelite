@@ -90,21 +90,16 @@ func get_polygons_from_image(image: Image) -> Array[PackedVector2Array]:
 
 	return new_polygons
 
-# create occluder from animated sprite (currently only works with animated sprites where animations only have 1 frame)
-func create_occluders_from_animated_sprite(sprite: AnimatedSprite2D, parent: Node2D) -> void:
-	# generate per animation
-	for animation_name in sprite.sprite_frames.get_animation_names():
-		# get polygons from image
-		var polys = get_polygons_from_image(sprite.sprite_frames.get_frame_texture(animation_name, 0).get_image())
+# takes a polygon and creates an occluder from them
+func create_occluder(polygon: PackedVector2Array, parent: Node2D, scale: Vector2 = Vector2.ONE, _name: String = "") -> void:
+	# create occluder
+	var occluder: LightOccluder2D = LightOccluder2D.new()
+	if _name != "":
+		occluder.name = _name
+	parent.add_child(occluder)
+	occluder.scale = scale
+	occluder.set_owner(get_tree().get_edited_scene_root())
 
-		# create occluder
-		var occluder: LightOccluder2D = LightOccluder2D.new()
-		occluder.name = animation_name
-		occluder.visible = false
-		parent.add_child(occluder)
-		occluder.set_owner(get_tree().get_edited_scene_root())
-
-		# create occluder polygon
-		occluder.occluder = OccluderPolygon2D.new()
-		occluder.occluder.polygon = polys[0]
-		occluder.position -= (sprite.sprite_frames.get_frame_texture(animation_name, 0).get_size() / 2)
+	# create occluder polygon
+	occluder.occluder = OccluderPolygon2D.new()
+	occluder.occluder.polygon = polygon

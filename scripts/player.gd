@@ -52,12 +52,11 @@ func _ready() -> void:
 	# create colliders
 	for sprite in sprites:
 		for animation_name in sprite.sprite_frames.get_animation_names():
-			# get polygons from image
+			# get polygon from image
 			colliders[animation_name] = Utility.get_polygons_from_image(sprite.sprite_frames.get_frame_texture(animation_name, 0).get_image())[0]
 
-	# create occluders
-	for sprite in sprites:
-		Utility.create_occluders_from_animated_sprite(sprite, occluders_group)
+			# create occluder
+			Utility.create_occluder(colliders[animation_name], occluders_group, sprite.scale, animation_name)
 
 	# FIXME: PerfBullets addon only works on Windows platform, for now.
 	if OS.get_name() == "Windows":

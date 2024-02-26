@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://nq5yxtyek6f2"]
+[gd_scene load_steps=4 format=3 uid="uid://nq5yxtyek6f2"]
 
 [ext_resource type="Script" path="res://scripts/teleporter.gd" id="1_m15y5"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_0iqm3"]
@@ -7,9 +7,6 @@
 shader = ExtResource("2_0iqm3")
 shader_parameter/line_color = Color(0, 0, 0, 1)
 shader_parameter/line_thickness = 2.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2hddu"]
-size = Vector2(0, 0)
 
 [node name="Teleporter" type="StaticBody2D"]
 collision_layer = 2
@@ -20,17 +17,20 @@ script = ExtResource("1_m15y5")
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_0ub0k")
 
-[node name="Collider" type="CollisionShape2D" parent="."]
+[node name="Occluders" type="Node2D" parent="."]
 unique_name_in_owner = true
-shape = SubResource("RectangleShape2D_2hddu")
+
+[node name="PhysicsCollider" type="CollisionPolygon2D" parent="."]
+unique_name_in_owner = true
 
 [node name="InteractSensor" type="Area2D" parent="."]
-unique_name_in_owner = true
 collision_layer = 0
 collision_mask = 4
+input_pickable = false
+monitorable = false
 
-[node name="Collider" type="CollisionShape2D" parent="InteractSensor"]
-shape = SubResource("RectangleShape2D_2hddu")
+[node name="SensorCollider" type="CollisionPolygon2D" parent="InteractSensor"]
+unique_name_in_owner = true
 
 [connection signal="body_entered" from="InteractSensor" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="InteractSensor" to="." method="_on_body_exited"]

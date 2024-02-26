@@ -6,9 +6,9 @@ var sounds: Dictionary
 var loot: String
 
 # init properties
-func setup(new_id: String, hud_reference: HUD) -> Lootable:
+func setup(_id: String, hud_reference: HUD) -> Lootable:
 	# save ID
-	id = new_id
+	id = _id
 
 	# save hud reference
 	hud = hud_reference
@@ -17,7 +17,7 @@ func setup(new_id: String, hud_reference: HUD) -> Lootable:
 	type = Cache.data["lootables"][id]["type"]
 
 	# get texture
-	texture = Cache.data["interactables"][type]["texture"]
+	texture_key = Cache.data["interactables"][type]["texture"]
 
 	# get sounds
 	sounds = Cache.data["interactables"][type]["sounds"]
