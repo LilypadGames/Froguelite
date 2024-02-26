@@ -33,7 +33,7 @@ var character_texture: String
 var sprites: Array = []
 var projectiles: Dictionary = {}
 var phase_actions: Array[Array] = [[{}]]
-@onready var collider: CollisionShape2D = %Collider
+#@onready var physics_collider: CollisionPolygon2D = %Collider
 @onready var sprite_group: CanvasGroup = %Sprites
 @onready var projectiles_group: Node2D = %Projectiles
 @onready var occluders_group: Node2D = %Occluders
@@ -43,9 +43,9 @@ var phase_actions: Array[Array] = [[{}]]
 # internal
 var id: String
 var type: String
-var movement_speed: float = 5000
-var direction: String = "right"
 var projectile_spawner_scene: PackedScene
+var polygons: Dictionary = {}
+var physics_collider: CollisionPolygon2D
 
 # init properties
 func setup(new_id: String) -> Enemy:
@@ -70,15 +70,57 @@ func _ready() -> void:
 	# create sprites
 	sprites.push_back(Utility.create_sprite(character_texture, "Character", sprite_group))
 
-	# set collider size, depending on sprite type
-	if sprites[0].get_class() == "Sprite2D":
-		collider.shape.extents = sprites[0].texture.get_size() / 2
+	# set up sprite
+	if sprites[0] is Sprite2D:
+		# create polygon
+		var _polygons = Utility.get_polygons_from_image(sprites[0].texture.get_image())
+
+		# create colliders and occluders
+		for polygon in _polygons:
+			var _physics_collider = CollisionPolygon2D.new()
+			_physics_collider.polygon = polygon
+			add_child(_physics_collider)
+
+			# create occluder
+			Utility.create_occluder(polygon, self, sprites[0].scale)
+
+	# set up animated sprite
+	elif sprites[0] is AnimatedSprite2D:
+		# init collider
+		physics_collider = CollisionPolygon2D.new()
+		add_child(physics_collider)
+
+		# create polygon and occluder
+		for animation_name in sprites[0].sprite_frames.get_animation_names():
+			# create polygon
+			polygons[animation_name] = Utility.get_polygons_from_image(sprites[0].sprite_frames.get_frame_texture(animation_name, 0).get_image())[0]
+
+			# create occluder
+			Utility.create_occluder(polygons[animation_name], occluders_group, sprites[0].scale, animation_name)
 
 	# init boss phases
 	if type == "boss":
 		_init_phases()
 
 func _physics_process(_delta: float) -> void:
+	# set polygon based on animation
+	if not polygons.is_empty():
+		# get current animation
+		var animation: StringName = (sprites[0] as AnimatedSprite2D).animation
+
+		# get current polygon
+		var polygon = polygons[animation]
+
+		# set colliders
+		physics_collider.polygon = polygon
+
+		# set occluder
+		for occluder: LightOccluder2D in occluders_group.get_children():
+			if occluder.name == animation:
+				occluder.visible = true
+			else:
+				occluder.visible = false
+
 	# run boss phases
 	if type == "boss":
 		_run_phase()

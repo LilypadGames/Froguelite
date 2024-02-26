@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b6ro37633e8vu"]
+[gd_scene load_steps=4 format=3 uid="uid://b6ro37633e8vu"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_c60qw"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_gqsd4"]
@@ -7,9 +7,6 @@
 shader = ExtResource("2_gqsd4")
 shader_parameter/line_color = Color(0, 0, 0, 1)
 shader_parameter/line_thickness = 0.5
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dgjml"]
-size = Vector2(8, 8)
 
 [node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 8
@@ -32,10 +29,6 @@ unique_name_in_owner = true
 
 [node name="Occluders" type="Node2D" parent="Character"]
 unique_name_in_owner = true
-
-[node name="Collider" type="CollisionShape2D" parent="."]
-unique_name_in_owner = true
-shape = SubResource("RectangleShape2D_dgjml")
 
 [node name="ActionTimer" type="Timer" parent="."]
 unique_name_in_owner = true
