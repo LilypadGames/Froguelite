@@ -70,13 +70,9 @@
 					{
 						"type": "spells",
 						"spells": [
-							"stench_ball_large_spiral" 
+							"stench_ball_large_spiral"
 						],
 						"time": 3.0
-					},
-					{
-						"type": "idle",
-						"time": 0.5
 					}
 				]
 			}

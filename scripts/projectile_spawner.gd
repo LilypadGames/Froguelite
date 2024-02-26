@@ -1,6 +1,9 @@
 class_name ProjectileSpawner
 extends Spawner
 
+# signals
+signal player_hit
+
 # references
 var timer: Timer
 var spell_id: String
@@ -28,6 +31,8 @@ func setup(_spell_id: String) -> ProjectileSpawner:
 		(bulletType._shape as CircleShape2D).radius = spell_data["fire_radius"]
 	if spell_data.has("quantity"):
 		bulletsPerRadius = spell_data["quantity"]
+	if spell_data.has("radii"):
+		numberOfRadii = spell_data["radii"]
 	if spell_data.has("spin"):
 		if spell_data["spin"].has("rate"):
 			spinRate = spell_data["spin"]["rate"]
@@ -81,7 +86,11 @@ func _on_bullet_hit(result: Array, bulletIndex: int, _spawner: Object) -> void:
 	var collider: Node2D = result[0]["collider"]
 
 	# collided with lootable
-	if collider is Lootable:
+	if collider is Player:
+		# delete all projectiles
+		player_hit.emit()
+
+	elif collider is Lootable:
 		# get projectile
 		var projectile: BulProps = get_bullet_from_index(bulletIndex)
 

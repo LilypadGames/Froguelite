@@ -39,5 +39,10 @@ shape = SubResource("RectangleShape2D_dgjml")
 
 [node name="ActionTimer" type="Timer" parent="."]
 unique_name_in_owner = true
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
 
 [connection signal="timeout" from="ActionTimer" to="." method="_advance_phase_action"]
