@@ -24,5 +24,6 @@
 		"res://assets/audio/sfx/hit_metal_2.ogg",
 		"res://assets/audio/sfx/hit_metal_3.ogg",
 		"res://assets/audio/sfx/hit_metal_4.ogg"
-	]
+	],
+	"sfx_hurt": "res://assets/audio/sfx/hurt.ogg"
 }

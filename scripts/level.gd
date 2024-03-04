@@ -55,7 +55,7 @@ func _ready() -> void:
 	# get level type
 	level_type = Cache.registry["world"]["level"][level_name]["type"]
 
-	# instantiate timemap level
+	# instantiate tilemap level
 	if level_type == "tilemap":
 		level = load(Cache.registry["world"]["level"][level_name]["file"]).instantiate()
 		_init_static_level()

@@ -24,7 +24,7 @@ const MOUSE_DOWN_TURN_THRESHOLD := 0.5
 
 # references
 @export_category("References")
-@onready var anim_player: AnimationPlayer = %AnimationPlayer
+@onready var anim_tree: AnimationTree = %AnimationTree
 @onready var character_texture: String = Cache.data["player"]["texture"]
 @onready var sprite_group: CanvasGroup = %Sprites
 @onready var projectiles_group: Node2D = %Projectiles
@@ -123,8 +123,9 @@ func _physics_process(delta: float) -> void:
 	collider.polygon = colliders[direction]
 
 	# hop (when moving)
-	if (velocity != Vector2.ZERO):
-		anim_player.play("hop")
+	if (velocity != Vector2.ZERO) and anim_tree.get("parameters/State/transition_request") != "hop":
+		#anim_player.play("hop")
+		anim_tree.set("parameters/State/transition_request", "hop")
 
 	# FIXME: PerfBullets addon only works on Windows platform, for now.
 	if OS.get_name() == "Windows":
@@ -161,3 +162,16 @@ func _input(_event: InputEvent) -> void:
 
 			# reset click direction
 			mouse_down_direction = ""
+
+# when hit by an enemy/projectile
+func hurt(body: Node2D) -> void:
+	# play sound effect (pitched to health percent)
+	SoundManager.play_sound(Cache.get_stream(Cache.data["player"]["sounds"]["hurt"]))
+
+	# play hurt animation
+	anim_tree.set("parameters/Hurt/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+
+	# hit by projectile
+	if body is ProjectileSpawner:
+		# deal damage
+		health -= body.damage

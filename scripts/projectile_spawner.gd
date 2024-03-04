@@ -8,12 +8,18 @@ signal player_hit
 var timer: Timer
 var spell_id: String
 
+# properties
+@export var damage: int
+
 func setup(_spell_id: String) -> ProjectileSpawner:
 	# store spell name
 	spell_id = _spell_id
 
 	# get spell data
 	var spell_data: Dictionary = Cache.data["spells"][spell_id]
+
+	# store spell properties
+	damage = spell_data["damage"]
 
 	# set up projectile behavior
 	name = spell_id
@@ -103,6 +109,9 @@ func _on_bullet_hit(result: Array, bulletIndex: int, _spawner: Object) -> void:
 	if collider is Player:
 		# delete all projectiles
 		player_hit.emit()
+
+		# hit player
+		collider.hurt(self)
 
 	elif collider is Lootable:
 		# get projectile

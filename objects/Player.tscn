@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://d00vibmf4lv6g"]
+[gd_scene load_steps=16 format=3 uid="uid://d00vibmf4lv6g"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ab6d8"]
 [ext_resource type="Shader" path="res://assets/shader/outline.gdshader" id="2_hud5r"]
@@ -34,6 +34,18 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(0, 0)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character/Sprites:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_dqfo6"]
 resource_name = "hop"
@@ -64,11 +76,65 @@ tracks/1/keys = {
 "values": [Vector2(0, 0), Vector2(0, -2), Vector2(0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_xpagf"]
+resource_name = "hurt"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character/Sprites:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.960784, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k4q3f"]
 _data = {
 "RESET": SubResource("Animation_24m32"),
-"hop": SubResource("Animation_dqfo6")
+"hop": SubResource("Animation_dqfo6"),
+"hurt": SubResource("Animation_xpagf")
 }
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xk71c"]
+animation = &"hop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r0sad"]
+animation = &"hurt"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ro4vy"]
+filter_enabled = true
+filters = ["Character/Sprites:modulate"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mr5ne"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_kdmfq"]
+sync = true
+input_0/name = "idle"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "hop"
+input_1/auto_advance = true
+input_1/reset = true
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_esdru"]
+graph_offset = Vector2(-598.612, 78.6184)
+nodes/Hop/node = SubResource("AnimationNodeAnimation_xk71c")
+nodes/Hop/position = Vector2(-280, 220)
+nodes/Hurt/node = SubResource("AnimationNodeOneShot_ro4vy")
+nodes/Hurt/position = Vector2(120, 180)
+"nodes/Hurt Anim/node" = SubResource("AnimationNodeAnimation_r0sad")
+"nodes/Hurt Anim/position" = Vector2(-140, 380)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_mr5ne")
+nodes/Idle/position = Vector2(-280, 80)
+nodes/State/node = SubResource("AnimationNodeTransition_kdmfq")
+nodes/State/position = Vector2(-140, 100)
+nodes/output/position = Vector2(280, 180)
+node_connections = [&"Hurt", 0, &"State", &"Hurt", 1, &"Hurt Anim", &"State", 0, &"Idle", &"State", 1, &"Hop", &"output", 0, &"Hurt"]
 
 [sub_resource type="Gradient" id="Gradient_232yt"]
 interpolation_mode = 1
@@ -105,10 +171,24 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_k4q3f")
 }
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+unique_name_in_owner = true
+root_node = NodePath("%AnimationTree/..")
+libraries = {
+"": SubResource("AnimationLibrary_k4q3f")
+}
+tree_root = SubResource("AnimationNodeBlendTree_esdru")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Hurt/active = false
+parameters/Hurt/internal_active = false
+parameters/Hurt/request = 0
+parameters/State/current_state = "idle"
+parameters/State/transition_request = ""
+parameters/State/current_index = 0
 
 [node name="Collider" type="CollisionPolygon2D" parent="."]
 unique_name_in_owner = true
